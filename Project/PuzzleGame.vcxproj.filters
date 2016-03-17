@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\Classes\AppDelegate.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>project</Filter>
+    </ClCompile>
+    <ClCompile Include="PuzzleScene.cpp">
+      <Filter>project\scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Puzzle.cpp">
+      <Filter>project\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="PuzzlePiece.cpp">
+      <Filter>project\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="MainMenu.cpp">
+      <Filter>project\scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="MySpriteAction.cpp">
+      <Filter>project\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="GameSettings.cpp">
+      <Filter>project\utility</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Classes\AppDelegate.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="main.h">
+      <Filter>project</Filter>
+    </ClInclude>
+    <ClInclude Include="PuzzleScene.h">
+      <Filter>project\scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Puzzle.h">
+      <Filter>project\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="PuzzlePiece.h">
+      <Filter>project\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenu.h">
+      <Filter>project\scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="MySpriteAction.h">
+      <Filter>project\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="GameSettings.h">
+      <Filter>project\utility</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="resource">
+      <UniqueIdentifier>{c6c2c38d-5c05-4700-8f68-ba66a0753dc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{30f2f563-01a2-4984-9d2e-cb5bc4c8af3e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="project">
+      <UniqueIdentifier>{e717d676-5bf5-4e41-b7d2-ae0d0c7c28da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="project\scenes">
+      <UniqueIdentifier>{acb2edc8-31cf-49b4-850c-97090f276fd5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="project\objects">
+      <UniqueIdentifier>{c5831cbd-73d4-460c-a497-3a54c6db1380}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="project\utility">
+      <UniqueIdentifier>{93bb3f5c-a3e6-47bf-beb6-8e711a66d5c0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="game.rc">
+      <Filter>resource</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
