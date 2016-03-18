@@ -18,8 +18,8 @@ private:
     void initBackground();
     void initPuzzle();
 
-
-    void swapTile(cocos2d::Sprite *spr);
+    void generateValidMove();
+    bool tryMove(int fromPiece, int toX, int toY);
 
     cocos2d::Size visibleSize { cocos2d::Director::getInstance()->getVisibleSize() };
     Puzzle puzzle;
@@ -27,7 +27,7 @@ private:
     int startPosX;
     int startPosY;
 
-    int currentTileTag;
+    int currentPieceTag;
     bool gameOver;
     int numMoves;
 };

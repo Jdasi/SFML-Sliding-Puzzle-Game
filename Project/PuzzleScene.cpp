@@ -22,7 +22,7 @@ bool PuzzleScene::init()
     startPosX = 100;
     startPosY = 100;
 
-    currentTileTag = 0;
+    currentPieceTag = 0;
     gameOver = false;
     numMoves = 0;
 
@@ -50,30 +50,76 @@ void PuzzleScene::initPuzzle()
 
 bool PuzzleScene::onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event)
 {
-    if (event->getCurrentTarget()->getTag() > 0)
+    PuzzlePiece *piece = static_cast<PuzzlePiece*>(event->getCurrentTarget());
+
+    if (piece->isBlankSpace())
     {
-        PuzzlePiece *piece = static_cast<PuzzlePiece*>(event->getCurrentTarget());
-
-        Point pt = touch->getLocation();
-        Rect recTemp = piece->getBoundingBox();
-
-        if (!recTemp.containsPoint(pt))
-        {
-            return false;
-        }
-
-        currentTileTag = piece->getTag();
-
-        cocos2d::JumpBy *jump = JumpBy::create(0.5f, Vec2(0, 0), 100, 1);
-        piece->runAction(jump);
-        
-        //swapTile(sprite);
+        return false;
     }
+
+    Point pt = touch->getLocation();
+    Rect recTemp = piece->getBoundingBox();
+
+    if (!recTemp.containsPoint(pt))
+    {
+        return false;
+    }
+
+    currentPieceTag = piece->getTag();
+
+    generateValidMove();
+
+    /*
+    cocos2d::JumpBy *jump = JumpBy::create(0.5f, Vec2(0, 0), 100, 1);
+    piece->runAction(jump);
+    */
 
     return true;
 }
 
-void PuzzleScene::swapTile(cocos2d::Sprite *spr)
+void PuzzleScene::generateValidMove()
 {
+    coordinate currPiece = puzzle.calculateCoordinates(currentPieceTag);
+
+    if (tryMove(currentPieceTag, currPiece.x + 1, currPiece.y))
+    {
+        return;
+    }
+
+    if (tryMove(currentPieceTag, currPiece.x, currPiece.y + 1))
+    {
+        return;
+    }
     
+    if (tryMove(currentPieceTag, currPiece.x - 1, currPiece.y))
+    {
+        return;
+    }
+    
+    if (tryMove(currentPieceTag, currPiece.x, currPiece.y - 1))
+    {
+        return;
+    }
+}
+
+bool PuzzleScene::tryMove(int fromPiece, int toX, int toY)
+{
+    int toPiece = puzzle.calculateOffset(toX, toY);
+
+    if (!puzzle.isPieceBlankSpace(toPiece))
+    {
+        return false;
+    }
+
+    float speed = 0.1f;
+
+    MoveTo *action1 = MoveTo::create(speed, puzzle.getPiece(toPiece).getPosition());
+    MoveTo *action2 = MoveTo::create(speed, puzzle.getPiece(fromPiece).getPosition());
+
+    puzzle.getPiece(fromPiece).runAction(action1);
+    puzzle.getPiece(toPiece).runAction(action2);
+
+    puzzle.swapPieces(fromPiece, toPiece);
+
+    return true;
 }

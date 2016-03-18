@@ -14,9 +14,18 @@ public:
 
     void initPuzzle(PuzzleScene *pScene, int startPosX, int startPosY);
 
+    PuzzlePiece &getPiece(int piece);
+
+    bool isPieceBlankSpace(int piece);
+
     int calculateOffset(int x, int y);
+    coordinate calculateCoordinates(int piece);
+
+    void swapPieces(int fromPiece, int toPiece);
 
 private:
+    bool inBounds(int x, int y);
+
     cocos2d::Size visibleSize{ cocos2d::Director::getInstance()->getVisibleSize() };
 
     float sizeX;

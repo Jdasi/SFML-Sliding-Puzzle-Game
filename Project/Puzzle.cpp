@@ -41,7 +41,8 @@ void Puzzle::initPuzzle(PuzzleScene *pScene, int startPosX, int startPosY)
             piece->setAnchorPoint(Vec2(0, 1));
             piece->setPosition(Vec2(startPosX + ((secX * xCycles) + (xCycles * pad)), 
                 visibleSize.height - startPosY - ((secY * yCycles) + (yCycles * pad))));
-            piece->setTag(((yCycles * segmentsX) + xCycles) + 1);
+            piece->setTag((yCycles * segmentsX) + xCycles);
+            piece->setID((yCycles * segmentsX) + xCycles);
 
             pScene->addChild(piece, (yCycles * segmentsX) + xCycles);
             
@@ -58,12 +59,61 @@ void Puzzle::initPuzzle(PuzzleScene *pScene, int startPosX, int startPosY)
     //int affectedPiece = ((rand() % segmentsY) * segmentsX) + (rand() % segmentsX);
     int affectedPiece = (segmentsX * segmentsY) - 1;
 
-    puzzlePieces[affectedPiece]->setOpacity(0);
     puzzlePieces[affectedPiece]->setBlankSpace(true);
-    puzzlePieces[affectedPiece]->setTag(0);
+}
+
+PuzzlePiece &Puzzle::getPiece(int piece)
+{
+    return *puzzlePieces[piece];
+}
+
+bool Puzzle::isPieceBlankSpace(int piece)
+{
+    coordinate pieceCoords = calculateCoordinates(piece);
+
+    if (!inBounds(pieceCoords.x, pieceCoords.y))
+    {
+        return false;
+    }
+
+    return puzzlePieces[piece]->isBlankSpace();
 }
 
 int Puzzle::calculateOffset(int x, int y)
 {
-    return (position.y * GameSettings::getSegments().x) + position.x;
+    return (y * GameSettings::getSegments().x) + x;
+}
+
+coordinate Puzzle::calculateCoordinates(int piece)
+{
+    int x = piece % GameSettings::getSegments().x;
+    int y = piece / GameSettings::getSegments().x;
+
+    return { x, y };
+}
+
+void Puzzle::swapPieces(int fromPiece, int toPiece)
+{
+    std::swap(puzzlePieces[fromPiece], puzzlePieces[toPiece]);
+
+    int fromTag = puzzlePieces[fromPiece]->getTag();
+    int toTag = puzzlePieces[toPiece]->getTag();
+
+    puzzlePieces[fromPiece]->setTag(toTag);
+    puzzlePieces[toPiece]->setTag(fromTag);
+}
+
+bool Puzzle::inBounds(int x, int y)
+{
+    if (x >= GameSettings::getSegments().x || x < 0)
+    {
+        return false;
+    }
+
+    if (y >= GameSettings::getSegments().y || y < 0)
+    {
+        return false;
+    }
+
+    return true;
 }

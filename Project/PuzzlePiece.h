@@ -1,4 +1,6 @@
 #pragma once
+#include "GameSettings.h"
+
 #include "cocos2d.h"
 
 class PuzzlePiece : public cocos2d::Sprite
@@ -12,7 +14,10 @@ public:
     bool isBlankSpace() const;
     void setBlankSpace(bool b);
 
+    int getID() const;
+    void setID(int v);
+
 private:
-    int id;
     bool blankSpace;
+    int id;
 };

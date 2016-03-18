@@ -2,8 +2,8 @@
 USING_NS_CC;
 
 PuzzlePiece::PuzzlePiece()
-    : id(0)
-    , blankSpace(false)
+    : blankSpace(false)
+    , id(0)
 {
 }
 
@@ -30,4 +30,21 @@ bool PuzzlePiece::isBlankSpace() const
 void PuzzlePiece::setBlankSpace(bool v)
 {
     blankSpace = v;
+
+    if (this->isBlankSpace())
+    {
+        this->setOpacity(0);
+    } else {
+        this->setOpacity(255);
+    }
+}
+
+int PuzzlePiece::getID() const
+{
+    return id;
+}
+
+void PuzzlePiece::setID(int v)
+{
+    id = v;
 }
