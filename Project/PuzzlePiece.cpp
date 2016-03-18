@@ -2,55 +2,27 @@
 USING_NS_CC;
 
 PuzzlePiece::PuzzlePiece()
-    : sprite(nullptr)
-    , sizeX(0)
-    , sizeY(0)
-    , id(0)
+    : id(0)
     , blankSpace(false)
 {
 }
 
-void PuzzlePiece::setSprite(cocos2d::Sprite *spr)
+PuzzlePiece *PuzzlePiece::create(const std::string &file, const cocos2d::Rect &rect)
 {
-    sprite = spr;
+    PuzzlePiece* pSprite = new PuzzlePiece();
+
+    if (pSprite->initWithFile(file, rect))
+    {
+        pSprite->autorelease();
+
+        return pSprite;
+    }
+
+    CC_SAFE_DELETE(pSprite);
+    return NULL;
 }
 
-cocos2d::Sprite* PuzzlePiece::getSprite()
-{
-    return sprite;
-}
-
-Size PuzzlePiece::getSize()
-{
-    return sprite->getContentSize();
-}
-
-cocos2d::Vec2 PuzzlePiece::getPosition()
-{
-    return sprite->getPosition();
-}
-
-void PuzzlePiece::setPosition(cocos2d::Vec2 pos)
-{
-    sprite->setPosition(pos.x, pos.y);
-}
-
-void PuzzlePiece::setAnchorPoint(int x, int y)
-{
-    sprite->setAnchorPoint(Vec2(x, y));
-}
-
-void PuzzlePiece::setTag(int v)
-{
-    sprite->setTag(v);
-}
-
-void PuzzlePiece::setOpacity(int v)
-{
-    sprite->setOpacity(v);
-}
-
-bool PuzzlePiece::isBlankSpace()
+bool PuzzlePiece::isBlankSpace() const
 {
     return blankSpace;
 }

@@ -52,23 +52,21 @@ bool PuzzleScene::onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event)
 {
     if (event->getCurrentTarget()->getTag() > 0)
     {
-        Sprite *sprite = static_cast<cocos2d::Sprite*>(event->getCurrentTarget());
+        PuzzlePiece *piece = static_cast<PuzzlePiece*>(event->getCurrentTarget());
 
         Point pt = touch->getLocation();
-        Rect recTemp = sprite->getBoundingBox();
+        Rect recTemp = piece->getBoundingBox();
 
         if (!recTemp.containsPoint(pt))
         {
             return false;
         }
 
-        currentTileTag = sprite->getTag();
+        currentTileTag = piece->getTag();
 
-        
         cocos2d::JumpBy *jump = JumpBy::create(0.5f, Vec2(0, 0), 100, 1);
-        sprite->runAction(jump);
+        piece->runAction(jump);
         
-
         //swapTile(sprite);
     }
 

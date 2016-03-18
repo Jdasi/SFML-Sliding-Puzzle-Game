@@ -34,22 +34,21 @@ void Puzzle::initPuzzle(PuzzleScene *pScene, int startPosX, int startPosY)
     {
         for (int xCycles = 0; xCycles < segmentsX; ++xCycles)
         {
-            PuzzlePiece piece;
-            piece.setSprite(Sprite::create(file, Rect
-                (0 + (secX * xCycles), 0 + (secY * yCycles), secX, secY)));
+            PuzzlePiece *piece = PuzzlePiece::create(file, Rect
+                (0 + (secX * xCycles), 0 + (secY * yCycles), secX, secY));
 
             // set anchor point to top left of image
-            piece.setAnchorPoint(0, 1);
-            piece.setPosition(Vec2(startPosX + ((secX * xCycles) + (xCycles * pad)), 
+            piece->setAnchorPoint(Vec2(0, 1));
+            piece->setPosition(Vec2(startPosX + ((secX * xCycles) + (xCycles * pad)), 
                 visibleSize.height - startPosY - ((secY * yCycles) + (yCycles * pad))));
-            piece.setTag(((yCycles * segmentsX) + xCycles) + 1);
+            piece->setTag(((yCycles * segmentsX) + xCycles) + 1);
 
-            pScene->addChild(piece.getSprite(), (yCycles * segmentsX) + xCycles);
+            pScene->addChild(piece, (yCycles * segmentsX) + xCycles);
             
             auto listener = EventListenerTouchOneByOne::create();
             listener->onTouchBegan = CC_CALLBACK_2(PuzzleScene::onTouchBegan, pScene);
             _eventDispatcher->
-                addEventListenerWithSceneGraphPriority(listener, piece.getSprite());
+                addEventListenerWithSceneGraphPriority(listener, piece);
 
             puzzlePieces.push_back(piece);
         }
@@ -59,23 +58,9 @@ void Puzzle::initPuzzle(PuzzleScene *pScene, int startPosX, int startPosY)
     //int affectedPiece = ((rand() % segmentsY) * segmentsX) + (rand() % segmentsX);
     int affectedPiece = (segmentsX * segmentsY) - 1;
 
-    puzzlePieces[affectedPiece].setOpacity(0);
-    puzzlePieces[affectedPiece].setBlankSpace(true);
-    puzzlePieces[affectedPiece].setTag(0);
-}
-
-cocos2d::Size Puzzle::getSize()
-{
-    return puzzleSprite.getContentSize();
-}
-
-cocos2d::Vec2 Puzzle::getPosition()
-{
-    return puzzleSprite.getPosition();
-}
-
-void Puzzle::setPosition(cocos2d::Vec2 pos)
-{
+    puzzlePieces[affectedPiece]->setOpacity(0);
+    puzzlePieces[affectedPiece]->setBlankSpace(true);
+    puzzlePieces[affectedPiece]->setTag(0);
 }
 
 int Puzzle::calculateOffset(int x, int y)
