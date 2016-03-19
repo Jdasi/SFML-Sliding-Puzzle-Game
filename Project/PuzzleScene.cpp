@@ -178,6 +178,12 @@ bool PuzzleScene::tryUserMove(int fromPiece, int toX, int toY)
 
     puzzle.swapPieces(fromPiece, toPiece);
 
+    if (puzzle.isPuzzleComplete())
+    {
+        puzzle.getPiece(puzzle.findBlankSpace()).setBlankSpace(false);
+        gameOver = true;
+    }
+
     return true;
 }
 

@@ -20,9 +20,11 @@ public:
     int findBlankSpace();
 
     void swapPieces(int fromPiece, int toPiece);
+    bool isPuzzleComplete();
 
     int calculateOffset(int x, int y);
     coordinate calculateCoordinates(int piece);
+
     bool inBounds(int x, int y);
 
 private:

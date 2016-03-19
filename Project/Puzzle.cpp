@@ -98,6 +98,27 @@ void Puzzle::swapPieces(int fromPiece, int toPiece)
     puzzlePieces[toPiece]->setTag(fromTag);
 }
 
+bool Puzzle::isPuzzleComplete()
+{
+    int totalPieces = GameSettings::getSegments().x * GameSettings::getSegments().y;
+
+    int correctPieces = 0;
+    for (unsigned int i = 0; i < puzzlePieces.size(); ++i)
+    {
+        if (puzzlePieces[i]->getTag() == puzzlePieces[i]->getID())
+        {
+            ++correctPieces;
+        }
+    }
+
+    if (correctPieces == totalPieces)
+    {
+        return true;
+    }
+
+    return false;
+}
+
 int Puzzle::calculateOffset(int x, int y)
 {
     return (y * GameSettings::getSegments().x) + x;
