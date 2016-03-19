@@ -17,15 +17,15 @@ public:
     PuzzlePiece &getPiece(int piece);
 
     bool isPieceBlankSpace(int piece);
-
-    int calculateOffset(int x, int y);
-    coordinate calculateCoordinates(int piece);
+    int findBlankSpace();
 
     void swapPieces(int fromPiece, int toPiece);
 
-private:
+    int calculateOffset(int x, int y);
+    coordinate calculateCoordinates(int piece);
     bool inBounds(int x, int y);
 
+private:
     cocos2d::Size visibleSize{ cocos2d::Director::getInstance()->getVisibleSize() };
 
     float sizeX;

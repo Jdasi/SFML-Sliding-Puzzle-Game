@@ -19,7 +19,12 @@ private:
     void initPuzzle();
 
     void generateValidMove();
-    bool tryMove(int fromPiece, int toX, int toY);
+    void generateRandomValidMoves(int times);
+
+    bool tryUserMove(int fromPiece, int toX, int toY);
+    bool tryComputerMove(int fromPiece, int toX, int toY);
+
+    void moveBlankSpaceToStart();
 
     cocos2d::Size visibleSize { cocos2d::Director::getInstance()->getVisibleSize() };
     Puzzle puzzle;
@@ -28,6 +33,7 @@ private:
     int startPosY;
 
     int currentPieceTag;
+
     bool gameOver;
     int numMoves;
 };

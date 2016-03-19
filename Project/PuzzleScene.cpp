@@ -1,20 +1,16 @@
 #include "Project/PuzzleScene.h"
-
 #include "Project/GameSettings.h"
 
 USING_NS_CC;
 
 cocos2d::Scene *PuzzleScene::createScene()
 {
-    // 'scene' & 'layer' are in autoreleased objects
     cocos2d::Scene *scene = Scene::create();
     auto layer = PuzzleScene::create();
 
-     // add layer as a child to scene
-     scene->addChild(layer);
+    scene->addChild(layer);
 
-     // return the scene
-     return scene;
+    return scene;
 }
 
 bool PuzzleScene::init()
@@ -46,6 +42,11 @@ void PuzzleScene::initBackground()
 void PuzzleScene::initPuzzle()
 {
     puzzle.initPuzzle(this, startPosX, startPosY);
+
+    int product = GameSettings::getSegments().x * GameSettings::getSegments().y;
+    generateRandomValidMoves(product * product);
+
+    moveBlankSpaceToStart();
 }
 
 bool PuzzleScene::onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event)
@@ -69,11 +70,6 @@ bool PuzzleScene::onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event)
 
     generateValidMove();
 
-    /*
-    cocos2d::JumpBy *jump = JumpBy::create(0.5f, Vec2(0, 0), 100, 1);
-    piece->runAction(jump);
-    */
-
     return true;
 }
 
@@ -81,29 +77,90 @@ void PuzzleScene::generateValidMove()
 {
     coordinate currPiece = puzzle.calculateCoordinates(currentPieceTag);
 
-    if (tryMove(currentPieceTag, currPiece.x + 1, currPiece.y))
+    if (tryUserMove(currentPieceTag, currPiece.x + 1, currPiece.y))
     {
         return;
     }
 
-    if (tryMove(currentPieceTag, currPiece.x, currPiece.y + 1))
+    if (tryUserMove(currentPieceTag, currPiece.x, currPiece.y + 1))
     {
         return;
     }
     
-    if (tryMove(currentPieceTag, currPiece.x - 1, currPiece.y))
+    if (tryUserMove(currentPieceTag, currPiece.x - 1, currPiece.y))
     {
         return;
     }
     
-    if (tryMove(currentPieceTag, currPiece.x, currPiece.y - 1))
+    if (tryUserMove(currentPieceTag, currPiece.x, currPiece.y - 1))
     {
         return;
     }
 }
 
-bool PuzzleScene::tryMove(int fromPiece, int toX, int toY)
+void PuzzleScene::generateRandomValidMoves(int times)
 {
+    for (int i = 0; i < times; ++i)
+    {
+        int blankSpace = puzzle.findBlankSpace();
+        coordinate blankSpaceCoords = puzzle.calculateCoordinates(blankSpace);
+
+        bool tileSwapped = false;
+        while (!tileSwapped)
+        {
+            int randomDirection = rand() % 4;
+
+            switch (randomDirection)
+            {
+            case 0:
+            {
+                if (tryComputerMove(blankSpace, blankSpaceCoords.x + 1, blankSpaceCoords.y))
+                {
+                    tileSwapped = true;
+                }
+
+                break;
+            }
+            case 1:
+            {
+                if (tryComputerMove(blankSpace, blankSpaceCoords.x, blankSpaceCoords.y + 1))
+                {
+                    tileSwapped = true;
+                }
+
+                break;
+            }
+            case 2:
+            {
+                if (tryComputerMove(blankSpace, blankSpaceCoords.x - 1, blankSpaceCoords.y))
+                {
+                    tileSwapped = true;
+                }
+
+                break;
+            }
+            case 3:
+            {
+                if (tryComputerMove(blankSpace, blankSpaceCoords.x, blankSpaceCoords.y - 1))
+                {
+                    tileSwapped = true;
+                }
+
+                break;
+            }
+            default: {}
+            }
+        }
+    }
+}
+
+bool PuzzleScene::tryUserMove(int fromPiece, int toX, int toY)
+{
+    if (!puzzle.inBounds(toX, toY))
+    {
+        return false;
+    }
+
     int toPiece = puzzle.calculateOffset(toX, toY);
 
     if (!puzzle.isPieceBlankSpace(toPiece))
@@ -111,10 +168,10 @@ bool PuzzleScene::tryMove(int fromPiece, int toX, int toY)
         return false;
     }
 
-    float speed = 0.1f;
+    float time = 0.1f;
 
-    MoveTo *action1 = MoveTo::create(speed, puzzle.getPiece(toPiece).getPosition());
-    MoveTo *action2 = MoveTo::create(speed, puzzle.getPiece(fromPiece).getPosition());
+    MoveTo *action1 = MoveTo::create(time, puzzle.getPiece(toPiece).getPosition());
+    MoveTo *action2 = MoveTo::create(time, puzzle.getPiece(fromPiece).getPosition());
 
     puzzle.getPiece(fromPiece).runAction(action1);
     puzzle.getPiece(toPiece).runAction(action2);
@@ -122,4 +179,49 @@ bool PuzzleScene::tryMove(int fromPiece, int toX, int toY)
     puzzle.swapPieces(fromPiece, toPiece);
 
     return true;
+}
+
+bool PuzzleScene::tryComputerMove(int fromPiece, int toX, int toY)
+{
+    if (!puzzle.inBounds(toX, toY))
+    {
+        return false;
+    }
+
+    int toPiece = puzzle.calculateOffset(toX, toY);
+
+    Vec2 fromPos = puzzle.getPiece(fromPiece).getPosition();
+    Vec2 toPos = puzzle.getPiece(toPiece).getPosition();
+
+    puzzle.getPiece(fromPiece).setPosition(toPos);
+    puzzle.getPiece(toPiece).setPosition(fromPos);
+
+    puzzle.swapPieces(fromPiece, toPiece);
+
+    return true;
+}
+
+void PuzzleScene::moveBlankSpaceToStart()
+{
+    for (int i = 0; i < GameSettings::getSegments().x; ++i)
+    {
+        int blankSpace = puzzle.findBlankSpace();
+        coordinate blankSpaceCoords = puzzle.calculateCoordinates(blankSpace);
+
+        if (!tryComputerMove(blankSpace, blankSpaceCoords.x + 1, blankSpaceCoords.y))
+        {
+            break;
+        }
+    }
+
+    for (int i = 0; i < GameSettings::getSegments().y; ++i)
+    {
+        int blankSpace = puzzle.findBlankSpace();
+        coordinate blankSpaceCoords = puzzle.calculateCoordinates(blankSpace);
+
+        if (!tryComputerMove(blankSpace, blankSpaceCoords.x, blankSpaceCoords.y + 1))
+        {
+            break;
+        }
+    }
 }

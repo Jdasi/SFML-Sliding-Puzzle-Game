@@ -71,12 +71,31 @@ bool Puzzle::isPieceBlankSpace(int piece)
 {
     coordinate pieceCoords = calculateCoordinates(piece);
 
-    if (!inBounds(pieceCoords.x, pieceCoords.y))
+    return puzzlePieces[piece]->isBlankSpace();
+}
+
+int Puzzle::findBlankSpace()
+{
+    for (unsigned int i = 0; i < puzzlePieces.size(); ++i)
     {
-        return false;
+        if (puzzlePieces[i]->isBlankSpace())
+        {
+            return i;
+        }
     }
 
-    return puzzlePieces[piece]->isBlankSpace();
+    return 0;
+}
+
+void Puzzle::swapPieces(int fromPiece, int toPiece)
+{
+    std::swap(puzzlePieces[fromPiece], puzzlePieces[toPiece]);
+
+    int fromTag = puzzlePieces[fromPiece]->getTag();
+    int toTag = puzzlePieces[toPiece]->getTag();
+
+    puzzlePieces[fromPiece]->setTag(toTag);
+    puzzlePieces[toPiece]->setTag(fromTag);
 }
 
 int Puzzle::calculateOffset(int x, int y)
@@ -90,17 +109,6 @@ coordinate Puzzle::calculateCoordinates(int piece)
     int y = piece / GameSettings::getSegments().x;
 
     return { x, y };
-}
-
-void Puzzle::swapPieces(int fromPiece, int toPiece)
-{
-    std::swap(puzzlePieces[fromPiece], puzzlePieces[toPiece]);
-
-    int fromTag = puzzlePieces[fromPiece]->getTag();
-    int toTag = puzzlePieces[toPiece]->getTag();
-
-    puzzlePieces[fromPiece]->setTag(toTag);
-    puzzlePieces[toPiece]->setTag(fromTag);
 }
 
 bool Puzzle::inBounds(int x, int y)
