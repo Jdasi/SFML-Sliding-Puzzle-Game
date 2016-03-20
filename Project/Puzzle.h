@@ -28,11 +28,14 @@ public:
     bool inBounds(int x, int y);
 
 private:
+    void sanityCheckImage(int pad);
+
     cocos2d::Size visibleSize{ cocos2d::Director::getInstance()->getVisibleSize() };
 
     float sizeX;
     float sizeY;
-    cocos2d::Vec2 position;
+    float scaleFactorX;
+    float scaleFactorY;
 
     std::vector<PuzzlePiece*> puzzlePieces;
 };

@@ -7,6 +7,8 @@ USING_NS_CC;
 Puzzle::Puzzle()
     : sizeX(0)
     , sizeY(0)
+    , scaleFactorX(1.0f)
+    , scaleFactorY(1.0f)
 {
 }
 
@@ -22,14 +24,17 @@ void Puzzle::initPuzzle(PuzzleScene *pScene, int startPosX, int startPosY)
 
     auto puzzle = Sprite::create(file);
 
-    float sizeX = puzzle->getContentSize().width;
-    float sizeY = puzzle->getContentSize().height;
+    sizeX = puzzle->getContentSize().width;
+    sizeY = puzzle->getContentSize().height;
 
     float secX = sizeX / segmentsX;
     float secY = sizeY / segmentsY;
 
     int pad = 2;
 
+    sanityCheckImage(pad);
+
+    // Splice puzzle image into PuzzlePieces.
     for (int yCycles = 0; yCycles < segmentsY; ++yCycles)
     {
         for (int xCycles = 0; xCycles < segmentsX; ++xCycles)
@@ -37,17 +42,25 @@ void Puzzle::initPuzzle(PuzzleScene *pScene, int startPosX, int startPosY)
             PuzzlePiece *piece = PuzzlePiece::create(file, Rect
                 (0 + (secX * xCycles), 0 + (secY * yCycles), secX, secY));
 
-            // set anchor point to top left of image
+            piece->setScaleX(scaleFactorX);
+            piece->setScaleY(scaleFactorY);
+
+            // Set anchor point to top left of image.
             piece->setAnchorPoint(Vec2(0, 1));
-            piece->setPosition(Vec2(startPosX + ((secX * xCycles) + (xCycles * pad)), 
-                visibleSize.height - startPosY - ((secY * yCycles) + (yCycles * pad))));
+
+            piece->setPosition
+                (Vec2(startPosX + (((secX * xCycles) + (xCycles * pad)) * scaleFactorX), 
+                (visibleSize.height - startPosY) - (((secY * yCycles) + (yCycles * pad)))
+                 * scaleFactorY));
+
             piece->setTag((yCycles * segmentsX) + xCycles);
             piece->setID((yCycles * segmentsX) + xCycles);
 
             pScene->addChild(piece, (yCycles * segmentsX) + xCycles);
             
             auto listener = EventListenerTouchOneByOne::create();
-            listener->onTouchBegan = CC_CALLBACK_2(PuzzleScene::interactWithPuzzle, pScene);
+            listener->onTouchBegan =
+                CC_CALLBACK_2(PuzzleScene::interactWithPuzzle, pScene);
             _eventDispatcher->
                 addEventListenerWithSceneGraphPriority(listener, piece);
 
@@ -55,11 +68,33 @@ void Puzzle::initPuzzle(PuzzleScene *pScene, int startPosX, int startPosY)
         }
     }
 
-    srand(static_cast<int>(time(nullptr)));
-    //int affectedPiece = ((rand() % segmentsY) * segmentsX) + (rand() % segmentsX);
+    // Hide bottom right puzzle piece.
     int affectedPiece = (segmentsX * segmentsY) - 1;
-
     puzzlePieces[affectedPiece]->setBlankSpace(true);
+}
+
+void Puzzle::sanityCheckImage(int pad)
+{
+    int paddingX = GameSettings::getSegments().x * pad;
+    int paddingY = GameSettings::getSegments().y * pad;
+
+    for (float i = scaleFactorX; i > 0; i -= 0.01)
+    {
+        if ((sizeX * i) + paddingX <= 800)
+        {
+            scaleFactorX = i;
+            break;
+        }
+    }
+
+    for (float i = scaleFactorY; i > 0; i -= 0.01)
+    {
+        if ((sizeY * i) + paddingY <= 600)
+        {
+            scaleFactorY = i;
+            break;
+        }
+    }
 }
 
 PuzzlePiece &Puzzle::getPiece(int piece)

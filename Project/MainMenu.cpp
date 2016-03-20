@@ -36,8 +36,8 @@ bool MainMenu::init()
 
 void MainMenu::initSettings()
 {
-    GameSettings::setImageName("puzzles/bear.jpg");  // Options: dog, cats, bear
-    GameSettings::setSegments(3, 3);
+    GameSettings::setImageName("puzzles/dog.jpg");  // Options: dog, cats, bear
+    GameSettings::setSegments(4, 4);
 }
 
 void MainMenu::initMenu()
