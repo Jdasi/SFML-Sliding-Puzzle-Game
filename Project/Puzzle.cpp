@@ -1,6 +1,7 @@
 #include "Project/Puzzle.h"
 #include "Project/PuzzleScene.h"
 #include "Project/GameSettings.h"
+#include <complex>
 
 USING_NS_CC;
 
@@ -49,9 +50,9 @@ void Puzzle::initPuzzle(PuzzleScene *pScene, int startPosX, int startPosY)
             piece->setAnchorPoint(Vec2(0, 1));
 
             piece->setPosition
-                (Vec2(startPosX + (((secX * xCycles) + (xCycles * pad)) * scaleFactorX), 
-                (visibleSize.height - startPosY) - (((secY * yCycles) + (yCycles * pad)))
-                 * scaleFactorY));
+                (Vec2(startPosX + (((secX * xCycles) * scaleFactorX) + (xCycles * pad)),
+                (visibleSize.height - startPosY) - (((secY * yCycles) * scaleFactorY) + 
+                (yCycles * pad))));
 
             piece->setTag((yCycles * segmentsX) + xCycles);
             piece->setID((yCycles * segmentsX) + xCycles);
@@ -78,21 +79,49 @@ void Puzzle::sanityCheckImage(int pad)
     int paddingX = GameSettings::getSegments().x * pad;
     int paddingY = GameSettings::getSegments().y * pad;
 
-    for (float i = scaleFactorX; i > 0; i -= 0.01)
+    // Scale down image.
+    if (sizeX + paddingX > 800)
     {
-        if ((sizeX * i) + paddingX <= 800)
+        for (float i = scaleFactorX; i > 0; i -= 0.001)
         {
-            scaleFactorX = i;
-            break;
+            if ((sizeX * i) + paddingX <= 800)
+            {
+                scaleFactorX = i;
+                break;
+            }
         }
     }
 
-    for (float i = scaleFactorY; i > 0; i -= 0.01)
+    if (sizeY + paddingY > 600)
     {
-        if ((sizeY * i) + paddingY <= 600)
+        for (float i = scaleFactorY; i > 0; i -= 0.001)
         {
+            if ((sizeY * i) + paddingY <= 600)
+            {
+                scaleFactorY = i;
+                break;
+            }
+        }
+    }
+
+    // Scale up image.
+    if (sizeX + paddingX < 800)
+    {
+        float i = scaleFactorX;
+        while ((sizeX * i) + paddingX <= 800)
+        {
+            i += 0.001;
+            scaleFactorX = i;
+        }
+    }
+
+    if (sizeY + paddingY < 600)
+    {
+        float i = scaleFactorY;
+        while ((sizeY * i) + paddingY <= 600)
+        {
+            i += 0.001;
             scaleFactorY = i;
-            break;
         }
     }
 }

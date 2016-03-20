@@ -34,6 +34,7 @@ private:
 
     float sizeX;
     float sizeY;
+
     float scaleFactorX;
     float scaleFactorY;
 
