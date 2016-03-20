@@ -16,16 +16,21 @@ struct coordinate
 class GameSettings
 {
 public:
-    GameSettings();
+    GameSettings() = default;
     ~GameSettings() = default;
 
     static std::string getImageName();
     static void setImageName(std::string name);
     
     static coordinate getSegments();
-    static void setSegments(int x, int y);
+    static void setSegmentsX(int x);
+    static void setSegmentsY(int y);
+
+    static bool isInitialised();
+    static void setInitialised(bool b);
 
 private:
     static std::string imageName;
     static coordinate segments;
+    static bool initialised;
 };

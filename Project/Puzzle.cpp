@@ -82,7 +82,7 @@ void Puzzle::sanityCheckImage(int pad)
     // Scale down image.
     if (sizeX + paddingX > 800)
     {
-        for (float i = scaleFactorX; i > 0; i -= 0.001)
+        for (float i = scaleFactorX; i > 0; i -= 0.001f)
         {
             if ((sizeX * i) + paddingX <= 800)
             {
@@ -94,7 +94,7 @@ void Puzzle::sanityCheckImage(int pad)
 
     if (sizeY + paddingY > 600)
     {
-        for (float i = scaleFactorY; i > 0; i -= 0.001)
+        for (float i = scaleFactorY; i > 0; i -= 0.001f)
         {
             if ((sizeY * i) + paddingY <= 600)
             {
@@ -110,7 +110,7 @@ void Puzzle::sanityCheckImage(int pad)
         float i = scaleFactorX;
         while ((sizeX * i) + paddingX <= 800)
         {
-            i += 0.001;
+            i += 0.001f;
             scaleFactorX = i;
         }
     }
@@ -120,7 +120,7 @@ void Puzzle::sanityCheckImage(int pad)
         float i = scaleFactorY;
         while ((sizeY * i) + paddingY <= 600)
         {
-            i += 0.001;
+            i += 0.001f;
             scaleFactorY = i;
         }
     }

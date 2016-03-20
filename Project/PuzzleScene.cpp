@@ -1,5 +1,6 @@
 #include "Project/PuzzleScene.h"
 #include "Project/GameSettings.h"
+#include "Project/MainMenu.h"
 
 USING_NS_CC;
 
@@ -57,6 +58,14 @@ void PuzzleScene::initLabels()
 
     updateMovesLabel(0);
 
+    MenuItemFont *menuLabel = MenuItemFont::create(
+        "Main Menu",
+        CC_CALLBACK_1(PuzzleScene::gotoMainMenu, this));
+
+    cocos2d::Menu *menu = Menu::create(menuLabel, nullptr);
+    menu->setPosition(Vec2(visibleSize.width - 250, visibleSize.height - 200));
+
+    this->addChild(menu, 1);
     this->addChild(movesLabel, 1);
 }
 
@@ -250,4 +259,10 @@ void PuzzleScene::moveBlankSpaceToStart()
             break;
         }
     }
+}
+
+void PuzzleScene::gotoMainMenu(cocos2d::Ref *sender)
+{
+    Director::getInstance()->replaceScene(
+        TransitionFade::create(1, MainMenu::createScene()));
 }

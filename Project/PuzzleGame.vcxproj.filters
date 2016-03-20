@@ -25,6 +25,9 @@
     <ClCompile Include="GameSettings.cpp">
       <Filter>project\utility</Filter>
     </ClCompile>
+    <ClCompile Include="SettingsMenu.cpp">
+      <Filter>project\scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h">
@@ -50,6 +53,9 @@
     </ClInclude>
     <ClInclude Include="GameSettings.h">
       <Filter>project\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="SettingsMenu.h">
+      <Filter>project\scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

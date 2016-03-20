@@ -154,6 +154,7 @@ xcopy "$(SolutionDir)\cocos2d\bin\$(PlatformToolset)\$(Configuration)\*.dll" "$(
     <ClCompile Include="PuzzlePiece.cpp" />
     <ClCompile Include="PuzzleScene.cpp" />
     <ClCompile Include="MySpriteAction.cpp" />
+    <ClCompile Include="SettingsMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h" />
@@ -164,6 +165,7 @@ xcopy "$(SolutionDir)\cocos2d\bin\$(PlatformToolset)\$(Configuration)\*.dll" "$(
     <ClInclude Include="PuzzlePiece.h" />
     <ClInclude Include="PuzzleScene.h" />
     <ClInclude Include="MySpriteAction.h" />
+    <ClInclude Include="SettingsMenu.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc" />

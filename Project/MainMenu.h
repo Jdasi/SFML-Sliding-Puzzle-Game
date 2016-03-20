@@ -12,10 +12,12 @@ public:
     void initMenu();
 
     void menuStartGame(cocos2d::Ref *sender);
+    void menuSettings(cocos2d::Ref *sender);
+
     void menuCloseCallback(cocos2d::Ref *pSender);
 
     CREATE_FUNC(MainMenu);
 
 private:
-
+    cocos2d::Size visibleSize{ cocos2d::Director::getInstance()->getVisibleSize() };
 };

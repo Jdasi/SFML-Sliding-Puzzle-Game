@@ -1,8 +1,7 @@
 #include "GameSettings.h"
-
 #include "PuzzleScene.h"
-
 #include "MainMenu.h"
+#include "SettingsMenu.h"
 USING_NS_CC;
 
 cocos2d::Scene *MainMenu::createScene()
@@ -36,13 +35,25 @@ bool MainMenu::init()
 
 void MainMenu::initSettings()
 {
-    GameSettings::setImageName("puzzles/dog.jpg");  // Options: dog, cats, bear, bunny, moon
-    GameSettings::setSegments(4, 4);
+    if (!GameSettings::isInitialised())
+    {
+        GameSettings::setImageName("puzzles/dog.jpg");  // Options: dog, cats, bear, bunny, moon
+        GameSettings::setSegmentsX(4);
+        GameSettings::setSegmentsY(4);
+        GameSettings::setInitialised(true);
+    }
 }
 
 void MainMenu::initMenu()
 {
-    // Create the first menu item, this will exit the app
+    MenuItemFont *mainMenuStartGame = MenuItemFont::create(
+        "Play Game",
+        CC_CALLBACK_1(MainMenu::menuStartGame, this));
+
+    MenuItemFont *menuSettings = MenuItemFont::create(
+        "Settings",
+        CC_CALLBACK_1(MainMenu::menuSettings, this));
+
     MenuItemSprite *mainMenuExit = new MenuItemSprite();
     mainMenuExit->initWithNormalSprite(
         Sprite::create("CloseNormal.png"),
@@ -50,12 +61,7 @@ void MainMenu::initMenu()
         nullptr,
         CC_CALLBACK_1(MainMenu::menuCloseCallback, this));
 
-    MenuItemFont *mainMenuStartGame = MenuItemFont::create(
-        "Play Game",
-        CC_CALLBACK_1(MainMenu::menuStartGame, this));
-
-    // Create the actual menu and assign the menu to the HelloWorld scene
-    cocos2d::Menu *menu = Menu::create(mainMenuStartGame, mainMenuExit, nullptr);
+    cocos2d::Menu *menu = Menu::create(mainMenuStartGame, menuSettings, mainMenuExit, nullptr);
     menu->alignItemsVertically();
     this->addChild(menu, 1);
 }
@@ -64,6 +70,12 @@ void MainMenu::menuStartGame(cocos2d::Ref *sender)
 {
     Director::getInstance()->replaceScene(
         TransitionFade::create(1, PuzzleScene::createScene()));
+}
+
+void MainMenu::menuSettings(cocos2d::Ref *sender)
+{
+    Director::getInstance()->replaceScene(
+        TransitionFade::create(1, SettingsMenu::createScene()));
 }
 
 void MainMenu::menuCloseCallback(cocos2d::Ref *pSender)

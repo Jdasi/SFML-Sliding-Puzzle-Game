@@ -2,10 +2,7 @@
 
 std::string GameSettings::imageName;
 coordinate GameSettings::segments { 0, 0 };
-
-GameSettings::GameSettings()
-{
-}
+bool GameSettings::initialised = false;
 
 std::string GameSettings::getImageName()
 {
@@ -22,8 +19,22 @@ coordinate GameSettings::getSegments()
     return segments;
 }
 
-void GameSettings::setSegments(int x, int y)
+void GameSettings::setSegmentsX(int x)
 {
     segments.x = x;
+}
+
+void GameSettings::setSegmentsY(int y)
+{
     segments.y = y;
+}
+
+bool GameSettings::isInitialised()
+{
+    return initialised;
+}
+
+void GameSettings::setInitialised(bool b)
+{
+    initialised = b;
 }

@@ -29,6 +29,8 @@ private:
 
     void moveBlankSpaceToStart();
 
+    void gotoMainMenu(cocos2d::Ref *sender);
+
     cocos2d::Size visibleSize { cocos2d::Director::getInstance()->getVisibleSize() };
     Puzzle puzzle;
 
