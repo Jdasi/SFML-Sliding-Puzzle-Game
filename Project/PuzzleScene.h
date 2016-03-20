@@ -17,6 +17,9 @@ public:
 private:
     void initBackground();
     void initPuzzle();
+    void initLabels();
+
+    void updateMovesLabel(int increment);
 
     void generateValidMove();
     void generateRandomValidMoves(int times);
@@ -36,4 +39,5 @@ private:
 
     bool gameOver;
     int numMoves;
+    cocos2d::Label *movesLabel;
 };

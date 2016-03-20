@@ -24,6 +24,7 @@ bool PuzzleScene::init()
 
     initBackground();
     initPuzzle();
+    initLabels();
 
     return true;
 }
@@ -47,6 +48,24 @@ void PuzzleScene::initPuzzle()
     generateRandomValidMoves(product * product);
 
     moveBlankSpaceToStart();
+}
+
+void PuzzleScene::initLabels()
+{
+    movesLabel = Label::createWithTTF("Moves: ", "fonts/Marker Felt.ttf", 24);
+    movesLabel->setPosition(Vec2(visibleSize.width / 2 + 300, (visibleSize.height / 2)));
+
+    updateMovesLabel(0);
+
+    this->addChild(movesLabel, 1);
+}
+
+void PuzzleScene::updateMovesLabel(int increment)
+{
+    numMoves += increment;
+
+    std::string stringMoves = "Moves: " + std::to_string(numMoves);
+    movesLabel->setString(stringMoves);
 }
 
 bool PuzzleScene::onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event)
@@ -177,6 +196,7 @@ bool PuzzleScene::tryUserMove(int fromPiece, int toX, int toY)
     puzzle.getPiece(toPiece).runAction(action2);
 
     puzzle.swapPieces(fromPiece, toPiece);
+    updateMovesLabel(1);
 
     if (puzzle.isPuzzleComplete())
     {
