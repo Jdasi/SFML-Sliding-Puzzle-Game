@@ -53,7 +53,7 @@ void PuzzleScene::initPuzzle()
 void PuzzleScene::initLabels()
 {
     movesLabel = Label::createWithTTF("Moves: ", "fonts/Marker Felt.ttf", 24);
-    movesLabel->setPosition(Vec2(visibleSize.width / 2 + 300, (visibleSize.height / 2)));
+    movesLabel->setPosition(Vec2(visibleSize.width - 250, visibleSize.height - 100));
 
     updateMovesLabel(0);
 
@@ -68,7 +68,7 @@ void PuzzleScene::updateMovesLabel(int increment)
     movesLabel->setString(stringMoves);
 }
 
-bool PuzzleScene::onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event)
+bool PuzzleScene::interactWithPuzzle(cocos2d::Touch *touch, cocos2d::Event *event)
 {
     PuzzlePiece *piece = static_cast<PuzzlePiece*>(event->getCurrentTarget());
 

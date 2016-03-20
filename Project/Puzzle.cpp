@@ -47,7 +47,7 @@ void Puzzle::initPuzzle(PuzzleScene *pScene, int startPosX, int startPosY)
             pScene->addChild(piece, (yCycles * segmentsX) + xCycles);
             
             auto listener = EventListenerTouchOneByOne::create();
-            listener->onTouchBegan = CC_CALLBACK_2(PuzzleScene::onTouchBegan, pScene);
+            listener->onTouchBegan = CC_CALLBACK_2(PuzzleScene::interactWithPuzzle, pScene);
             _eventDispatcher->
                 addEventListenerWithSceneGraphPriority(listener, piece);
 
