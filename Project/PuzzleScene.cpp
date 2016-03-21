@@ -196,6 +196,11 @@ bool PuzzleScene::tryUserMove(int fromPiece, int toX, int toY)
         return false;
     }
 
+    if (puzzle.getPiece(toPiece).getNumberOfRunningActions() != 0)
+    {
+        return false;
+    }
+
     float time = 0.1f;
 
     MoveTo *action1 = MoveTo::create(time, puzzle.getPiece(toPiece).getPosition());

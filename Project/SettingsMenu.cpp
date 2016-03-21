@@ -48,7 +48,7 @@ void SettingsMenu::initMenu()
     xSegmentsSlider->loadSlidBallTextures("SliderNode_Normal.png", "SliderNode_Press.png", "SliderNode_Disable.png");
     xSegmentsSlider->loadProgressBarTexture("Slider_PressBar.png");
     xSegmentsSlider->setPosition(Vec2(visibleSize.width / 2, (visibleSize.height / 2) - 150));
-    xSegmentsSlider->setPercent(1);
+    xSegmentsSlider->setPercent(GameSettings::getSegments().x - 3);
     xSegmentsSlider->setMaxPercent(7);
 
     xSliderLabel = Label::createWithTTF(std::to_string(xSegmentsSlider->getPercent() + 3), "fonts/Marker Felt.ttf", 24);
@@ -77,7 +77,7 @@ void SettingsMenu::initMenu()
     ySegmentsSlider->loadSlidBallTextures("SliderNode_Normal.png", "SliderNode_Press.png", "SliderNode_Disable.png");
     ySegmentsSlider->loadProgressBarTexture("Slider_PressBar.png");
     ySegmentsSlider->setPosition(Vec2(visibleSize.width / 2, (visibleSize.height / 2) - 250));
-    ySegmentsSlider->setPercent(1);
+    ySegmentsSlider->setPercent(GameSettings::getSegments().y - 3);
     ySegmentsSlider->setMaxPercent(7);
 
     ySliderLabel = Label::createWithTTF(std::to_string(ySegmentsSlider->getPercent() + 3), "fonts/Marker Felt.ttf", 24);
