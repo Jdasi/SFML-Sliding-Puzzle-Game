@@ -62,7 +62,7 @@ void PuzzleScene::initLabels()
         "Main Menu",
         CC_CALLBACK_1(PuzzleScene::gotoMainMenu, this));
 
-    cocos2d::Menu *menu = Menu::create(menuLabel, nullptr);
+    Menu *menu = Menu::create(menuLabel, nullptr);
     menu->setPosition(Vec2(visibleSize.width - 250, visibleSize.height - 200));
 
     this->addChild(menu, 1);

@@ -51,21 +51,18 @@ void SettingsMenu::initMenu()
     xSegmentsSlider->setPercent(GameSettings::getSegments().x - 3);
     xSegmentsSlider->setMaxPercent(7);
 
-    xSliderLabel = Label::createWithTTF(std::to_string(xSegmentsSlider->getPercent() + 3), "fonts/Marker Felt.ttf", 24);
+    xSliderLabel = Label::createWithTTF("X Segments: " + std::to_string(xSegmentsSlider->getPercent() + 3), "fonts/Marker Felt.ttf", 24);
     xSliderLabel->setPosition(Vec2(xSegmentsSlider->getPosition().x, xSegmentsSlider->getPosition().y + 25));
     this->addChild(xSliderLabel, 1);
 
-    xSegmentsSlider->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
+    xSegmentsSlider->addEventListener([&](Ref* sender, ui::Slider::EventType type) {
         switch (type)
         {
-        case ui::Widget::TouchEventType::BEGAN:
-        {
-            break;
-        }
-        case ui::Widget::TouchEventType::ENDED:
+        case ui::Slider::EventType::ON_PERCENTAGE_CHANGED:
         {
             GameSettings::setSegmentsX(xSegmentsSlider->getPercent() + 3);
-            xSliderLabel->setString(std::to_string(xSegmentsSlider->getPercent() + 3));
+            xSliderLabel->setString("X Segments: " + std::to_string(xSegmentsSlider->getPercent() + 3));
+
             break;
         }
         default: {}
@@ -80,21 +77,18 @@ void SettingsMenu::initMenu()
     ySegmentsSlider->setPercent(GameSettings::getSegments().y - 3);
     ySegmentsSlider->setMaxPercent(7);
 
-    ySliderLabel = Label::createWithTTF(std::to_string(ySegmentsSlider->getPercent() + 3), "fonts/Marker Felt.ttf", 24);
+    ySliderLabel = Label::createWithTTF("Y Segments: " + std::to_string(ySegmentsSlider->getPercent() + 3), "fonts/Marker Felt.ttf", 24);
     ySliderLabel->setPosition(Vec2(ySegmentsSlider->getPosition().x, ySegmentsSlider->getPosition().y + 25));
     this->addChild(ySliderLabel, 1);
 
-    ySegmentsSlider->addTouchEventListener([&](Ref* sender, ui::Widget::TouchEventType type) {
+    ySegmentsSlider->addEventListener([&](Ref* sender, ui::Slider::EventType type) {
         switch (type)
         {
-        case ui::Widget::TouchEventType::BEGAN:
-        {
-            break;
-        }
-        case ui::Widget::TouchEventType::ENDED:
+        case ui::Slider::EventType::ON_PERCENTAGE_CHANGED:
         {
             GameSettings::setSegmentsY(ySegmentsSlider->getPercent() + 3);
-            ySliderLabel->setString(std::to_string(ySegmentsSlider->getPercent() + 3));
+            ySliderLabel->setString("Y Segments: " + std::to_string(ySegmentsSlider->getPercent() + 3));
+
             break;
         }
         default: {}
