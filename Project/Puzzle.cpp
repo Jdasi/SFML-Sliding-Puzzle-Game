@@ -23,7 +23,7 @@ void Puzzle::initPuzzle(PuzzleScene *pScene, int startPosX, int startPosY)
     int segmentsY = GameSettings::getSegments().y;
     std::string file{ GameSettings::getImageName() };
 
-    auto puzzle = Sprite::create(file);
+    Sprite *puzzle = Sprite::create(file);
 
     sizeX = puzzle->getContentSize().width;
     sizeY = puzzle->getContentSize().height;
@@ -33,7 +33,7 @@ void Puzzle::initPuzzle(PuzzleScene *pScene, int startPosX, int startPosY)
 
     int pad = 2;
 
-    sanityCheckImage(pad);
+    sanityCheckImage(puzzle, pad);
 
     // Splice puzzle image into PuzzlePieces.
     for (int yCycles = 0; yCycles < segmentsY; ++yCycles)
@@ -74,55 +74,20 @@ void Puzzle::initPuzzle(PuzzleScene *pScene, int startPosX, int startPosY)
     puzzlePieces[affectedPiece]->setBlankSpace(true);
 }
 
-void Puzzle::sanityCheckImage(int pad)
+void Puzzle::sanityCheckImage(cocos2d::Sprite *spr, int pad)
 {
     int paddingX = GameSettings::getSegments().x * pad;
     int paddingY = GameSettings::getSegments().y * pad;
 
-    // Scale down image.
-    if (sizeX + paddingX > 800)
+    // Scale image if necessary.
+    if (sizeX + paddingX != 800)
     {
-        for (float i = scaleFactorX; i > 0; i -= 0.001f)
-        {
-            if ((sizeX * i) + paddingX <= 800)
-            {
-                scaleFactorX = i;
-                break;
-            }
-        }
+        scaleFactorX = (800 - paddingX) / spr->getContentSize().width;
     }
 
-    if (sizeY + paddingY > 600)
+    if (sizeY + paddingY != 600)
     {
-        for (float i = scaleFactorY; i > 0; i -= 0.001f)
-        {
-            if ((sizeY * i) + paddingY <= 600)
-            {
-                scaleFactorY = i;
-                break;
-            }
-        }
-    }
-
-    // Scale up image.
-    if (sizeX + paddingX < 800)
-    {
-        float i = scaleFactorX;
-        while ((sizeX * i) + paddingX <= 800)
-        {
-            i += 0.001f;
-            scaleFactorX = i;
-        }
-    }
-
-    if (sizeY + paddingY < 600)
-    {
-        float i = scaleFactorY;
-        while ((sizeY * i) + paddingY <= 600)
-        {
-            i += 0.001f;
-            scaleFactorY = i;
-        }
+        scaleFactorY = (600 - paddingY) / spr->getContentSize().height;
     }
 }
 

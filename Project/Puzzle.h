@@ -28,7 +28,7 @@ public:
     bool inBounds(int x, int y);
 
 private:
-    void sanityCheckImage(int pad);
+    void sanityCheckImage(cocos2d::Sprite *spr, int pad);
 
     cocos2d::Size visibleSize{ cocos2d::Director::getInstance()->getVisibleSize() };
 
