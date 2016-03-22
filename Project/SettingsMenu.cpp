@@ -1,6 +1,7 @@
 #include "GameSettings.h"
 #include "settingsMenu.h"
 #include "MainMenu.h"
+#include "ImageMenu.h"
 
 USING_NS_CC;
 
@@ -21,8 +22,8 @@ bool SettingsMenu::init()
         return false;
     }
 
-    cocos2d::Label *label = Label::createWithTTF("Settings", "fonts/Marker Felt.ttf", 24);
-    label->setPosition(Vec2(visibleSize.width / 2, visibleSize.height - 150));
+    cocos2d::Label *label = Label::createWithTTF("Settings", "fonts/Marker Felt.ttf", 32);
+    label->setPosition(Vec2(visibleSize.width / 2, visibleSize.height - 100));
     this->addChild(label, 1);
 
     initMenu();
@@ -33,26 +34,34 @@ bool SettingsMenu::init()
 
 void SettingsMenu::initMenu()
 {
+    MenuItemFont *changeImage = MenuItemFont::create(
+        "Change Image",
+        CC_CALLBACK_1(SettingsMenu::gotoImageMenu, this));
+
     MenuItemFont *mainMenu = MenuItemFont::create(
         "Main Menu",
         CC_CALLBACK_1(SettingsMenu::gotoMainMenu, this));
 
-    cocos2d::Menu *menu = Menu::create(mainMenu, nullptr);
-    menu->alignItemsVertically();
+    cocos2d::Menu *menu = Menu::create(changeImage, mainMenu, nullptr);
+    menu->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
+
+    changeImage->setPositionY(-50);
+    mainMenu->setPositionY(-250);
+
     this->addChild(menu, 1);
 
     // --------------------------------------------
 
     xSegmentsSlider = ui::Slider::create();
-    xSegmentsSlider->loadBarTexture("Slider_Back.png"); // what the slider looks like
+    xSegmentsSlider->loadBarTexture("Slider_Back.png");
     xSegmentsSlider->loadSlidBallTextures("SliderNode_Normal.png", "SliderNode_Press.png", "SliderNode_Disable.png");
     xSegmentsSlider->loadProgressBarTexture("Slider_PressBar.png");
-    xSegmentsSlider->setPosition(Vec2(visibleSize.width / 2, (visibleSize.height / 2) - 150));
+    xSegmentsSlider->setPosition(Vec2(visibleSize.width / 2, visibleSize.height - 250));
     xSegmentsSlider->setPercent(GameSettings::getSegments().x - 3);
     xSegmentsSlider->setMaxPercent(7);
 
     xSliderLabel = Label::createWithTTF("X Segments: " + std::to_string(xSegmentsSlider->getPercent() + 3), "fonts/Marker Felt.ttf", 24);
-    xSliderLabel->setPosition(Vec2(xSegmentsSlider->getPosition().x, xSegmentsSlider->getPosition().y + 25));
+    xSliderLabel->setPosition(Vec2(xSegmentsSlider->getPosition().x, xSegmentsSlider->getPosition().y + 30));
     this->addChild(xSliderLabel, 1);
 
     xSegmentsSlider->addEventListener([&](Ref* sender, ui::Slider::EventType type) {
@@ -70,15 +79,15 @@ void SettingsMenu::initMenu()
     });
 
     ySegmentsSlider = ui::Slider::create();
-    ySegmentsSlider->loadBarTexture("Slider_Back.png"); // what the slider looks like
+    ySegmentsSlider->loadBarTexture("Slider_Back.png");
     ySegmentsSlider->loadSlidBallTextures("SliderNode_Normal.png", "SliderNode_Press.png", "SliderNode_Disable.png");
     ySegmentsSlider->loadProgressBarTexture("Slider_PressBar.png");
-    ySegmentsSlider->setPosition(Vec2(visibleSize.width / 2, (visibleSize.height / 2) - 250));
+    ySegmentsSlider->setPosition(Vec2(visibleSize.width / 2, visibleSize.height - 350));
     ySegmentsSlider->setPercent(GameSettings::getSegments().y - 3);
     ySegmentsSlider->setMaxPercent(7);
 
     ySliderLabel = Label::createWithTTF("Y Segments: " + std::to_string(ySegmentsSlider->getPercent() + 3), "fonts/Marker Felt.ttf", 24);
-    ySliderLabel->setPosition(Vec2(ySegmentsSlider->getPosition().x, ySegmentsSlider->getPosition().y + 25));
+    ySliderLabel->setPosition(Vec2(ySegmentsSlider->getPosition().x, ySegmentsSlider->getPosition().y + 30));
     this->addChild(ySliderLabel, 1);
 
     ySegmentsSlider->addEventListener([&](Ref* sender, ui::Slider::EventType type) {
@@ -99,8 +108,14 @@ void SettingsMenu::initMenu()
     this->addChild(ySegmentsSlider);
 }
 
+void SettingsMenu::gotoImageMenu(cocos2d::Ref *sender)
+{
+    Director::getInstance()->replaceScene(
+        TransitionFade::create(0.5, ImageMenu::createScene()));
+}
+
 void SettingsMenu::gotoMainMenu(cocos2d::Ref *sender)
 {
     Director::getInstance()->replaceScene(
-        TransitionFade::create(1, MainMenu::createScene()));
+        TransitionFade::create(0.5, MainMenu::createScene()));
 }

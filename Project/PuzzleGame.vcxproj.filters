@@ -28,6 +28,9 @@
     <ClCompile Include="SettingsMenu.cpp">
       <Filter>project\scenes</Filter>
     </ClCompile>
+    <ClCompile Include="ImageMenu.cpp">
+      <Filter>project\scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h">
@@ -55,6 +58,9 @@
       <Filter>project\utility</Filter>
     </ClInclude>
     <ClInclude Include="SettingsMenu.h">
+      <Filter>project\scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageMenu.h">
       <Filter>project\scenes</Filter>
     </ClInclude>
   </ItemGroup>

@@ -23,8 +23,8 @@ bool MainMenu::init()
 
     Size visibleSize = Director::getInstance()->getVisibleSize();
 
-    cocos2d::Label *label = Label::createWithTTF("Sliding Puzzle", "fonts/Marker Felt.ttf", 24);
-    label->setPosition(Vec2(visibleSize.width / 2, (visibleSize.height / 2) + 150));
+    cocos2d::Label *label = Label::createWithTTF("Sliding Puzzle", "fonts/Marker Felt.ttf", 32);
+    label->setPosition(Vec2(visibleSize.width / 2, visibleSize.height - 100));
     this->addChild(label, 1);
 
     initSettings();
@@ -37,7 +37,7 @@ void MainMenu::initSettings()
 {
     if (!GameSettings::isInitialised())
     {
-        GameSettings::setImageName("puzzles/dog.jpg");  // Options: dog, cats, bear, bunny, moon
+        GameSettings::setImageName("puzzles/bridge.jpg", 0);
         GameSettings::setSegmentsX(4);
         GameSettings::setSegmentsY(4);
         GameSettings::setInitialised(true);
@@ -69,13 +69,13 @@ void MainMenu::initMenu()
 void MainMenu::menuStartGame(cocos2d::Ref *sender)
 {
     Director::getInstance()->replaceScene(
-        TransitionFade::create(1, PuzzleScene::createScene()));
+        TransitionFade::create(0.5, PuzzleScene::createScene()));
 }
 
 void MainMenu::menuSettings(cocos2d::Ref *sender)
 {
     Director::getInstance()->replaceScene(
-        TransitionFade::create(1, SettingsMenu::createScene()));
+        TransitionFade::create(0.5, SettingsMenu::createScene()));
 }
 
 void MainMenu::menuCloseCallback(cocos2d::Ref *pSender)

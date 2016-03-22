@@ -12,6 +12,7 @@ public:
 
     void initMenu();
 
+    void gotoImageMenu(cocos2d::Ref *sender);
     void gotoMainMenu(cocos2d::Ref *sender);
 
     CREATE_FUNC(SettingsMenu);

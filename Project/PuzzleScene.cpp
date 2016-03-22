@@ -17,7 +17,7 @@ cocos2d::Scene *PuzzleScene::createScene()
 bool PuzzleScene::init()
 {
     startPosX = 100;
-    startPosY = 100;
+    startPosY = 80;
 
     currentPieceTag = 0;
     gameOver = false;
@@ -34,7 +34,6 @@ void PuzzleScene::initBackground()
 {
     auto backdrop = Sprite::create("backdrop.jpg");
 
-    backdrop->setScale(1);
     backdrop->setAnchorPoint(Vec2(0, 0));
     backdrop->setPosition(Vec2(0, 0));
 
@@ -269,5 +268,5 @@ void PuzzleScene::moveBlankSpaceToStart()
 void PuzzleScene::gotoMainMenu(cocos2d::Ref *sender)
 {
     Director::getInstance()->replaceScene(
-        TransitionFade::create(1, MainMenu::createScene()));
+        TransitionFade::create(0.5, MainMenu::createScene()));
 }

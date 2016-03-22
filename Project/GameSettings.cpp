@@ -1,6 +1,7 @@
 #include "Project/GameSettings.h"
 
 std::string GameSettings::imageName;
+int GameSettings::imageID = 0;
 coordinate GameSettings::segments { 0, 0 };
 bool GameSettings::initialised = false;
 
@@ -12,6 +13,17 @@ std::string GameSettings::getImageName()
 void GameSettings::setImageName(std::string name)
 {
     imageName = name;
+}
+
+int GameSettings::getImageID()
+{
+    return imageID;
+}
+
+void GameSettings::setImageName(std::string name, int id)
+{
+    imageName = name;
+    imageID = id;
 }
 
 coordinate GameSettings::getSegments()
