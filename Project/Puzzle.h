@@ -32,6 +32,8 @@ private:
 
     cocos2d::Size visibleSize{ cocos2d::Director::getInstance()->getVisibleSize() };
 
+    int totalPieces;
+
     float sizeX;
     float sizeY;
 

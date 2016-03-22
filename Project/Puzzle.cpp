@@ -6,7 +6,8 @@
 USING_NS_CC;
 
 Puzzle::Puzzle()
-    : sizeX(0)
+    : totalPieces(GameSettings::getSegments().x * GameSettings::getSegments().y)
+    , sizeX(0)
     , sizeY(0)
     , scaleFactorX(1.0f)
     , scaleFactorY(1.0f)
@@ -105,11 +106,11 @@ bool Puzzle::isPieceBlankSpace(int piece)
 
 int Puzzle::findBlankSpace()
 {
-    for (unsigned int i = 0; i < puzzlePieces.size(); ++i)
+    for (PuzzlePiece *piece : puzzlePieces)
     {
-        if (puzzlePieces[i]->isBlankSpace())
+        if (piece->isBlankSpace())
         {
-            return i;
+            return piece->getTag();
         }
     }
 
@@ -129,12 +130,10 @@ void Puzzle::swapPieces(int fromPiece, int toPiece)
 
 bool Puzzle::isPuzzleComplete()
 {
-    int totalPieces = GameSettings::getSegments().x * GameSettings::getSegments().y;
-
     int correctPieces = 0;
-    for (unsigned int i = 0; i < puzzlePieces.size(); ++i)
+    for (PuzzlePiece *piece : puzzlePieces)
     {
-        if (puzzlePieces[i]->getTag() == puzzlePieces[i]->getID())
+        if (piece->getTag() == piece->getID())
         {
             ++correctPieces;
         }
