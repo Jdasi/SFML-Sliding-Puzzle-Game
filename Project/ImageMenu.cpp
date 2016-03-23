@@ -24,6 +24,7 @@ bool ImageMenu::init()
     initMenu();
     initLabels();
     initPresetImages();
+    initEditBox();
 
     return true;
 }
@@ -104,7 +105,39 @@ void ImageMenu::initPresetImages()
         this->addChild(spr, 1);
     }
 
-    presetImages[GameSettings::getImageID()]->setOpacity(selectedOpacity);
+    if (!GameSettings::isUsingCustomImage())
+    {
+        presetImages[GameSettings::getImageID()]->setOpacity(selectedOpacity);
+    }
+}
+
+void ImageMenu::initEditBox()
+{
+    textField = ui::TextField::create("Input Text Here", "fonts/Marker Felt.ttf", 20);
+    if (GameSettings::isUsingCustomImage())
+    {
+        textField->setString(GameSettings::getImageName());
+    }
+    textField->setTouchEnabled(true);
+    textField->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2 - 100));
+    textField->setMaxLengthEnabled(true);
+    textField->setMaxLength(30);
+
+    textField->addEventListener(std::bind(&ImageMenu::textFieldInteraction, this, std::placeholders::_1, std::placeholders::_2));
+
+    this->addChild(textField);
+}
+
+void ImageMenu::textFieldInteraction(cocos2d::Ref* sender, cocos2d::ui::TextField::EventType type)
+{
+    switch (type)
+    {
+    default:
+    {
+        fadePresetImages();
+        GameSettings::setCustomImageName(textField->getString());
+    }
+    }
 }
 
 bool ImageMenu::imageClick(cocos2d::Touch *touch, cocos2d::Event *event)
@@ -119,10 +152,7 @@ bool ImageMenu::imageClick(cocos2d::Touch *touch, cocos2d::Event *event)
         return false;
     }
 
-    for (auto i : presetImages)
-    {
-        i->setOpacity(fadedOpacity);
-    }
+    fadePresetImages();
 
     spr->setOpacity(selectedOpacity);
     int imgID = spr->getTag();
@@ -157,6 +187,14 @@ bool ImageMenu::imageClick(cocos2d::Touch *touch, cocos2d::Event *event)
     }
 
     return true;
+}
+
+void ImageMenu::fadePresetImages()
+{
+    for (auto i : presetImages)
+    {
+        i->setOpacity(fadedOpacity);
+    }
 }
 
 void ImageMenu::gotoSettingsMenu(cocos2d::Ref* sender)

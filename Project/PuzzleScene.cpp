@@ -45,7 +45,8 @@ void PuzzleScene::initPuzzle()
     puzzle.initPuzzle(this, startPosX, startPosY);
 
     int product = GameSettings::getSegments().x * GameSettings::getSegments().y;
-    generateRandomValidMoves(product * product);
+    //generateRandomValidMoves(product * product);
+    generateRandomValidMoves(1);
 
     moveBlankSpaceToStart();
 }
@@ -215,6 +216,17 @@ bool PuzzleScene::tryUserMove(int fromPiece, int toX, int toY)
     {
         puzzle.getPiece(puzzle.findBlankSpace()).setBlankSpace(false);
         gameOver = true;
+
+        // ------- code possibly for somewhere else?
+        Color3B col = Color3B::WHITE;
+        Sprite *spr = Sprite::create();
+        spr->setTextureRect(Rect(0, 0, visibleSize.width, visibleSize.height));
+        spr->setColor(col);
+        spr->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
+        spr->setOpacity(100);
+        FadeOut *fade = FadeOut::create(1);
+        spr->runAction(fade);
+        this->addChild(spr, 100);
     }
 
     return true;

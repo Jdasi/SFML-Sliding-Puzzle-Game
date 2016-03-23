@@ -12,8 +12,12 @@ public:
     void initMenu();
     void initLabels();
     void initPresetImages();
+    void initEditBox();
+
+    void textFieldInteraction(cocos2d::Ref *sender, cocos2d::ui::TextField::EventType type);
 
     bool imageClick(cocos2d::Touch *touch, cocos2d::Event *event);
+    void fadePresetImages();
 
     void gotoSettingsMenu(cocos2d::Ref *sender);
 
@@ -26,4 +30,5 @@ private:
     int selectedOpacity = 255;
 
     std::vector<cocos2d::Sprite*> presetImages;
+    cocos2d::ui::TextField *textField;
 };
