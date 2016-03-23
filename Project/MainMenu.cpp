@@ -2,6 +2,9 @@
 #include "PuzzleScene.h"
 #include "MainMenu.h"
 #include "SettingsMenu.h"
+
+#include "FileUtils.h"
+
 USING_NS_CC;
 
 cocos2d::Scene *MainMenu::createScene()
@@ -29,6 +32,9 @@ bool MainMenu::init()
 
     initSettings();
     initMenu();
+
+    std::wstring executable_path = get_executable_path();
+    std::vector<std::string> files = enumerate_files(executable_path + L"\\puzzles\\*.jpg");
 
     return true;
 }
