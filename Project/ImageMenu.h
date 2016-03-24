@@ -11,24 +11,22 @@ public:
 
     void initMenu();
     void initLabels();
-    void initPresetImages();
-    void initEditBox();
+    void initImageSelector();
 
-    void textFieldInteraction(cocos2d::Ref *sender, cocos2d::ui::TextField::EventType type);
-
-    bool imageClick(cocos2d::Touch *touch, cocos2d::Event *event);
-    void fadePresetImages();
-
-    void gotoSettingsMenu(cocos2d::Ref *sender);
+    bool leftArrowClick(cocos2d::Ref *sender);
+    bool rightArrowClick(cocos2d::Ref *sender);
 
     CREATE_FUNC(ImageMenu);
 
 private:
+    void updateDisplayedImage();
+    void updateImageLabels();
+
+    void gotoSettingsMenu(cocos2d::Ref *sender);
+
     cocos2d::Size visibleSize{ cocos2d::Director::getInstance()->getVisibleSize() };
 
-    int fadedOpacity = 100;
-    int selectedOpacity = 255;
-
-    std::vector<cocos2d::Sprite*> presetImages;
-    cocos2d::ui::TextField *textField;
+    cocos2d::Sprite *displayedImage;
+    cocos2d::Label *imageName;
+    cocos2d::Label *imageNumber;
 };

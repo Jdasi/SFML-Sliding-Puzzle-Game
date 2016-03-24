@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 
 struct coordinate
 {
@@ -23,7 +24,6 @@ public:
 
     static std::string getImageName();
     static void setImageName(std::string name, int id);
-    static void setCustomImageName(std::string name);
     
     static coordinate getSegments();
     static void setSegmentsX(int x);
@@ -32,12 +32,13 @@ public:
     static bool isInitialised();
     static void setInitialised(bool b);
 
-    static bool isUsingCustomImage();
+    static void enumeratePuzzles();
+    static std::vector<std::string> getPuzzles();
 
 private:
     static std::string imageName;
     static int imageID;
     static coordinate segments;
     static bool initialised;
-    static bool customImage;
+    static std::vector<std::string> puzzles;
 };

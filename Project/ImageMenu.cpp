@@ -21,180 +21,125 @@ bool ImageMenu::init()
         return false;
     }
 
-    initMenu();
     initLabels();
-    initPresetImages();
-    initEditBox();
+    initImageSelector();
+    initMenu();
 
     return true;
 }
 
-
 void ImageMenu::initMenu()
 {
+    MenuItemSprite *leftArrow = new MenuItemSprite();
+    leftArrow->initWithNormalSprite(
+        Sprite::create("utility/arrow_up.png"),
+        Sprite::create("utility/arrow_dn.png"),
+        nullptr,
+        CC_CALLBACK_1(ImageMenu::leftArrowClick, this));
+
+    MenuItemSprite *rightArrow = new MenuItemSprite();
+    rightArrow->initWithNormalSprite(
+        Sprite::create("utility/arrow_up.png"),
+        Sprite::create("utility/arrow_dn.png"),
+        nullptr,
+        CC_CALLBACK_1(ImageMenu::rightArrowClick, this));
+
     MenuItemFont *back = MenuItemFont::create(
         "Back",
         CC_CALLBACK_1(ImageMenu::gotoSettingsMenu, this));
 
-    cocos2d::Menu *menu = Menu::create(back, nullptr);
+    cocos2d::Menu *menu = Menu::create(leftArrow, rightArrow, back, nullptr);
     menu->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
 
-    back->setPositionY(-250);
+    leftArrow->setPosition(Vec2(-300, 25));
+    leftArrow->setScale(0.3f);
+    leftArrow->setRotation3D(Vec3(0, 180, 0));
 
-    this->addChild(menu, 1);
+    rightArrow->setPosition(Vec2(300, 25));
+    rightArrow->setScale(0.3f);
+
+    back->setPositionY(-300);
+
+    this->addChild(menu);
 }
 
 void ImageMenu::initLabels()
 {
-    cocos2d::Label *imageMenu = Label::createWithTTF("Image Menu", "fonts/Marker Felt.ttf", 32);
+    cocos2d::Label *imageMenu = Label::createWithTTF
+        ("Image Menu", "fonts/Marker Felt.ttf", 32);
     imageMenu->setPosition(Vec2(visibleSize.width / 2, visibleSize.height - 100));
-    this->addChild(imageMenu, 1);
 
-    cocos2d::Label *clickTip = Label::createWithTTF("Click on an image to select it", "fonts/Marker Felt.ttf", 20);
-    clickTip->setPosition(Vec2(visibleSize.width / 2, visibleSize.height - 180));
-    this->addChild(clickTip, 1);
+    imageName = Label::createWithTTF("Placeholder", "fonts/Marker Felt.ttf", 22);
+    imageName->setPosition(Vec2(visibleSize.width / 2, 250));
+
+    imageNumber = Label::createWithTTF("Placeholder", "fonts/Marker Felt.ttf", 20);
+    imageNumber->setPosition(Vec2(visibleSize.width / 2, 220));
+
+    updateImageLabels();
+
+    this->addChild(imageMenu);
+    this->addChild(imageName);
+    this->addChild(imageNumber);
 }
 
-void ImageMenu::initPresetImages()
+void ImageMenu::updateImageLabels()
 {
-    for (int i = 0; i < 5; ++i)
-    {
-        Sprite *spr = nullptr;
-
-        switch (i)
-        {
-            case 0:
-            {
-                spr = Sprite::create("puzzles/bridge.jpg");
-                break;
-            }
-            case 1:
-            {
-                spr = Sprite::create("puzzles/divers.jpg");
-                break;
-            }
-            case 2:
-            {
-                spr = Sprite::create("puzzles/dog.jpg");
-                break;
-            }
-            case 3:
-            {
-                spr = Sprite::create("puzzles/game.jpg");
-                break;
-            }
-            case 4:
-            {
-                spr = Sprite::create("puzzles/wheel.jpg");
-                break;
-            }
-        }
-
-        spr->setPosition(Vec2(275 + (i * 200) + (i * 2), (visibleSize.height / 2) + 100));
-        spr->setScaleX(200 / spr->getContentSize().width);
-        spr->setScaleY(150 / spr->getContentSize().height);
-        spr->setOpacity(fadedOpacity);
-        spr->setTag(i);
-
-        auto listener = EventListenerTouchOneByOne::create();
-        listener->onTouchBegan = CC_CALLBACK_2(ImageMenu::imageClick, this);
-        _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, spr);
-
-        presetImages.push_back(spr);
-
-        this->addChild(spr, 1);
-    }
-
-    if (!GameSettings::isUsingCustomImage())
-    {
-        presetImages[GameSettings::getImageID()]->setOpacity(selectedOpacity);
-    }
+    imageName->setString(GameSettings::getImageName());
+    imageNumber->setString("( " + std::to_string(GameSettings::getImageID() + 1) + " / " + std::to_string(GameSettings::getPuzzles().size()) + " )");
 }
 
-void ImageMenu::initEditBox()
+void ImageMenu::initImageSelector()
 {
-    textField = ui::TextField::create("Input Text Here", "fonts/Marker Felt.ttf", 20);
-    if (GameSettings::isUsingCustomImage())
-    {
-        textField->setString(GameSettings::getImageName());
-    }
-    textField->setTouchEnabled(true);
-    textField->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2 - 100));
-    textField->setMaxLengthEnabled(true);
-    textField->setMaxLength(30);
+    displayedImage = Sprite::create();
+    displayedImage->setPosition
+        (Vec2(visibleSize.width / 2, (visibleSize.height / 2) + 50));
 
-    textField->addEventListener(std::bind(&ImageMenu::textFieldInteraction, this, std::placeholders::_1, std::placeholders::_2));
+    updateDisplayedImage();
 
-    this->addChild(textField);
+    this->addChild(displayedImage);
 }
 
-void ImageMenu::textFieldInteraction(cocos2d::Ref* sender, cocos2d::ui::TextField::EventType type)
+bool ImageMenu::leftArrowClick(cocos2d::Ref *sender)
 {
-    switch (type)
-    {
-    default:
-    {
-        fadePresetImages();
-        GameSettings::setCustomImageName(textField->getString());
-    }
-    }
-}
+    int currentImageID = GameSettings::getImageID();
 
-bool ImageMenu::imageClick(cocos2d::Touch *touch, cocos2d::Event *event)
-{
-    Sprite *spr = static_cast<Sprite*>(event->getCurrentTarget());
-
-    Point pt = touch->getLocation();
-    Rect recTemp = spr->getBoundingBox();
-
-    if (!recTemp.containsPoint(pt))
+    if (--currentImageID < 0)
     {
-        return false;
+        currentImageID = GameSettings::getPuzzles().size() - 1;
     }
 
-    fadePresetImages();
+    GameSettings::setImageName
+        ("puzzles/" + GameSettings::getPuzzles()[currentImageID], currentImageID);
 
-    spr->setOpacity(selectedOpacity);
-    int imgID = spr->getTag();
-
-    switch (imgID)
-    {
-        case 0:
-        {
-            GameSettings::setImageName("puzzles/bridge.jpg", imgID);
-            break;
-        }
-        case 1:
-        {
-            GameSettings::setImageName("puzzles/divers.jpg", imgID);
-            break;
-        }
-        case 2:
-        {
-            GameSettings::setImageName("puzzles/dog.jpg", imgID);
-            break;
-        }
-        case 3:
-        {
-            GameSettings::setImageName("puzzles/game.jpg", imgID);
-            break;
-        }
-        case 4:
-        {
-            GameSettings::setImageName("puzzles/wheel.jpg", imgID);
-            break;
-        }
-    }
+    updateDisplayedImage();
+    updateImageLabels();
 
     return true;
 }
 
-void ImageMenu::fadePresetImages()
+bool ImageMenu::rightArrowClick(cocos2d::Ref *sender)
 {
-    for (auto i : presetImages)
+    int currentImageID = GameSettings::getImageID();
+
+    if (++currentImageID >(GameSettings::getPuzzles().size() - 1))
     {
-        i->setOpacity(fadedOpacity);
+        currentImageID = 0;
     }
+
+    GameSettings::setImageName
+        ("puzzles/" + GameSettings::getPuzzles()[currentImageID], currentImageID);
+
+    updateDisplayedImage();
+    updateImageLabels();
+
+    return true;
+}
+
+void ImageMenu::updateDisplayedImage()
+{
+    displayedImage->initWithFile(GameSettings::getImageName());
+    displayedImage->setScaleX(400 / displayedImage->getContentSize().width);
+    displayedImage->setScaleY(300 / displayedImage->getContentSize().height);
 }
 
 void ImageMenu::gotoSettingsMenu(cocos2d::Ref* sender)

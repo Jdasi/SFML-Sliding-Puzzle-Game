@@ -53,9 +53,11 @@ void SettingsMenu::initMenu()
     // --------------------------------------------
 
     xSegmentsSlider = ui::Slider::create();
-    xSegmentsSlider->loadBarTexture("Slider_Back.png");
-    xSegmentsSlider->loadSlidBallTextures("SliderNode_Normal.png", "SliderNode_Press.png", "SliderNode_Disable.png");
-    xSegmentsSlider->loadProgressBarTexture("Slider_PressBar.png");
+    xSegmentsSlider->loadBarTexture("utility/Slider_Back.png");
+    xSegmentsSlider->loadSlidBallTextures("utility/SliderNode_Normal.png",
+                                          "utility/SliderNode_Press.png",
+                                          "utility/SliderNode_Disable.png");
+    xSegmentsSlider->loadProgressBarTexture("utility/Slider_PressBar.png");
     xSegmentsSlider->setPosition(Vec2(visibleSize.width / 2, visibleSize.height - 250));
     xSegmentsSlider->setPercent(GameSettings::getSegments().x - 3);
     xSegmentsSlider->setMaxPercent(7);
@@ -79,9 +81,11 @@ void SettingsMenu::initMenu()
     });
 
     ySegmentsSlider = ui::Slider::create();
-    ySegmentsSlider->loadBarTexture("Slider_Back.png");
-    ySegmentsSlider->loadSlidBallTextures("SliderNode_Normal.png", "SliderNode_Press.png", "SliderNode_Disable.png");
-    ySegmentsSlider->loadProgressBarTexture("Slider_PressBar.png");
+    ySegmentsSlider->loadBarTexture("utility/Slider_Back.png");
+    ySegmentsSlider->loadSlidBallTextures("utility/SliderNode_Normal.png",
+                                          "utility/SliderNode_Press.png",
+                                          "utility/SliderNode_Disable.png");
+    ySegmentsSlider->loadProgressBarTexture("utility/Slider_PressBar.png");
     ySegmentsSlider->setPosition(Vec2(visibleSize.width / 2, visibleSize.height - 350));
     ySegmentsSlider->setPercent(GameSettings::getSegments().y - 3);
     ySegmentsSlider->setMaxPercent(7);

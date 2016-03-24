@@ -33,9 +33,6 @@ bool MainMenu::init()
     initSettings();
     initMenu();
 
-    std::wstring executable_path = get_executable_path();
-    std::vector<std::string> files = enumerate_files(executable_path + L"\\puzzles\\*.jpg");
-
     return true;
 }
 
@@ -43,7 +40,8 @@ void MainMenu::initSettings()
 {
     if (!GameSettings::isInitialised())
     {
-        GameSettings::setImageName("puzzles/bridge.jpg", 0);
+        GameSettings::enumeratePuzzles();
+        GameSettings::setImageName("puzzles/" + GameSettings::getPuzzles()[0], 0);
         GameSettings::setSegmentsX(4);
         GameSettings::setSegmentsY(4);
         GameSettings::setInitialised(true);
@@ -62,8 +60,8 @@ void MainMenu::initMenu()
 
     MenuItemSprite *mainMenuExit = new MenuItemSprite();
     mainMenuExit->initWithNormalSprite(
-        Sprite::create("CloseNormal.png"),
-        Sprite::create("CloseSelected.png"),
+        Sprite::create("utility/CloseNormal.png"),
+        Sprite::create("utility/CloseSelected.png"),
         nullptr,
         CC_CALLBACK_1(MainMenu::menuCloseCallback, this));
 

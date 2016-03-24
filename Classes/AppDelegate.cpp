@@ -6,6 +6,8 @@ USING_NS_CC;
 
 bool AppDelegate::applicationDidFinishLaunching() 
 {
+    srand(static_cast<int>(time(nullptr)));
+
     cocos2d::Director *director = Director::getInstance();
     cocos2d::GLView *glview = director->getOpenGLView();
 

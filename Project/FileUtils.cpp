@@ -35,12 +35,6 @@ std::vector<std::string> enumerate_files(const std::wstring& path)
     WIN32_FIND_DATA ffd;
     HANDLE hFind = FindFirstFile(path.c_str(), &ffd);
 
-    // Check if access to path fails.
-    if (hFind == INVALID_HANDLE_VALUE)
-    {
-        throw std::runtime_error("Error reading directory contents");
-    }
-
     std::vector<std::string> files;
     do
     {
@@ -51,9 +45,6 @@ std::vector<std::string> enumerate_files(const std::wstring& path)
             files.push_back(wstring_to_string(fileName));
         }
     } while (FindNextFile(hFind, &ffd) != 0);
-
-    if (GetLastError() != ERROR_NO_MORE_FILES)
-        throw std::runtime_error("Something went wrong enumerating files.");
     
     FindClose(hFind);
     return files;

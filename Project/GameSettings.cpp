@@ -1,10 +1,11 @@
 #include "Project/GameSettings.h"
+#include "FileUtils.h"
 
 std::string GameSettings::imageName;
 int GameSettings::imageID = 0;
 coordinate GameSettings::segments { 0, 0 };
 bool GameSettings::initialised = false;
-bool GameSettings::customImage = false;
+std::vector<std::string> GameSettings::puzzles;
 
 int GameSettings::getImageID()
 {
@@ -20,13 +21,6 @@ void GameSettings::setImageName(std::string name, int id)
 {
     imageName = name;
     imageID = id;
-    customImage = false;
-}
-
-void GameSettings::setCustomImageName(std::string name)
-{
-    imageName = name;
-    customImage = true;
 }
 
 coordinate GameSettings::getSegments()
@@ -54,7 +48,17 @@ void GameSettings::setInitialised(bool b)
     initialised = b;
 }
 
-bool GameSettings::isUsingCustomImage()
+void GameSettings::enumeratePuzzles()
 {
-    return customImage;
+    std::wstring executable_path = get_executable_path();
+    std::vector<std::string> puzzlesJpg = enumerate_files(executable_path + L"\\puzzles\\*.jpg");
+    //std::vector<std::string> puzzlesPng = enumerate_files(executable_path + L"\\puzzles\\*.png");
+    //puzzles.reserve(puzzlesJpg.size() + puzzlesPng.size());
+    puzzles.insert(puzzles.end(), puzzlesJpg.begin(), puzzlesJpg.end());
+    //puzzles.insert(puzzles.end(), puzzlesPng.begin(), puzzlesPng.end());
+}
+
+std::vector<std::string> GameSettings::getPuzzles()
+{
+    return puzzles;
 }

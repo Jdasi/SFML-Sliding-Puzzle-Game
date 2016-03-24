@@ -32,7 +32,7 @@ bool PuzzleScene::init()
 
 void PuzzleScene::initBackground()
 {
-    auto backdrop = Sprite::create("backdrop.jpg");
+    auto backdrop = Sprite::create("backdrops/regal.jpg");
 
     backdrop->setAnchorPoint(Vec2(0, 0));
     backdrop->setPosition(Vec2(0, 0));
@@ -218,10 +218,9 @@ bool PuzzleScene::tryUserMove(int fromPiece, int toX, int toY)
         gameOver = true;
 
         // ------- code possibly for somewhere else?
-        Color3B col = Color3B::WHITE;
         Sprite *spr = Sprite::create();
         spr->setTextureRect(Rect(0, 0, visibleSize.width, visibleSize.height));
-        spr->setColor(col);
+        spr->setColor(Color3B::WHITE);
         spr->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
         spr->setOpacity(100);
         FadeOut *fade = FadeOut::create(1);
