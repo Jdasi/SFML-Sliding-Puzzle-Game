@@ -1,4 +1,4 @@
-#include "Project/GameSettings.h"
+#include "GameSettings.h"
 #include "FileUtils.h"
 
 std::string GameSettings::imageName;

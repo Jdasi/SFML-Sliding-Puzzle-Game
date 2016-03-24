@@ -3,8 +3,6 @@
 #include "MainMenu.h"
 #include "SettingsMenu.h"
 
-#include "FileUtils.h"
-
 USING_NS_CC;
 
 cocos2d::Scene *MainMenu::createScene()

@@ -1,5 +1,5 @@
 #pragma once
-#include "Project/PuzzlePiece.h"
+#include "PuzzlePiece.h"
 
 #include "cocos2d.h"
 #include <Vector>
@@ -10,7 +10,7 @@ class Puzzle : public cocos2d::Layer
 {
 public:
     Puzzle();
-    ~Puzzle();
+    ~Puzzle() = default;
 
     void initPuzzle(PuzzleScene *pScene, int startPosX, int startPosY);
 

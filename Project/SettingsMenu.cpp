@@ -22,9 +22,9 @@ bool SettingsMenu::init()
         return false;
     }
 
-    cocos2d::Label *label = Label::createWithTTF("Settings", "fonts/Marker Felt.ttf", 32);
-    label->setPosition(Vec2(visibleSize.width / 2, visibleSize.height - 100));
-    this->addChild(label, 1);
+    cocos2d::Label *sceneTitle = Label::createWithTTF("Settings", "fonts/Marker Felt.ttf", 32);
+    sceneTitle->setPosition(Vec2(visibleSize.width / 2, visibleSize.height - 100));
+    this->addChild(sceneTitle, 1);
 
     initMenu();
 

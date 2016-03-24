@@ -1,7 +1,6 @@
-#include "Project/Puzzle.h"
-#include "Project/PuzzleScene.h"
-#include "Project/GameSettings.h"
-#include <complex>
+#include "Puzzle.h"
+#include "PuzzleScene.h"
+#include "GameSettings.h"
 
 USING_NS_CC;
 
@@ -11,10 +10,6 @@ Puzzle::Puzzle()
     , sizeY(0)
     , scaleFactorX(1.0f)
     , scaleFactorY(1.0f)
-{
-}
-
-Puzzle::~Puzzle()
 {
 }
 
@@ -71,8 +66,7 @@ void Puzzle::initPuzzle(PuzzleScene *pScene, int startPosX, int startPosY)
     }
 
     // Hide bottom right puzzle piece.
-    int affectedPiece = (segmentsX * segmentsY) - 1;
-    puzzlePieces[affectedPiece]->setBlankSpace(true);
+    puzzlePieces[(segmentsX * segmentsY) - 1]->setBlankSpace(true);
 }
 
 void Puzzle::sanityCheckImage(cocos2d::Sprite *spr, int pad)
@@ -80,7 +74,6 @@ void Puzzle::sanityCheckImage(cocos2d::Sprite *spr, int pad)
     int paddingX = GameSettings::getSegments().x * pad;
     int paddingY = GameSettings::getSegments().y * pad;
 
-    // Scale image if necessary.
     if (sizeX + paddingX != 800)
     {
         scaleFactorX = (800 - paddingX) / spr->getContentSize().width;

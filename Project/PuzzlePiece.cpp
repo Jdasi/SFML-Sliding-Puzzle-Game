@@ -1,4 +1,4 @@
-#include "Project/PuzzlePiece.h"
+#include "PuzzlePiece.h"
 USING_NS_CC;
 
 PuzzlePiece::PuzzlePiece()

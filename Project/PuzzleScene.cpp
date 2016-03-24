@@ -1,6 +1,6 @@
-#include "Project/PuzzleScene.h"
-#include "Project/GameSettings.h"
-#include "Project/MainMenu.h"
+#include "PuzzleScene.h"
+#include "GameSettings.h"
+#include "MainMenu.h"
 
 USING_NS_CC;
 
@@ -53,10 +53,10 @@ void PuzzleScene::initPuzzle()
 
 void PuzzleScene::initLabels()
 {
-    movesLabel = Label::createWithTTF("Moves: ", "fonts/Marker Felt.ttf", 24);
+    movesLabel = Label::createWithTTF("Placeholder", "fonts/Marker Felt.ttf", 24);
     movesLabel->setPosition(Vec2(visibleSize.width - 250, visibleSize.height - 100));
 
-    updateMovesLabel(0);
+    updateMovesLabel();
 
     MenuItemFont *menuLabel = MenuItemFont::create(
         "Main Menu",
@@ -72,9 +72,7 @@ void PuzzleScene::initLabels()
 void PuzzleScene::updateMovesLabel(int increment)
 {
     numMoves += increment;
-
-    std::string stringMoves = "Moves: " + std::to_string(numMoves);
-    movesLabel->setString(stringMoves);
+    movesLabel->setString("Moves: " + std::to_string(numMoves));
 }
 
 bool PuzzleScene::interactWithPuzzle(cocos2d::Touch *touch, cocos2d::Event *event)

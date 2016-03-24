@@ -1,7 +1,5 @@
 #pragma once
 #include "cocos2d.h"
-#include "ui/CocosGUI.h"
-#include <vector>
 
 class ImageMenu : public cocos2d::Layer
 {
@@ -9,16 +7,16 @@ public:
     static cocos2d::Scene* createScene();
     virtual bool init();
 
+    CREATE_FUNC(ImageMenu);
+
+private:
     void initMenu();
     void initLabels();
-    void initImageSelector();
+    void initPreviewImage();
 
     bool leftArrowClick(cocos2d::Ref *sender);
     bool rightArrowClick(cocos2d::Ref *sender);
 
-    CREATE_FUNC(ImageMenu);
-
-private:
     void updateDisplayedImage();
     void updateImageLabels();
 

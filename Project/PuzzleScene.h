@@ -1,5 +1,5 @@
 #pragma once
-#include "Project/Puzzle.h"
+#include "Puzzle.h"
 
 #include <cocos2d.h>
 
@@ -19,7 +19,7 @@ private:
     void initPuzzle();
     void initLabels();
 
-    void updateMovesLabel(int increment);
+    void updateMovesLabel(int increment = 0);
 
     void generateValidMove();
     void generateRandomValidMoves(int times);

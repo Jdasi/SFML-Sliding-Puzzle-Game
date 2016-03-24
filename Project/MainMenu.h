@@ -8,6 +8,9 @@ public:
     static cocos2d::Scene* createScene();
     virtual bool init();
 
+    CREATE_FUNC(MainMenu);
+
+private:
     void initSettings();
     void initMenu();
 
@@ -16,8 +19,5 @@ public:
 
     void menuCloseCallback(cocos2d::Ref *pSender);
 
-    CREATE_FUNC(MainMenu);
-
-private:
     cocos2d::Size visibleSize{ cocos2d::Director::getInstance()->getVisibleSize() };
 };

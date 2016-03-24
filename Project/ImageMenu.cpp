@@ -21,9 +21,9 @@ bool ImageMenu::init()
         return false;
     }
 
-    initLabels();
-    initImageSelector();
     initMenu();
+    initLabels();
+    initPreviewImage();
 
     return true;
 }
@@ -65,9 +65,9 @@ void ImageMenu::initMenu()
 
 void ImageMenu::initLabels()
 {
-    cocos2d::Label *imageMenu = Label::createWithTTF
+    cocos2d::Label *sceneTitle = Label::createWithTTF
         ("Image Menu", "fonts/Marker Felt.ttf", 32);
-    imageMenu->setPosition(Vec2(visibleSize.width / 2, visibleSize.height - 100));
+    sceneTitle->setPosition(Vec2(visibleSize.width / 2, visibleSize.height - 100));
 
     imageName = Label::createWithTTF("Placeholder", "fonts/Marker Felt.ttf", 22);
     imageName->setPosition(Vec2(visibleSize.width / 2, 250));
@@ -77,18 +77,12 @@ void ImageMenu::initLabels()
 
     updateImageLabels();
 
-    this->addChild(imageMenu);
+    this->addChild(sceneTitle);
     this->addChild(imageName);
     this->addChild(imageNumber);
 }
 
-void ImageMenu::updateImageLabels()
-{
-    imageName->setString(GameSettings::getImageName());
-    imageNumber->setString("( " + std::to_string(GameSettings::getImageID() + 1) + " / " + std::to_string(GameSettings::getPuzzles().size()) + " )");
-}
-
-void ImageMenu::initImageSelector()
+void ImageMenu::initPreviewImage()
 {
     displayedImage = Sprite::create();
     displayedImage->setPosition
@@ -119,7 +113,7 @@ bool ImageMenu::leftArrowClick(cocos2d::Ref *sender)
 
 bool ImageMenu::rightArrowClick(cocos2d::Ref *sender)
 {
-    int currentImageID = GameSettings::getImageID();
+    unsigned int currentImageID = GameSettings::getImageID();
 
     if (++currentImageID >(GameSettings::getPuzzles().size() - 1))
     {
@@ -133,6 +127,12 @@ bool ImageMenu::rightArrowClick(cocos2d::Ref *sender)
     updateImageLabels();
 
     return true;
+}
+
+void ImageMenu::updateImageLabels()
+{
+    imageName->setString(GameSettings::getImageName());
+    imageNumber->setString("( " + std::to_string(GameSettings::getImageID() + 1) + " / " + std::to_string(GameSettings::getPuzzles().size()) + " )");
 }
 
 void ImageMenu::updateDisplayedImage()
