@@ -12,10 +12,13 @@ public:
 
 private:
     void initSettings();
+    void initBackdrop();
     void initMenu();
 
-    void menuStart(cocos2d::Ref *sender);
-    void menuCloseCallback(cocos2d::Ref *pSender);
+    void gotoPuzzleSelection(cocos2d::Ref *sender);
+    void gotoUnlocks(cocos2d::Ref *sender);
+    void gotoStatistics(cocos2d::Ref *sender);
+    void exitGame(cocos2d::Ref *pSender);
 
     cocos2d::Size visibleSize{ cocos2d::Director::getInstance()->getVisibleSize() };
 };

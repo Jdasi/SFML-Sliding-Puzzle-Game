@@ -24,11 +24,13 @@ bool MainMenu::init()
 
     Size visibleSize = Director::getInstance()->getVisibleSize();
 
-    cocos2d::Label *label = Label::createWithTTF("Sliding Puzzle", "fonts/Marker Felt.ttf", 32);
-    label->setPosition(Vec2(visibleSize.width / 2, visibleSize.height - 100));
-    this->addChild(label);
+    cocos2d::Label *sceneTitle = Label::createWithTTF
+        ("Sliding Puzzle Game", "fonts/Marker Felt.ttf", 32);
+    sceneTitle->setPosition(Vec2(visibleSize.width / 2, visibleSize.height - 100));
+    this->addChild(sceneTitle, 1);
 
     initSettings();
+    initBackdrop();
     initMenu();
 
     return true;
@@ -46,31 +48,82 @@ void MainMenu::initSettings()
     }
 }
 
-void MainMenu::initMenu()
+void MainMenu::initBackdrop()
 {
-    MenuItemFont *menuStart = MenuItemFont::create(
-        "Start",
-        CC_CALLBACK_1(MainMenu::menuStart, this));
+    Sprite *backdrop = Sprite::create("backdrops/regal_menu.jpg");
 
-    MenuItemSprite *mainMenuExit = new MenuItemSprite();
-    mainMenuExit->initWithNormalSprite(
-        Sprite::create("utility/CloseNormal.png"),
-        Sprite::create("utility/CloseSelected.png"),
-        nullptr,
-        CC_CALLBACK_1(MainMenu::menuCloseCallback, this));
+    backdrop->setAnchorPoint(Vec2(0, 0));
+    backdrop->setPosition(Vec2(0, 0));
 
-    cocos2d::Menu *menu = Menu::create(menuStart, mainMenuExit, nullptr);
-    menu->alignItemsVertically();
-    this->addChild(menu, 1);
+    this->addChild(backdrop, 0);
 }
 
-void MainMenu::menuStart(cocos2d::Ref *sender)
+void MainMenu::initMenu()
+{
+    MenuItemSprite *menuPlay = new MenuItemSprite();
+    menuPlay->initWithNormalSprite(
+        Sprite::create("launchpad/play_up.png"),
+        Sprite::create("launchpad/play_dn.png"),
+        nullptr,
+        CC_CALLBACK_1(MainMenu::gotoPuzzleSelection, this));
+
+    MenuItemSprite *menuUnlocks = new MenuItemSprite();
+    menuUnlocks->initWithNormalSprite(
+        Sprite::create("launchpad/unlocks_up.png"),
+        Sprite::create("launchpad/unlocks_dn.png"),
+        nullptr,
+        CC_CALLBACK_1(MainMenu::gotoUnlocks, this));
+
+    MenuItemSprite *menuStatistics = new MenuItemSprite();
+    menuStatistics->initWithNormalSprite(
+        Sprite::create("launchpad/statistics_up.png"),
+        Sprite::create("launchpad/statistics_dn.png"),
+        nullptr,
+        CC_CALLBACK_1(MainMenu::gotoStatistics, this));
+
+    MenuItemSprite *menuExit = new MenuItemSprite();
+    menuExit->initWithNormalSprite(
+        Sprite::create("launchpad/quit_up.png"),
+        Sprite::create("launchpad/quit_dn.png"),
+        nullptr,
+        CC_CALLBACK_1(MainMenu::exitGame, this));
+
+    cocos2d::Menu *menu = Menu::create
+        (menuPlay, menuUnlocks, menuStatistics, menuExit, nullptr);
+    menu->setPosition(Vec2(visibleSize.width / 2, (visibleSize.height / 2) - 25));
+
+    menuPlay->setPosition(Vec2(-115, 115));
+    menuPlay->setScale(0.75);
+
+    menuUnlocks->setPosition(Vec2(115, 115));
+    menuUnlocks->setScale(0.75);
+
+    menuStatistics->setPosition(Vec2(-115, -115));
+    menuStatistics->setScale(0.75);
+
+    menuExit->setPosition(Vec2(115, -115));
+    menuExit->setScale(0.75);
+
+    this->addChild(menu);
+}
+
+void MainMenu::gotoPuzzleSelection(cocos2d::Ref *sender)
 {
     Director::getInstance()->replaceScene(
         TransitionFade::create(0.5, PuzzleSelection::createScene()));
 }
 
-void MainMenu::menuCloseCallback(cocos2d::Ref *pSender)
+void MainMenu::gotoUnlocks(cocos2d::Ref* sender)
+{
+
+}
+
+void MainMenu::gotoStatistics(cocos2d::Ref* sender)
+{
+
+}
+
+void MainMenu::exitGame(cocos2d::Ref *pSender)
 {
     Director::getInstance()->end();
 }

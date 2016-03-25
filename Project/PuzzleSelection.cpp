@@ -22,6 +22,7 @@ bool PuzzleSelection::init()
         return false;
     }
 
+    initBackdrop();
     initMenu();
     initSliders();
     initLabels();
@@ -31,21 +32,31 @@ bool PuzzleSelection::init()
     return true;
 }
 
+void PuzzleSelection::initBackdrop()
+{
+    Sprite *backdrop = Sprite::create("backdrops/regal_menu.jpg");
+
+    backdrop->setAnchorPoint(Vec2(0, 0));
+    backdrop->setPosition(Vec2(0, 0));
+
+    this->addChild(backdrop, 0);
+}
+
 void PuzzleSelection::initMenu()
 {
-    MenuItemFont *playGame = MenuItemFont::create(
-        "Play Game",
+    MenuItemFont *menuStart = MenuItemFont::create(
+        "Start",
         CC_CALLBACK_1(PuzzleSelection::gotoPuzzleGame, this));
 
-    MenuItemFont *mainMenu = MenuItemFont::create(
-        "Main Menu",
+    MenuItemFont *menuBack = MenuItemFont::create(
+        "Back",
         CC_CALLBACK_1(PuzzleSelection::gotoMainMenu, this));
 
-    cocos2d::Menu *menu = Menu::create(playGame, mainMenu, nullptr);
+    cocos2d::Menu *menu = Menu::create(menuStart, menuBack, nullptr);
     menu->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
 
-    playGame->setPosition(Vec2(300, -250));
-    mainMenu->setPosition(Vec2(300, -300));
+    menuStart->setPosition(Vec2(300, -250));
+    menuBack->setPosition(Vec2(300, -300));
 
     this->addChild(menu);
 }
@@ -55,10 +66,10 @@ void PuzzleSelection::initLabels()
     cocos2d::Label *sceneTitle = Label::createWithTTF("Choose a Puzzle!", "fonts/Marker Felt.ttf", 32);
     sceneTitle->setPosition(Vec2(visibleSize.width / 2, visibleSize.height - 100));
 
-    imageName = Label::createWithTTF("Placeholder", "fonts/Marker Felt.ttf", 22);
+    imageName = Label::createWithTTF("imageName", "fonts/Marker Felt.ttf", 22);
     imageName->setPosition(Vec2((visibleSize.width / 2) - 250, 250));
 
-    imageNumber = Label::createWithTTF("Placeholder", "fonts/Marker Felt.ttf", 20);
+    imageNumber = Label::createWithTTF("imageNumber", "fonts/Marker Felt.ttf", 20);
     imageNumber->setPosition(Vec2((visibleSize.width / 2) - 250, 220));
 
     updateImageLabels();

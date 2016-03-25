@@ -24,7 +24,7 @@ bool PuzzleGame::init()
     gameOver = false;
     numMoves = 0;
 
-    initBackground();
+    initBackdrop();
     initPuzzle();
     initLabels();
     initMenu();
@@ -33,9 +33,9 @@ bool PuzzleGame::init()
     return true;
 }
 
-void PuzzleGame::initBackground()
+void PuzzleGame::initBackdrop()
 {
-    Sprite *backdrop = Sprite::create("backdrops/regal.jpg");
+    Sprite *backdrop = Sprite::create("backdrops/regal_puzzle.jpg");
 
     backdrop->setAnchorPoint(Vec2(0, 0));
     backdrop->setPosition(Vec2(0, 0));
@@ -56,7 +56,7 @@ void PuzzleGame::initPuzzle()
 
 void PuzzleGame::initLabels()
 {
-    movesLabel = Label::createWithTTF("Placeholder", "fonts/Marker Felt.ttf", 30);
+    movesLabel = Label::createWithTTF("Moves: ", "fonts/Marker Felt.ttf", 30);
     movesLabel->setPosition(Vec2(visibleSize.width - 210, (visibleSize.height / 2) - 100));
 
     updateMovesLabel();
@@ -64,19 +64,19 @@ void PuzzleGame::initLabels()
 
 void PuzzleGame::initMenu()
 {
-    MenuItemFont *mainMenu = MenuItemFont::create(
+    MenuItemFont *menuChoosePuzzle = MenuItemFont::create(
+        "Choose Puzzle",
+        CC_CALLBACK_1(PuzzleGame::gotoPuzzleSelection, this));
+
+    MenuItemFont *menuMain = MenuItemFont::create(
         "Main Menu",
         CC_CALLBACK_1(PuzzleGame::gotoMainMenu, this));
 
-    MenuItemFont *changeImage = MenuItemFont::create(
-        "Change Image",
-        CC_CALLBACK_1(PuzzleGame::gotoPuzzleSelection, this));
-
-    Menu *menu = Menu::create(changeImage, mainMenu, nullptr);
+    Menu *menu = Menu::create(menuChoosePuzzle, menuMain, nullptr);
     menu->setPosition(Vec2(visibleSize.width - 210, visibleSize.height / 2));
 
-    changeImage->setPositionY(-225);
-    mainMenu->setPositionY(-275);
+    menuChoosePuzzle->setPositionY(-225);
+    menuMain->setPositionY(-275);
 
     this->addChild(menu);
     this->addChild(movesLabel);

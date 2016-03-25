@@ -12,6 +12,7 @@ public:
     CREATE_FUNC(PuzzleSelection);
 
 private:
+    void initBackdrop();
     void initMenu();
     void initLabels();
     void initSliders();

@@ -16,7 +16,7 @@ public:
     CREATE_FUNC(PuzzleGame);
 
 private:
-    void initBackground();
+    void initBackdrop();
     void initPuzzle();
     void initLabels();
     void initMenu();
