@@ -1,20 +1,21 @@
-#include "PuzzleScene.h"
+#include "PuzzleGame.h"
 #include "GameSettings.h"
 #include "MainMenu.h"
+#include "PuzzleSelection.h"
 
 USING_NS_CC;
 
-cocos2d::Scene *PuzzleScene::createScene()
+cocos2d::Scene *PuzzleGame::createScene()
 {
     cocos2d::Scene *scene = Scene::create();
-    auto layer = PuzzleScene::create();
+    auto layer = PuzzleGame::create();
 
     scene->addChild(layer);
 
     return scene;
 }
 
-bool PuzzleScene::init()
+bool PuzzleGame::init()
 {
     startPosX = 100;
     startPosY = 80;
@@ -26,13 +27,15 @@ bool PuzzleScene::init()
     initBackground();
     initPuzzle();
     initLabels();
+    initMenu();
+    initPreviewImage();
 
     return true;
 }
 
-void PuzzleScene::initBackground()
+void PuzzleGame::initBackground()
 {
-    auto backdrop = Sprite::create("backdrops/regal.jpg");
+    Sprite *backdrop = Sprite::create("backdrops/regal.jpg");
 
     backdrop->setAnchorPoint(Vec2(0, 0));
     backdrop->setPosition(Vec2(0, 0));
@@ -40,7 +43,7 @@ void PuzzleScene::initBackground()
     this->addChild(backdrop, 0);
 }
 
-void PuzzleScene::initPuzzle()
+void PuzzleGame::initPuzzle()
 {
     puzzle.initPuzzle(this, startPosX, startPosY);
 
@@ -51,31 +54,55 @@ void PuzzleScene::initPuzzle()
     moveBlankSpaceToStart();
 }
 
-void PuzzleScene::initLabels()
+void PuzzleGame::initLabels()
 {
-    movesLabel = Label::createWithTTF("Placeholder", "fonts/Marker Felt.ttf", 24);
-    movesLabel->setPosition(Vec2(visibleSize.width - 250, visibleSize.height - 100));
+    movesLabel = Label::createWithTTF("Placeholder", "fonts/Marker Felt.ttf", 30);
+    movesLabel->setPosition(Vec2(visibleSize.width - 210, (visibleSize.height / 2) - 100));
 
     updateMovesLabel();
-
-    MenuItemFont *menuLabel = MenuItemFont::create(
-        "Main Menu",
-        CC_CALLBACK_1(PuzzleScene::gotoMainMenu, this));
-
-    Menu *menu = Menu::create(menuLabel, nullptr);
-    menu->setPosition(Vec2(visibleSize.width - 250, visibleSize.height - 200));
-
-    this->addChild(menu, 1);
-    this->addChild(movesLabel, 1);
 }
 
-void PuzzleScene::updateMovesLabel(int increment)
+void PuzzleGame::initMenu()
+{
+    MenuItemFont *mainMenu = MenuItemFont::create(
+        "Main Menu",
+        CC_CALLBACK_1(PuzzleGame::gotoMainMenu, this));
+
+    MenuItemFont *changeImage = MenuItemFont::create(
+        "Change Image",
+        CC_CALLBACK_1(PuzzleGame::gotoPuzzleSelection, this));
+
+    Menu *menu = Menu::create(changeImage, mainMenu, nullptr);
+    menu->setPosition(Vec2(visibleSize.width - 210, visibleSize.height / 2));
+
+    changeImage->setPositionY(-225);
+    mainMenu->setPositionY(-275);
+
+    this->addChild(menu);
+    this->addChild(movesLabel);
+}
+
+void PuzzleGame::initPreviewImage()
+{
+    Sprite *preview = Sprite::create(GameSettings::getImageName());
+    preview->setPosition(Vec2(visibleSize.width - 210, (visibleSize.height / 2) + 175));
+    preview->setScaleX(264 / preview->getContentSize().width);
+    preview->setScaleY(198 / preview->getContentSize().height);
+
+    Label *label = Label::createWithTTF("Preview", "fonts/Marker Felt.ttf", 24);
+    label->setPosition(Vec2(preview->getPositionX(), preview->getPositionY() + 125));
+
+    this->addChild(label);
+    this->addChild(preview);
+}
+
+void PuzzleGame::updateMovesLabel(int increment)
 {
     numMoves += increment;
     movesLabel->setString("Moves: " + std::to_string(numMoves));
 }
 
-bool PuzzleScene::interactWithPuzzle(cocos2d::Touch *touch, cocos2d::Event *event)
+bool PuzzleGame::interactWithPuzzle(cocos2d::Touch *touch, cocos2d::Event *event)
 {
     PuzzlePiece *piece = static_cast<PuzzlePiece*>(event->getCurrentTarget());
 
@@ -99,7 +126,7 @@ bool PuzzleScene::interactWithPuzzle(cocos2d::Touch *touch, cocos2d::Event *even
     return true;
 }
 
-void PuzzleScene::generateValidMove()
+void PuzzleGame::generateValidMove()
 {
     coordinate currPiece = puzzle.calculateCoordinates(currentPieceTag);
 
@@ -124,7 +151,7 @@ void PuzzleScene::generateValidMove()
     }
 }
 
-void PuzzleScene::generateRandomValidMoves(int times)
+void PuzzleGame::generateRandomValidMoves(int times)
 {
     for (int i = 0; i < times; ++i)
     {
@@ -180,7 +207,7 @@ void PuzzleScene::generateRandomValidMoves(int times)
     }
 }
 
-bool PuzzleScene::tryUserMove(int fromPiece, int toX, int toY)
+bool PuzzleGame::tryUserMove(int fromPiece, int toX, int toY)
 {
     if (!puzzle.inBounds(toX, toY))
     {
@@ -229,7 +256,7 @@ bool PuzzleScene::tryUserMove(int fromPiece, int toX, int toY)
     return true;
 }
 
-bool PuzzleScene::tryComputerMove(int fromPiece, int toX, int toY)
+bool PuzzleGame::tryComputerMove(int fromPiece, int toX, int toY)
 {
     if (!puzzle.inBounds(toX, toY))
     {
@@ -249,7 +276,7 @@ bool PuzzleScene::tryComputerMove(int fromPiece, int toX, int toY)
     return true;
 }
 
-void PuzzleScene::moveBlankSpaceToStart()
+void PuzzleGame::moveBlankSpaceToStart()
 {
     for (int i = 0; i < GameSettings::getSegments().x; ++i)
     {
@@ -274,8 +301,14 @@ void PuzzleScene::moveBlankSpaceToStart()
     }
 }
 
-void PuzzleScene::gotoMainMenu(cocos2d::Ref *sender)
+void PuzzleGame::gotoMainMenu(cocos2d::Ref *sender)
 {
     Director::getInstance()->replaceScene(
         TransitionFade::create(0.5, MainMenu::createScene()));
+}
+
+void PuzzleGame::gotoPuzzleSelection(cocos2d::Ref *sender)
+{
+    Director::getInstance()->replaceScene(
+        TransitionFade::create(0.5, PuzzleSelection::createScene()));
 }

@@ -1,6 +1,5 @@
 #include <windows.h>
 #include <vector>
-#include <string>
 #include <codecvt>
 
 // Because filenames are widestrings (accept international characters)

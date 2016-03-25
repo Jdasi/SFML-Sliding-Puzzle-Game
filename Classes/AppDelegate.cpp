@@ -1,5 +1,4 @@
 #include "Project/MainMenu.h"
-#include "Project/PuzzleScene.h"
 
 #include "AppDelegate.h"
 USING_NS_CC;
@@ -19,7 +18,6 @@ bool AppDelegate::applicationDidFinishLaunching()
     }
 
     auto scene = MainMenu::createScene();
-    //auto scene = PuzzleScene::createScene();
 
     director->runWithScene(scene);
 

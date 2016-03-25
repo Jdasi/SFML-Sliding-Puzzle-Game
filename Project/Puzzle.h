@@ -1,10 +1,12 @@
 #pragma once
+
 #include "PuzzlePiece.h"
+#include "GameSettings.h"
 
 #include "cocos2d.h"
 #include <Vector>
 
-class PuzzleScene;
+class PuzzleGame;
 
 class Puzzle : public cocos2d::Layer
 {
@@ -12,7 +14,7 @@ public:
     Puzzle();
     ~Puzzle() = default;
 
-    void initPuzzle(PuzzleScene *pScene, int startPosX, int startPosY);
+    void initPuzzle(PuzzleGame *pScene, int startPosX, int startPosY);
 
     PuzzlePiece &getPiece(int piece);
 

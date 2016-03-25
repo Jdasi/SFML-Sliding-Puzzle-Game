@@ -1,6 +1,5 @@
 #include "Puzzle.h"
-#include "PuzzleScene.h"
-#include "GameSettings.h"
+#include "PuzzleGame.h"
 
 USING_NS_CC;
 
@@ -13,7 +12,7 @@ Puzzle::Puzzle()
 {
 }
 
-void Puzzle::initPuzzle(PuzzleScene *pScene, int startPosX, int startPosY)
+void Puzzle::initPuzzle(PuzzleGame *pScene, int startPosX, int startPosY)
 {
     int segmentsX = GameSettings::getSegments().x;
     int segmentsY = GameSettings::getSegments().y;
@@ -57,7 +56,7 @@ void Puzzle::initPuzzle(PuzzleScene *pScene, int startPosX, int startPosY)
             
             auto listener = EventListenerTouchOneByOne::create();
             listener->onTouchBegan =
-                CC_CALLBACK_2(PuzzleScene::interactWithPuzzle, pScene);
+                CC_CALLBACK_2(PuzzleGame::interactWithPuzzle, pScene);
             _eventDispatcher->
                 addEventListenerWithSceneGraphPriority(listener, piece);
 

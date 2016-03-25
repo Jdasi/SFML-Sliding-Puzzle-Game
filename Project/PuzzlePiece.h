@@ -1,5 +1,4 @@
 #pragma once
-#include "GameSettings.h"
 
 #include "cocos2d.h"
 

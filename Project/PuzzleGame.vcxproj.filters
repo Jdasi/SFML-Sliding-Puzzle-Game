@@ -7,9 +7,6 @@
     <ClCompile Include="main.cpp">
       <Filter>project</Filter>
     </ClCompile>
-    <ClCompile Include="PuzzleScene.cpp">
-      <Filter>project\scenes</Filter>
-    </ClCompile>
     <ClCompile Include="Puzzle.cpp">
       <Filter>project\objects</Filter>
     </ClCompile>
@@ -25,14 +22,14 @@
     <ClCompile Include="GameSettings.cpp">
       <Filter>project\utility</Filter>
     </ClCompile>
-    <ClCompile Include="SettingsMenu.cpp">
-      <Filter>project\scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="ImageMenu.cpp">
-      <Filter>project\scenes</Filter>
-    </ClCompile>
     <ClCompile Include="FileUtils.cpp">
       <Filter>project\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="PuzzleSelection.cpp">
+      <Filter>project\scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="PuzzleGame.cpp">
+      <Filter>project\scenes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -41,9 +38,6 @@
     </ClInclude>
     <ClInclude Include="main.h">
       <Filter>project</Filter>
-    </ClInclude>
-    <ClInclude Include="PuzzleScene.h">
-      <Filter>project\scenes</Filter>
     </ClInclude>
     <ClInclude Include="Puzzle.h">
       <Filter>project\objects</Filter>
@@ -60,14 +54,14 @@
     <ClInclude Include="GameSettings.h">
       <Filter>project\utility</Filter>
     </ClInclude>
-    <ClInclude Include="SettingsMenu.h">
-      <Filter>project\scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="ImageMenu.h">
-      <Filter>project\scenes</Filter>
-    </ClInclude>
     <ClInclude Include="FileUtils.h">
       <Filter>project\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="PuzzleSelection.h">
+      <Filter>project\scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="PuzzleGame.h">
+      <Filter>project\scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

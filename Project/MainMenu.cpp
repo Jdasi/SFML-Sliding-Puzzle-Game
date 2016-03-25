@@ -1,7 +1,7 @@
 #include "GameSettings.h"
-#include "PuzzleScene.h"
+#include "PuzzleGame.h"
 #include "MainMenu.h"
-#include "SettingsMenu.h"
+#include "PuzzleSelection.h"
 
 USING_NS_CC;
 
@@ -26,7 +26,7 @@ bool MainMenu::init()
 
     cocos2d::Label *label = Label::createWithTTF("Sliding Puzzle", "fonts/Marker Felt.ttf", 32);
     label->setPosition(Vec2(visibleSize.width / 2, visibleSize.height - 100));
-    this->addChild(label, 1);
+    this->addChild(label);
 
     initSettings();
     initMenu();
@@ -48,13 +48,9 @@ void MainMenu::initSettings()
 
 void MainMenu::initMenu()
 {
-    MenuItemFont *mainMenuStartGame = MenuItemFont::create(
-        "Play Game",
-        CC_CALLBACK_1(MainMenu::menuStartGame, this));
-
-    MenuItemFont *menuSettings = MenuItemFont::create(
-        "Settings",
-        CC_CALLBACK_1(MainMenu::menuSettings, this));
+    MenuItemFont *menuStart = MenuItemFont::create(
+        "Start",
+        CC_CALLBACK_1(MainMenu::menuStart, this));
 
     MenuItemSprite *mainMenuExit = new MenuItemSprite();
     mainMenuExit->initWithNormalSprite(
@@ -63,21 +59,15 @@ void MainMenu::initMenu()
         nullptr,
         CC_CALLBACK_1(MainMenu::menuCloseCallback, this));
 
-    cocos2d::Menu *menu = Menu::create(mainMenuStartGame, menuSettings, mainMenuExit, nullptr);
+    cocos2d::Menu *menu = Menu::create(menuStart, mainMenuExit, nullptr);
     menu->alignItemsVertically();
     this->addChild(menu, 1);
 }
 
-void MainMenu::menuStartGame(cocos2d::Ref *sender)
+void MainMenu::menuStart(cocos2d::Ref *sender)
 {
     Director::getInstance()->replaceScene(
-        TransitionFade::create(0.5, PuzzleScene::createScene()));
-}
-
-void MainMenu::menuSettings(cocos2d::Ref *sender)
-{
-    Director::getInstance()->replaceScene(
-        TransitionFade::create(0.5, SettingsMenu::createScene()));
+        TransitionFade::create(0.5, PuzzleSelection::createScene()));
 }
 
 void MainMenu::menuCloseCallback(cocos2d::Ref *pSender)

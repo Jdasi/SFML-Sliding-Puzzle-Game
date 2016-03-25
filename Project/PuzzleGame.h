@@ -1,9 +1,10 @@
 #pragma once
+
 #include "Puzzle.h"
 
 #include <cocos2d.h>
 
-class PuzzleScene : public cocos2d::Layer
+class PuzzleGame : public cocos2d::Layer
 {
 public:
     static cocos2d::Scene *createScene();
@@ -12,12 +13,14 @@ public:
     bool interactWithPuzzle(cocos2d::Touch *touch, cocos2d::Event* event);
 
     // implement the "static create()" method manually
-    CREATE_FUNC(PuzzleScene);
+    CREATE_FUNC(PuzzleGame);
 
 private:
     void initBackground();
     void initPuzzle();
     void initLabels();
+    void initMenu();
+    void initPreviewImage();
 
     void updateMovesLabel(int increment = 0);
 
@@ -30,6 +33,7 @@ private:
     void moveBlankSpaceToStart();
 
     void gotoMainMenu(cocos2d::Ref *sender);
+    void gotoPuzzleSelection(cocos2d::Ref *sender);
 
     cocos2d::Size visibleSize { cocos2d::Director::getInstance()->getVisibleSize() };
     Puzzle puzzle;

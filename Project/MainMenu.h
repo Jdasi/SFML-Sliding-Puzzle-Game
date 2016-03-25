@@ -14,9 +14,7 @@ private:
     void initSettings();
     void initMenu();
 
-    void menuStartGame(cocos2d::Ref *sender);
-    void menuSettings(cocos2d::Ref *sender);
-
+    void menuStart(cocos2d::Ref *sender);
     void menuCloseCallback(cocos2d::Ref *pSender);
 
     cocos2d::Size visibleSize{ cocos2d::Director::getInstance()->getVisibleSize() };
