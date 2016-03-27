@@ -1,7 +1,10 @@
 #include "GameSettings.h"
+#include "GameProfile.h"
 #include "PuzzleGame.h"
 #include "MainMenu.h"
 #include "PuzzleSelection.h"
+
+#include "FileUtils.h"
 
 USING_NS_CC;
 
@@ -30,6 +33,7 @@ bool MainMenu::init()
     this->addChild(sceneTitle, 1);
 
     initSettings();
+    initProfile();
     initBackdrop();
     initMenu();
 
@@ -38,6 +42,12 @@ bool MainMenu::init()
 
 void MainMenu::initSettings()
 {
+    if (!GameProfile::isInitialised())
+    {
+        loadProfile();
+        GameProfile::setInitialised(true);
+    }
+
     if (!GameSettings::isInitialised())
     {
         GameSettings::enumeratePuzzles();
@@ -46,6 +56,11 @@ void MainMenu::initSettings()
         GameSettings::setSegmentsY(4);
         GameSettings::setInitialised(true);
     }
+}
+
+void MainMenu::initProfile()
+{
+    
 }
 
 void MainMenu::initBackdrop()
@@ -125,5 +140,7 @@ void MainMenu::gotoStatistics(cocos2d::Ref* sender)
 
 void MainMenu::exitGame(cocos2d::Ref *pSender)
 {
+    saveProfile();
+
     Director::getInstance()->end();
 }

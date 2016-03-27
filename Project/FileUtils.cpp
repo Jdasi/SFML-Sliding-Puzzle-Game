@@ -1,6 +1,9 @@
+#include "GameProfile.h"
+
 #include <windows.h>
 #include <vector>
 #include <codecvt>
+#include <fstream>
 
 // Because filenames are widestrings (accept international characters)
 // We need to convert them to regular strings
@@ -47,4 +50,42 @@ std::vector<std::string> enumerate_files(const std::wstring& path)
     
     FindClose(hFind);
     return files;
+}
+
+void loadProfile()
+{
+    std::ifstream file("profile.txt");
+
+    if (!file.is_open())
+        throw std::runtime_error("File not found");
+
+    GameProfile::keymap &profileSettings = GameProfile::getProfileSettings();
+
+    std::string line;
+    while (std::getline(file, line))
+    {
+        int pos = line.find_first_of('=');
+
+        std::string key = line.substr(0, pos);
+        std::string val = line.substr(pos + 1);
+
+        profileSettings[key] = val;
+    }
+}
+
+void saveProfile()
+{
+    std::ofstream file("profile.txt");
+
+    if (!file.is_open())
+        throw std::runtime_error("File not found");
+
+    GameProfile::keymap &profileSettings = GameProfile::getProfileSettings();
+    for (auto itr : profileSettings)
+    {
+        std::string line = itr.first + "=" + itr.second + '\n';
+        file << line;
+    }
+
+    file.close();
 }

@@ -38,16 +38,6 @@ void GameSettings::setSegmentsY(int y)
     segments.y = y;
 }
 
-bool GameSettings::isInitialised()
-{
-    return initialised;
-}
-
-void GameSettings::setInitialised(bool b)
-{
-    initialised = b;
-}
-
 void GameSettings::enumeratePuzzles()
 {
     std::wstring executable_path = get_executable_path();
@@ -61,4 +51,14 @@ void GameSettings::enumeratePuzzles()
 std::vector<std::string> GameSettings::getPuzzles()
 {
     return puzzles;
+}
+
+bool GameSettings::isInitialised()
+{
+    return initialised;
+}
+
+void GameSettings::setInitialised(bool b)
+{
+    initialised = b;
 }

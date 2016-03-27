@@ -5,3 +5,5 @@
 
 std::wstring get_executable_path();
 std::vector<std::string> enumerate_files(const std::wstring& path);
+void loadProfile();
+void saveProfile();

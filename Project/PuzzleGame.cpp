@@ -1,5 +1,6 @@
 #include "PuzzleGame.h"
 #include "GameSettings.h"
+#include "GameProfile.h"
 #include "MainMenu.h"
 #include "PuzzleSelection.h"
 
@@ -29,6 +30,8 @@ bool PuzzleGame::init()
     initLabels();
     initMenu();
     initPreviewImage();
+
+    GameProfile::modifyProfileSetting("puzzlesAttempted", 1);
 
     return true;
 }
@@ -237,9 +240,12 @@ bool PuzzleGame::tryUserMove(int fromPiece, int toX, int toY)
     puzzle.swapPieces(fromPiece, toPiece);
     updateMovesLabel(1);
 
+    GameProfile::modifyProfileSetting("totalMoves", 1);
+
     if (puzzle.isPuzzleComplete())
     {
         puzzle.getPiece(puzzle.findBlankSpace()).setBlankSpace(false);
+        GameProfile::modifyProfileSetting("puzzlesCompleted", 1);
         gameOver = true;
 
         // ------- code possibly for somewhere else?

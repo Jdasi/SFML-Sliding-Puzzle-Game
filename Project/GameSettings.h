@@ -1,5 +1,7 @@
 #pragma once
 
+#include "GameUnlock.h"
+
 #include <string>
 #include <vector>
 
@@ -30,11 +32,14 @@ public:
     static void setSegmentsX(int x);
     static void setSegmentsY(int y);
 
-    static bool isInitialised();
-    static void setInitialised(bool b);
-
     static void enumeratePuzzles();
     static std::vector<std::string> getPuzzles();
+
+    //static void enumerateUnlocks();
+    //static std::vector<GameUnlock> getUnlocks();
+
+    static bool isInitialised();
+    static void setInitialised(bool b);
 
 private:
     static std::string imageName;
