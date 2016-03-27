@@ -13,6 +13,7 @@ public:
 private:
     void initSettings();
     void initProfile();
+    void initStarDisplay();
     void initBackdrop();
     void initMenu();
 

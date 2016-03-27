@@ -14,13 +14,14 @@ public:
 private:
     void initBackdrop();
     void initMenu();
-    void initLabels();
     void initSliders();
     void initPreviewImage();
     void initArrows();
+    void initRewardsPane();
 
     void updateDisplayedImage();
     void updateImageLabels();
+    void updateRewardsLabel();
 
     bool rightArrowClick(cocos2d::Ref *sender);
     bool leftArrowClick(cocos2d::Ref *sender);
@@ -39,4 +40,5 @@ private:
     cocos2d::Sprite *displayedImage;
     cocos2d::Label *imageName;
     cocos2d::Label *imageNumber;
+    cocos2d::Label *puzzleValue;
 };

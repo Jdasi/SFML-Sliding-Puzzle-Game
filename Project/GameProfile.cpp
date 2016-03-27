@@ -4,7 +4,7 @@ GameProfile::keymap GameProfile::profileSettings;
 std::string GameProfile::currentBackground;
 bool GameProfile::initialised = false;
 
-GameProfile::keymap &GameProfile::getProfileSettings()
+GameProfile::keymap &GameProfile::getProfileKeymap()
 {
    return profileSettings;
 }
@@ -44,17 +44,17 @@ std::string GameProfile::profileSettingToString(ProfileSetting setting)
     }
 }
 
-std::string GameProfile::getProfileSetting(ProfileSetting setting)
+std::string GameProfile::getProfileStat(ProfileSetting setting)
 {
     return profileSettings[profileSettingToString(setting)];
 }
 
-void GameProfile::setProfileSetting(ProfileSetting setting, std::string val)
+void GameProfile::setProfileStat(ProfileSetting setting, std::string val)
 {
     profileSettings[profileSettingToString(setting)] = val;
 }
 
-void GameProfile::modifyProfileSetting(ProfileSetting setting, int amount)
+void GameProfile::modifyProfileStat(ProfileSetting setting, int amount)
 {
     std::string actualSetting = profileSettingToString(setting);
     int tempVal = stoi(profileSettings[actualSetting]) + amount;

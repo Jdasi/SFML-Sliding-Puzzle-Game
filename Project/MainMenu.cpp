@@ -34,6 +34,7 @@ bool MainMenu::init()
 
     initSettings();
     initProfile();
+    initStarDisplay();
     initBackdrop();
     initMenu();
 
@@ -42,12 +43,6 @@ bool MainMenu::init()
 
 void MainMenu::initSettings()
 {
-    if (!GameProfile::isInitialised())
-    {
-        loadProfile();
-        GameProfile::setInitialised(true);
-    }
-
     if (!GameSettings::isInitialised())
     {
         GameSettings::enumeratePuzzles();
@@ -60,7 +55,25 @@ void MainMenu::initSettings()
 
 void MainMenu::initProfile()
 {
-    
+    if (!GameProfile::isInitialised())
+    {
+        loadProfile();
+        GameProfile::setInitialised(true);
+    }
+}
+
+void MainMenu::initStarDisplay()
+{
+    Sprite *star = Sprite::create("utility/star.png");
+    star->setPosition(Vec2(visibleSize.width - 200, visibleSize.height - 100));
+    star->setScale(0.4f);
+
+    cocos2d::Label *numStars = Label::createWithTTF("numStars", "fonts/Marker Felt.ttf", 24);
+    numStars->setPosition(Vec2(star->getPositionX() + 100, star->getPositionY() - 50));
+    numStars->setString("x " + GameProfile::getProfileStat(ProfileSetting::stars));
+
+    this->addChild(star, 1);
+    this->addChild(numStars, 1);
 }
 
 void MainMenu::initBackdrop()
@@ -119,7 +132,7 @@ void MainMenu::initMenu()
     menuExit->setPosition(Vec2(115, -115));
     menuExit->setScale(0.75);
 
-    this->addChild(menu);
+    this->addChild(menu, 1);
 }
 
 void MainMenu::gotoPuzzleSelection(cocos2d::Ref *sender)

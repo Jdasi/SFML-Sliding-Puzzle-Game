@@ -4,6 +4,7 @@
 std::string GameSettings::imageName;
 int GameSettings::imageID = 0;
 coordinate GameSettings::segments { 0, 0 };
+int GameSettings::currentPuzzleValue = 0;
 bool GameSettings::initialised = false;
 std::vector<std::string> GameSettings::puzzles;
 
@@ -51,6 +52,16 @@ void GameSettings::enumeratePuzzles()
 std::vector<std::string> GameSettings::getPuzzles()
 {
     return puzzles;
+}
+
+int GameSettings::getCurrentPuzzleValue()
+{
+    return currentPuzzleValue;
+}
+
+void GameSettings::setCurrentPuzzleValue(int value)
+{
+    currentPuzzleValue = value;
 }
 
 bool GameSettings::isInitialised()

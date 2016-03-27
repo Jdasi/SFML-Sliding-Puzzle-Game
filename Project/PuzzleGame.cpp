@@ -31,7 +31,7 @@ bool PuzzleGame::init()
     initMenu();
     initPreviewImage();
 
-    GameProfile::modifyProfileSetting(ProfileSetting::puzzlesAttempted, 1);
+    GameProfile::modifyProfileStat(ProfileSetting::puzzlesAttempted, 1);
 
     return true;
 }
@@ -81,8 +81,8 @@ void PuzzleGame::initMenu()
     menuChoosePuzzle->setPositionY(-225);
     menuMain->setPositionY(-275);
 
-    this->addChild(menu);
-    this->addChild(movesLabel);
+    this->addChild(menu, 1);
+    this->addChild(movesLabel, 1);
 }
 
 void PuzzleGame::initPreviewImage()
@@ -95,8 +95,8 @@ void PuzzleGame::initPreviewImage()
     Label *label = Label::createWithTTF("Preview", "fonts/Marker Felt.ttf", 24);
     label->setPosition(Vec2(preview->getPositionX(), preview->getPositionY() + 125));
 
-    this->addChild(label);
-    this->addChild(preview);
+    this->addChild(label, 1);
+    this->addChild(preview, 1);
 }
 
 void PuzzleGame::updateMovesLabel(int increment)
@@ -240,12 +240,15 @@ bool PuzzleGame::tryUserMove(int fromPiece, int toX, int toY)
     puzzle.swapPieces(fromPiece, toPiece);
     updateMovesLabel(1);
 
-    GameProfile::modifyProfileSetting(ProfileSetting::totalMoves, 1);
+    GameProfile::modifyProfileStat(ProfileSetting::totalMoves, 1);
 
     if (puzzle.isPuzzleComplete())
     {
+        GameProfile::modifyProfileStat(ProfileSetting::puzzlesCompleted, 1);
+        GameProfile::modifyProfileStat
+            (ProfileSetting::stars, GameSettings::getCurrentPuzzleValue());
+
         puzzle.getPiece(puzzle.findBlankSpace()).setBlankSpace(false);
-        GameProfile::modifyProfileSetting(ProfileSetting::puzzlesCompleted, 1);
         gameOver = true;
 
         // ------- code possibly for somewhere else?

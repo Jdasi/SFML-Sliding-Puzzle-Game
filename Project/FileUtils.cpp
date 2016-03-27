@@ -59,7 +59,7 @@ void loadProfile()
     if (!file.is_open())
         throw std::runtime_error("File not found");
 
-    GameProfile::keymap &profileSettings = GameProfile::getProfileSettings();
+    GameProfile::keymap &profileSettings = GameProfile::getProfileKeymap();
 
     std::string line;
     while (std::getline(file, line))
@@ -80,7 +80,7 @@ void saveProfile()
     if (!file.is_open())
         throw std::runtime_error("File not found");
 
-    GameProfile::keymap &profileSettings = GameProfile::getProfileSettings();
+    GameProfile::keymap &profileSettings = GameProfile::getProfileKeymap();
     for (auto itr : profileSettings)
     {
         std::string line = itr.first + "=" + itr.second + '\n';

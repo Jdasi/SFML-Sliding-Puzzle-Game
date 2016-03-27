@@ -1,6 +1,6 @@
 backgroundsUnlocked=0
-puzzlesAttempted=2
-puzzlesCompleted=1
+puzzlesAttempted=0
+puzzlesCompleted=0
 stars=0
 timePlayed=0
-totalMoves=23
+totalMoves=0

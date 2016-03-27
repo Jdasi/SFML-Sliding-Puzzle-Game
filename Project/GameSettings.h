@@ -35,6 +35,9 @@ public:
     static void enumeratePuzzles();
     static std::vector<std::string> getPuzzles();
 
+    static int getCurrentPuzzleValue();
+    static void setCurrentPuzzleValue(int value);
+
     //static void enumerateUnlocks();
     //static std::vector<GameUnlock> getUnlocks();
 
@@ -45,6 +48,7 @@ private:
     static std::string imageName;
     static int imageID;
     static coordinate segments;
+    static int currentPuzzleValue;
     static bool initialised;
     static std::vector<std::string> puzzles;
 };
