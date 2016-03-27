@@ -9,20 +9,56 @@ GameProfile::keymap &GameProfile::getProfileSettings()
    return profileSettings;
 }
 
-std::string GameProfile::getProfileSetting(std::string setting)
+std::string GameProfile::profileSettingToString(ProfileSetting setting)
 {
-    return profileSettings[setting];
+    switch (setting)
+    {
+        case ProfileSetting::stars:
+        {
+            return "stars";
+        }
+        case ProfileSetting::timePlayed:
+        {
+            return "timePlayed";
+        }
+        case ProfileSetting::totalMoves:
+        {
+            return "totalMoves";
+        }
+        case ProfileSetting::puzzlesAttempted:
+        {
+            return "puzzlesAttempted";
+        }
+        case ProfileSetting::puzzlesCompleted:
+        {
+            return "puzzlesCompleted";
+        }
+        case ProfileSetting::backgroundsUnlocked:
+        {
+            return "backgroundsUnlocked";
+        }
+        default:
+        {
+            return "null";
+        }
+    }
 }
 
-void GameProfile::setProfileSetting(std::string setting, std::string val)
+std::string GameProfile::getProfileSetting(ProfileSetting setting)
 {
-    profileSettings[setting] = val;
+    return profileSettings[profileSettingToString(setting)];
 }
 
-void GameProfile::modifyProfileSetting(std::string setting, int amount)
+void GameProfile::setProfileSetting(ProfileSetting setting, std::string val)
 {
-    int tempVal = stoi(profileSettings[setting]) + amount;
-    profileSettings[setting] = std::to_string(tempVal);
+    profileSettings[profileSettingToString(setting)] = val;
+}
+
+void GameProfile::modifyProfileSetting(ProfileSetting setting, int amount)
+{
+    std::string actualSetting = profileSettingToString(setting);
+    int tempVal = stoi(profileSettings[actualSetting]) + amount;
+    profileSettings[actualSetting] = std::to_string(tempVal);
 }
 
 std::string GameProfile::getCurrentBackground()

@@ -12,7 +12,6 @@ public:
 
     bool interactWithPuzzle(cocos2d::Touch *touch, cocos2d::Event* event);
 
-    // implement the "static create()" method manually
     CREATE_FUNC(PuzzleGame);
 
 private:

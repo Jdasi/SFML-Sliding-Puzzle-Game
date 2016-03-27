@@ -31,7 +31,7 @@ bool PuzzleGame::init()
     initMenu();
     initPreviewImage();
 
-    GameProfile::modifyProfileSetting("puzzlesAttempted", 1);
+    GameProfile::modifyProfileSetting(ProfileSetting::puzzlesAttempted, 1);
 
     return true;
 }
@@ -240,12 +240,12 @@ bool PuzzleGame::tryUserMove(int fromPiece, int toX, int toY)
     puzzle.swapPieces(fromPiece, toPiece);
     updateMovesLabel(1);
 
-    GameProfile::modifyProfileSetting("totalMoves", 1);
+    GameProfile::modifyProfileSetting(ProfileSetting::totalMoves, 1);
 
     if (puzzle.isPuzzleComplete())
     {
         puzzle.getPiece(puzzle.findBlankSpace()).setBlankSpace(false);
-        GameProfile::modifyProfileSetting("puzzlesCompleted", 1);
+        GameProfile::modifyProfileSetting(ProfileSetting::puzzlesCompleted, 1);
         gameOver = true;
 
         // ------- code possibly for somewhere else?

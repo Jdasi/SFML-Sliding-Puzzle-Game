@@ -1,8 +1,6 @@
 backgroundsUnlocked=0
-favouritePuzzle=null
-hardestPuzzleSolved=0
-puzzlesAttempted=4
-puzzlesCompleted=2
+puzzlesAttempted=2
+puzzlesCompleted=1
 stars=0
 timePlayed=0
-totalMoves=28
+totalMoves=23

@@ -13,8 +13,6 @@ enum class ProfileSetting
     totalMoves,
     puzzlesAttempted,
     puzzlesCompleted,
-    favouritePuzzle,
-    hardestPuzzleSolved,
     backgroundsUnlocked
 };
 
@@ -24,10 +22,11 @@ public:
     using keymap = std::map<std::string, std::string>;
 
     static keymap &getProfileSettings();
+    static std::string profileSettingToString(ProfileSetting setting);
 
-    static std::string getProfileSetting(std::string setting);
-    static void setProfileSetting(std::string setting, std::string val);
-    static void modifyProfileSetting(std::string setting, int amount);
+    static std::string getProfileSetting(ProfileSetting setting);
+    static void setProfileSetting(ProfileSetting setting, std::string val);
+    static void modifyProfileSetting(ProfileSetting setting, int amount);
 
     static std::string getCurrentBackground();
     static void setCurrentBackground(std::string str);
