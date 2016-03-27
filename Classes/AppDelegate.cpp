@@ -12,7 +12,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 
     if (!glview)
     {
-        glview = GLViewImpl::create("Sliding Puzzle Game");
+        glview = GLViewImpl::create("Square Slide");
         glview->setFrameSize(1366, 768);
         director->setOpenGLView(glview);
     }

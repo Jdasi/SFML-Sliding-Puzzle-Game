@@ -49,18 +49,27 @@ void PuzzleSelection::initBackdrop()
 
 void PuzzleSelection::initMenu()
 {
-    MenuItemFont *menuStart = MenuItemFont::create(
-        "Start",
+    MenuItemSprite *menuPlay = new MenuItemSprite();
+    menuPlay->initWithNormalSprite(
+        Sprite::create("utility/play_up.png"),
+        Sprite::create("utility/play_dn.png"),
+        nullptr,
         CC_CALLBACK_1(PuzzleSelection::gotoPuzzleGame, this));
 
-    MenuItemFont *menuMain = MenuItemFont::create(
-        "Main Menu",
+    MenuItemSprite *menuMain = new MenuItemSprite();
+    menuMain->initWithNormalSprite(
+        Sprite::create("utility/main_up.png"),
+        Sprite::create("utility/main_dn.png"),
+        nullptr,
         CC_CALLBACK_1(PuzzleSelection::gotoMainMenu, this));
 
-    cocos2d::Menu *menu = Menu::create(menuStart, menuMain, nullptr);
+    cocos2d::Menu *menu = Menu::create(menuPlay, menuMain, nullptr);
     menu->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
 
-    menuStart->setPosition(Vec2(400, -250));
+    menuPlay->setScale(0.66);
+    menuMain->setScale(0.66);
+
+    menuPlay->setPosition(Vec2(400, -240));
     menuMain->setPosition(Vec2(400, -300));
 
     this->addChild(menu, 1);
@@ -193,10 +202,10 @@ void PuzzleSelection::initRewardsPane()
 {
     Label *rewardDesc = Label::createWithTTF
         ("This Puzzle is worth:", "fonts/Marker Felt.ttf", 26);
-    rewardDesc->setPosition(Vec2((visibleSize.width / 2) + 400, 320));
+    rewardDesc->setPosition(Vec2((visibleSize.width / 2) + 400, 350));
 
     Sprite *star = Sprite::create("utility/star.png");
-    star->setPosition(Vec2((visibleSize.width / 2) + 400, 250));
+    star->setPosition(Vec2((visibleSize.width / 2) + 400, 280));
     star->setScale(0.25f);
     
     puzzleValue = Label::createWithTTF("puzzleValue", "fonts/Marker Felt.ttf", 24);

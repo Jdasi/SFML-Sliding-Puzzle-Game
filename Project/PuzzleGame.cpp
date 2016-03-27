@@ -60,29 +60,39 @@ void PuzzleGame::initPuzzle()
 void PuzzleGame::initLabels()
 {
     movesLabel = Label::createWithTTF("Moves: ", "fonts/Marker Felt.ttf", 30);
-    movesLabel->setPosition(Vec2(visibleSize.width - 210, (visibleSize.height / 2) - 100));
+    movesLabel->setPosition(Vec2(visibleSize.width - 210, (visibleSize.height / 2) - 50));
 
     updateMovesLabel();
+
+    this->addChild(movesLabel, 1);
 }
 
 void PuzzleGame::initMenu()
 {
-    MenuItemFont *menuChoosePuzzle = MenuItemFont::create(
-        "Choose Puzzle",
+    MenuItemSprite *menuChoose = new MenuItemSprite();
+    menuChoose->initWithNormalSprite(
+        Sprite::create("utility/choose_up.png"),
+        Sprite::create("utility/choose_dn.png"),
+        nullptr,
         CC_CALLBACK_1(PuzzleGame::gotoPuzzleSelection, this));
 
-    MenuItemFont *menuMain = MenuItemFont::create(
-        "Main Menu",
+    MenuItemSprite *menuMain = new MenuItemSprite();
+    menuMain->initWithNormalSprite(
+        Sprite::create("utility/main_up.png"),
+        Sprite::create("utility/main_dn.png"),
+        nullptr,
         CC_CALLBACK_1(PuzzleGame::gotoMainMenu, this));
 
-    Menu *menu = Menu::create(menuChoosePuzzle, menuMain, nullptr);
+    Menu *menu = Menu::create(menuChoose, menuMain, nullptr);
     menu->setPosition(Vec2(visibleSize.width - 210, visibleSize.height / 2));
 
-    menuChoosePuzzle->setPositionY(-225);
+    menuChoose->setScale(0.66);
+    menuMain->setScale(0.66);
+
+    menuChoose->setPositionY(-215);
     menuMain->setPositionY(-275);
 
     this->addChild(menu, 1);
-    this->addChild(movesLabel, 1);
 }
 
 void PuzzleGame::initPreviewImage()

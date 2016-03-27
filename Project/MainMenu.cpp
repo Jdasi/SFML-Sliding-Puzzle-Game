@@ -27,10 +27,9 @@ bool MainMenu::init()
 
     Size visibleSize = Director::getInstance()->getVisibleSize();
 
-    cocos2d::Label *sceneTitle = Label::createWithTTF
-        ("Sliding Puzzle Game", "fonts/Marker Felt.ttf", 32);
-    sceneTitle->setPosition(Vec2(visibleSize.width / 2, visibleSize.height - 100));
-    this->addChild(sceneTitle, 1);
+    Sprite *logo = Sprite::create("utility/logo.png");
+    logo->setPosition(Vec2(visibleSize.width / 2, visibleSize.height - 150));
+    this->addChild(logo, 1);
 
     initSettings();
     initProfile();
@@ -118,19 +117,19 @@ void MainMenu::initMenu()
 
     cocos2d::Menu *menu = Menu::create
         (menuPlay, menuUnlocks, menuStatistics, menuExit, nullptr);
-    menu->setPosition(Vec2(visibleSize.width / 2, (visibleSize.height / 2) - 25));
+    menu->setPosition(Vec2(visibleSize.width / 2, (visibleSize.height / 2) - 100));
 
-    menuPlay->setPosition(Vec2(-115, 115));
-    menuPlay->setScale(0.75);
+    menuPlay->setPosition(Vec2(-100, 100));
+    menuPlay->setScale(0.66);
 
-    menuUnlocks->setPosition(Vec2(115, 115));
-    menuUnlocks->setScale(0.75);
+    menuUnlocks->setPosition(Vec2(100, 100));
+    menuUnlocks->setScale(0.66);
 
-    menuStatistics->setPosition(Vec2(-115, -115));
-    menuStatistics->setScale(0.75);
+    menuStatistics->setPosition(Vec2(-100, -100));
+    menuStatistics->setScale(0.66);
 
-    menuExit->setPosition(Vec2(115, -115));
-    menuExit->setScale(0.75);
+    menuExit->setPosition(Vec2(100, -100));
+    menuExit->setScale(0.66);
 
     this->addChild(menu, 1);
 }
