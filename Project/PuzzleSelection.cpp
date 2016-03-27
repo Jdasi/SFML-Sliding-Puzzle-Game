@@ -1,4 +1,5 @@
 #include "GameSettings.h"
+#include "GameProfile.h"
 #include "PuzzleSelection.h"
 #include "MainMenu.h"
 #include "PuzzleGame.h"
@@ -39,7 +40,8 @@ bool PuzzleSelection::init()
 
 void PuzzleSelection::initBackdrop()
 {
-    Sprite *backdrop = Sprite::create("backdrops/regal_menu.jpg");
+    Sprite *backdrop = Sprite::create
+        ("backdrops/" + GameProfile::getCurrentBackground() + "_menu.jpg");
 
     backdrop->setAnchorPoint(Vec2(0, 0));
     backdrop->setPosition(Vec2(0, 0));

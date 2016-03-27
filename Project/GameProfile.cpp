@@ -37,6 +37,10 @@ std::string GameProfile::profileSettingToString(ProfileSetting setting)
         {
             return "backgroundsUnlocked";
         }
+        case ProfileSetting::currentBackground:
+        {
+            return "currentBackground";
+        }
         default:
         {
             return "null";

@@ -57,6 +57,8 @@ void MainMenu::initProfile()
     if (!GameProfile::isInitialised())
     {
         loadProfile();
+        GameProfile::setCurrentBackground
+            (GameProfile::getProfileStat(ProfileSetting::currentBackground));
         GameProfile::setInitialised(true);
     }
 }
@@ -77,7 +79,8 @@ void MainMenu::initStarDisplay()
 
 void MainMenu::initBackdrop()
 {
-    Sprite *backdrop = Sprite::create("backdrops/regal_menu.jpg");
+    Sprite *backdrop = Sprite::create
+        ("backdrops/" + GameProfile::getCurrentBackground() + "_menu.jpg");
 
     backdrop->setAnchorPoint(Vec2(0, 0));
     backdrop->setPosition(Vec2(0, 0));

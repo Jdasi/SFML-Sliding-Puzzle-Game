@@ -9,7 +9,8 @@ enum class ProfileSetting
     totalMoves,
     puzzlesAttempted,
     puzzlesCompleted,
-    backgroundsUnlocked
+    backgroundsUnlocked,
+    currentBackground
 };
 
 class GameProfile

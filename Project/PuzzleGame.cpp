@@ -38,7 +38,8 @@ bool PuzzleGame::init()
 
 void PuzzleGame::initBackdrop()
 {
-    Sprite *backdrop = Sprite::create("backdrops/regal_puzzle.jpg");
+    Sprite *backdrop = Sprite::create
+        ("backdrops/" + GameProfile::getCurrentBackground() + "_puzzle.jpg");
 
     backdrop->setAnchorPoint(Vec2(0, 0));
     backdrop->setPosition(Vec2(0, 0));

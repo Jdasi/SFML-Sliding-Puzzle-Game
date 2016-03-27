@@ -1,4 +1,5 @@
 backgroundsUnlocked=0
+currentBackground=regal
 puzzlesAttempted=0
 puzzlesCompleted=0
 stars=0
