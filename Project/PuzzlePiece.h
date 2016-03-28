@@ -14,7 +14,7 @@ public:
     void setBlankSpace(bool b);
 
     int getID() const;
-    void setID(int v);
+    void setID(int value);
 
 private:
     bool blankSpace;

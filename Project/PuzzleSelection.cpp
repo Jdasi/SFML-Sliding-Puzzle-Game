@@ -23,8 +23,9 @@ bool PuzzleSelection::init()
         return false;
     }
 
-    cocos2d::Label *sceneTitle = Label::createWithTTF("Choose a Puzzle!", "fonts/Marker Felt.ttf", 32);
-    sceneTitle->setPosition(Vec2(visibleSize.width / 2, visibleSize.height - 100));
+    Sprite *sceneTitle = Sprite::create("utility/chooseLabel.png");
+    sceneTitle->setPosition
+        (Vec2((visibleSize.width / 2) - 150, visibleSize.height - 100));
 
     initBackdrop();
     initMenu();
@@ -68,13 +69,17 @@ void PuzzleSelection::initMenu()
     cocos2d::Menu *menu = Menu::create(menuPlay, menuMain, nullptr);
     menu->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
 
-    menuPlay->setScale(0.66);
-    menuMain->setScale(0.66);
+    menuPlay->setScale(0.66f);
+    menuMain->setScale(0.66f);
 
     menuPlay->setPosition(Vec2(400, -240));
     menuMain->setPosition(Vec2(400, -300));
 
-    this->addChild(menu, 1);
+    Sprite *pane = Sprite::create("utility/pane.png");
+    pane->setPosition(Vec2((visibleSize.width / 2) + 400, visibleSize.height / 2));
+
+    this->addChild(menu, 2);
+    this->addChild(pane, 1);
 }
 
 void PuzzleSelection::initSliders()
@@ -143,11 +148,11 @@ void PuzzleSelection::initSliders()
         }
     });
 
-    this->addChild(xSegmentsSlider, 1);
-    this->addChild(ySegmentsSlider, 1);
+    this->addChild(xSegmentsSlider, 2);
+    this->addChild(ySegmentsSlider, 2);
 
-    this->addChild(xSliderLabel, 1);
-    this->addChild(ySliderLabel, 1);
+    this->addChild(xSliderLabel, 2);
+    this->addChild(ySliderLabel, 2);
 }
 
 void PuzzleSelection::initPreviewImage()
@@ -158,11 +163,13 @@ void PuzzleSelection::initPreviewImage()
 
     updateDisplayedImage();
 
-    imageName = Label::createWithTTF("imageName", "fonts/Marker Felt.ttf", 22);
+    imageName = Label::createWithTTF("imageName", "fonts/Marker Felt.ttf", 26);
     imageName->setPosition(Vec2((visibleSize.width / 2) - 150, 150));
+    imageName->enableGlow(Color4B::BLACK);
 
-    imageNumber = Label::createWithTTF("imageNumber", "fonts/Marker Felt.ttf", 20);
+    imageNumber = Label::createWithTTF("imageNumber", "fonts/Marker Felt.ttf", 24);
     imageNumber->setPosition(Vec2((visibleSize.width / 2) - 150, 120));
+    imageNumber->enableGlow(Color4B::BLACK);
 
     updateImageLabels();
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Puzzle.h"
+#include "GameSettings.h"
 
 #include <cocos2d.h>
 
@@ -29,6 +30,7 @@ private:
     bool tryUserMove(int fromPiece, int toX, int toY);
     bool tryComputerMove(int fromPiece, int toX, int toY);
 
+    void updateBlankspaceInfo();
     void moveBlankSpaceToStart();
 
     void gotoMainMenu(cocos2d::Ref *sender);
@@ -41,6 +43,9 @@ private:
     int startPosY;
 
     int currentPieceTag;
+
+    int blankSpace;
+    static coordinate blankSpaceCoords;
 
     bool gameOver;
     int numMoves;

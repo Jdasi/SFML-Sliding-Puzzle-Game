@@ -1,12 +1,12 @@
 #pragma once
 
 #include "PuzzlePiece.h"
-#include "GameSettings.h"
 
 #include "cocos2d.h"
 #include <Vector>
 
 class PuzzleGame;
+struct coordinate;
 
 class Puzzle : public cocos2d::Layer
 {

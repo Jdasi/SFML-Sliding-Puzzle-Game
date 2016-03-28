@@ -16,7 +16,7 @@ static std::string wstring_to_string(const std::wstring &str)
 
 std::wstring get_executable_path()
 {
-    const char EXECUTABLE_NAME[] = "PuzzleGame.exe";
+    const char executeableName[] = "PuzzleGame.exe";
 
     TCHAR path[MAX_PATH];
 
@@ -29,7 +29,7 @@ std::wstring get_executable_path()
     std::wstring pathstr = path;
 
     // Return the path minus EXECUTABLE_NAME.
-    return pathstr.substr(0, pathstr.length()-sizeof(EXECUTABLE_NAME));
+    return pathstr.substr(0, pathstr.length()-sizeof(executeableName));
 }
 
 std::vector<std::string> enumerate_files(const std::wstring& path)

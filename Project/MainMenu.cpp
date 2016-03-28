@@ -1,6 +1,5 @@
 #include "GameSettings.h"
 #include "GameProfile.h"
-#include "PuzzleGame.h"
 #include "MainMenu.h"
 #include "PuzzleSelection.h"
 
@@ -58,7 +57,7 @@ void MainMenu::initProfile()
     {
         loadProfile();
         GameProfile::setCurrentBackground
-            (GameProfile::getProfileStat(ProfileSetting::currentBackground));
+            (GameProfile::getProfileStat(ProfileStat::currentBackground));
         GameProfile::setInitialised(true);
     }
 }
@@ -69,9 +68,11 @@ void MainMenu::initStarDisplay()
     star->setPosition(Vec2(visibleSize.width - 200, visibleSize.height - 100));
     star->setScale(0.4f);
 
-    cocos2d::Label *numStars = Label::createWithTTF("numStars", "fonts/Marker Felt.ttf", 24);
+    cocos2d::Label *numStars = 
+        Label::createWithTTF("numStars", "fonts/Marker Felt.ttf", 24);
     numStars->setPosition(Vec2(star->getPositionX() + 100, star->getPositionY() - 50));
-    numStars->setString("x " + GameProfile::getProfileStat(ProfileSetting::stars));
+    numStars->setString("x " + GameProfile::getProfileStat(ProfileStat::stars));
+    numStars->enableGlow(Color4B::BLACK);
 
     this->addChild(star, 1);
     this->addChild(numStars, 1);
@@ -123,16 +124,16 @@ void MainMenu::initMenu()
     menu->setPosition(Vec2(visibleSize.width / 2, (visibleSize.height / 2) - 100));
 
     menuPlay->setPosition(Vec2(-100, 100));
-    menuPlay->setScale(0.66);
+    menuPlay->setScale(0.66f);
 
     menuUnlocks->setPosition(Vec2(100, 100));
-    menuUnlocks->setScale(0.66);
+    menuUnlocks->setScale(0.66f);
 
     menuStatistics->setPosition(Vec2(-100, -100));
-    menuStatistics->setScale(0.66);
+    menuStatistics->setScale(0.66f);
 
     menuExit->setPosition(Vec2(100, -100));
-    menuExit->setScale(0.66);
+    menuExit->setScale(0.66f);
 
     this->addChild(menu, 1);
 }

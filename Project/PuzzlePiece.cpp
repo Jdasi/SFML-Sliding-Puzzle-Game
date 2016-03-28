@@ -27,14 +27,16 @@ bool PuzzlePiece::isBlankSpace() const
     return blankSpace;
 }
 
-void PuzzlePiece::setBlankSpace(bool v)
+void PuzzlePiece::setBlankSpace(bool b)
 {
-    blankSpace = v;
+    blankSpace = b;
 
     if (this->isBlankSpace())
     {
         this->setOpacity(0);
-    } else {
+    }
+    else
+    {
         this->setOpacity(255);
     }
 }
@@ -44,7 +46,7 @@ int PuzzlePiece::getID() const
     return id;
 }
 
-void PuzzlePiece::setID(int v)
+void PuzzlePiece::setID(int value)
 {
-    id = v;
+    id = value;
 }

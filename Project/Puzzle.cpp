@@ -1,5 +1,6 @@
 #include "Puzzle.h"
 #include "PuzzleGame.h"
+#include "GameSettings.h"
 
 USING_NS_CC;
 
@@ -41,7 +42,7 @@ void Puzzle::initPuzzle(PuzzleGame *pScene, int startPosX, int startPosY)
             piece->setScaleX(scaleFactorX);
             piece->setScaleY(scaleFactorY);
 
-            // Set anchor point to top left of image.
+            // Set anchor point to top left of piece.
             piece->setAnchorPoint(Vec2(0, 1));
 
             piece->setPosition
@@ -91,8 +92,6 @@ PuzzlePiece &Puzzle::getPiece(int piece)
 
 bool Puzzle::isPieceBlankSpace(int piece)
 {
-    coordinate pieceCoords = calculateCoordinates(piece);
-
     return puzzlePieces[piece]->isBlankSpace();
 }
 

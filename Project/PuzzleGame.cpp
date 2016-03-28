@@ -1,10 +1,11 @@
 #include "PuzzleGame.h"
-#include "GameSettings.h"
 #include "GameProfile.h"
 #include "MainMenu.h"
 #include "PuzzleSelection.h"
 
 USING_NS_CC;
+
+coordinate PuzzleGame::blankSpaceCoords{ 0, 0 };
 
 cocos2d::Scene *PuzzleGame::createScene()
 {
@@ -31,7 +32,7 @@ bool PuzzleGame::init()
     initMenu();
     initPreviewImage();
 
-    GameProfile::modifyProfileStat(ProfileSetting::puzzlesAttempted, 1);
+    GameProfile::modifyProfileStat(ProfileStat::puzzlesAttempted, 1);
 
     return true;
 }
@@ -51,7 +52,7 @@ void PuzzleGame::initPuzzle()
 {
     puzzle.initPuzzle(this, startPosX, startPosY);
 
-    int product = GameSettings::getSegments().x * GameSettings::getSegments().y;
+    //int product = GameSettings::getSegments().x * GameSettings::getSegments().y;
     //generateRandomValidMoves(product * product);
     generateRandomValidMoves(1);
 
@@ -87,8 +88,8 @@ void PuzzleGame::initMenu()
     Menu *menu = Menu::create(menuChoose, menuMain, nullptr);
     menu->setPosition(Vec2(visibleSize.width - 210, visibleSize.height / 2));
 
-    menuChoose->setScale(0.66);
-    menuMain->setScale(0.66);
+    menuChoose->setScale(0.66f);
+    menuMain->setScale(0.66f);
 
     menuChoose->setPositionY(-215);
     menuMain->setPositionY(-275);
@@ -159,18 +160,14 @@ void PuzzleGame::generateValidMove()
         return;
     }
     
-    if (tryUserMove(currentPieceTag, currPiece.x, currPiece.y - 1))
-    {
-        return;
-    }
+    tryUserMove(currentPieceTag, currPiece.x, currPiece.y - 1);
 }
 
 void PuzzleGame::generateRandomValidMoves(int times)
 {
     for (int i = 0; i < times; ++i)
     {
-        int blankSpace = puzzle.findBlankSpace();
-        coordinate blankSpaceCoords = puzzle.calculateCoordinates(blankSpace);
+        updateBlankspaceInfo();
 
         bool tileSwapped = false;
         while (!tileSwapped)
@@ -181,7 +178,8 @@ void PuzzleGame::generateRandomValidMoves(int times)
             {
             case 0:
             {
-                if (tryComputerMove(blankSpace, blankSpaceCoords.x + 1, blankSpaceCoords.y))
+                if (tryComputerMove(blankSpace, 
+                    blankSpaceCoords.x + 1, blankSpaceCoords.y))
                 {
                     tileSwapped = true;
                 }
@@ -190,7 +188,8 @@ void PuzzleGame::generateRandomValidMoves(int times)
             }
             case 1:
             {
-                if (tryComputerMove(blankSpace, blankSpaceCoords.x, blankSpaceCoords.y + 1))
+                if (tryComputerMove(blankSpace, 
+                    blankSpaceCoords.x, blankSpaceCoords.y + 1))
                 {
                     tileSwapped = true;
                 }
@@ -199,7 +198,8 @@ void PuzzleGame::generateRandomValidMoves(int times)
             }
             case 2:
             {
-                if (tryComputerMove(blankSpace, blankSpaceCoords.x - 1, blankSpaceCoords.y))
+                if (tryComputerMove(blankSpace, 
+                    blankSpaceCoords.x - 1, blankSpaceCoords.y))
                 {
                     tileSwapped = true;
                 }
@@ -208,7 +208,8 @@ void PuzzleGame::generateRandomValidMoves(int times)
             }
             case 3:
             {
-                if (tryComputerMove(blankSpace, blankSpaceCoords.x, blankSpaceCoords.y - 1))
+                if (tryComputerMove(blankSpace, 
+                    blankSpaceCoords.x, blankSpaceCoords.y - 1))
                 {
                     tileSwapped = true;
                 }
@@ -251,13 +252,13 @@ bool PuzzleGame::tryUserMove(int fromPiece, int toX, int toY)
     puzzle.swapPieces(fromPiece, toPiece);
     updateMovesLabel(1);
 
-    GameProfile::modifyProfileStat(ProfileSetting::totalMoves, 1);
+    GameProfile::modifyProfileStat(ProfileStat::totalMoves, 1);
 
     if (puzzle.isPuzzleComplete())
     {
-        GameProfile::modifyProfileStat(ProfileSetting::puzzlesCompleted, 1);
+        GameProfile::modifyProfileStat(ProfileStat::puzzlesCompleted, 1);
         GameProfile::modifyProfileStat
-            (ProfileSetting::stars, GameSettings::getCurrentPuzzleValue());
+            (ProfileStat::stars, GameSettings::getCurrentPuzzleValue());
 
         puzzle.getPiece(puzzle.findBlankSpace()).setBlankSpace(false);
         gameOver = true;
@@ -296,12 +297,17 @@ bool PuzzleGame::tryComputerMove(int fromPiece, int toX, int toY)
     return true;
 }
 
+void PuzzleGame::updateBlankspaceInfo()
+{
+    blankSpace = puzzle.findBlankSpace();
+    blankSpaceCoords = puzzle.calculateCoordinates(blankSpace);
+}
+
 void PuzzleGame::moveBlankSpaceToStart()
 {
     for (int i = 0; i < GameSettings::getSegments().x; ++i)
     {
-        int blankSpace = puzzle.findBlankSpace();
-        coordinate blankSpaceCoords = puzzle.calculateCoordinates(blankSpace);
+        updateBlankspaceInfo();
 
         if (!tryComputerMove(blankSpace, blankSpaceCoords.x + 1, blankSpaceCoords.y))
         {
@@ -311,8 +317,7 @@ void PuzzleGame::moveBlankSpaceToStart()
 
     for (int i = 0; i < GameSettings::getSegments().y; ++i)
     {
-        int blankSpace = puzzle.findBlankSpace();
-        coordinate blankSpaceCoords = puzzle.calculateCoordinates(blankSpace);
+        updateBlankspaceInfo();
 
         if (!tryComputerMove(blankSpace, blankSpaceCoords.x, blankSpaceCoords.y + 1))
         {

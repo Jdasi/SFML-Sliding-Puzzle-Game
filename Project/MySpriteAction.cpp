@@ -8,7 +8,6 @@ MySpriteAction *MySpriteAction::create(
 
     if (act)
     {
-        // set sprite for auto release and assign the variables passed through to the constructor
         act->autorelease();
         act->sprite = spr;
         act->frame = fr;
@@ -25,7 +24,6 @@ void MySpriteAction::update(float time)
 
 MySpriteAction *MySpriteAction::clone() const
 {
-    // only needed if we clone the action i.e. create a copy, don't worry too much about this
     MySpriteAction *act = new MySpriteAction();
     act->autorelease();
     act->frame = this->frame;

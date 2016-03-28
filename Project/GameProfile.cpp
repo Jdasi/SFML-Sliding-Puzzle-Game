@@ -9,35 +9,35 @@ GameProfile::keymap &GameProfile::getProfileKeymap()
    return profileSettings;
 }
 
-std::string GameProfile::profileSettingToString(ProfileSetting setting)
+std::string GameProfile::profileSettingToString(ProfileStat setting)
 {
     switch (setting)
     {
-        case ProfileSetting::stars:
+        case ProfileStat::stars:
         {
             return "stars";
         }
-        case ProfileSetting::timePlayed:
+        case ProfileStat::timePlayed:
         {
             return "timePlayed";
         }
-        case ProfileSetting::totalMoves:
+        case ProfileStat::totalMoves:
         {
             return "totalMoves";
         }
-        case ProfileSetting::puzzlesAttempted:
+        case ProfileStat::puzzlesAttempted:
         {
             return "puzzlesAttempted";
         }
-        case ProfileSetting::puzzlesCompleted:
+        case ProfileStat::puzzlesCompleted:
         {
             return "puzzlesCompleted";
         }
-        case ProfileSetting::backgroundsUnlocked:
+        case ProfileStat::backgroundsUnlocked:
         {
             return "backgroundsUnlocked";
         }
-        case ProfileSetting::currentBackground:
+        case ProfileStat::currentBackground:
         {
             return "currentBackground";
         }
@@ -48,17 +48,17 @@ std::string GameProfile::profileSettingToString(ProfileSetting setting)
     }
 }
 
-std::string GameProfile::getProfileStat(ProfileSetting setting)
+std::string GameProfile::getProfileStat(ProfileStat setting)
 {
     return profileSettings[profileSettingToString(setting)];
 }
 
-void GameProfile::setProfileStat(ProfileSetting setting, std::string val)
+void GameProfile::setProfileStat(ProfileStat setting, std::string val)
 {
     profileSettings[profileSettingToString(setting)] = val;
 }
 
-void GameProfile::modifyProfileStat(ProfileSetting setting, int amount)
+void GameProfile::modifyProfileStat(ProfileStat setting, int amount)
 {
     std::string actualSetting = profileSettingToString(setting);
     int tempVal = stoi(profileSettings[actualSetting]) + amount;

@@ -2,8 +2,6 @@
 
 #include "cocos2d.h"
 
-#include <string>
-
 class GameUnlock
 {
 public:

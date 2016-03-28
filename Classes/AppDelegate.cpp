@@ -26,10 +26,8 @@ bool AppDelegate::applicationDidFinishLaunching()
 
 void AppDelegate::applicationDidEnterBackground() 
 {
-
 }
 
 void AppDelegate::applicationWillEnterForeground() 
 {
-
 }
