@@ -1,9 +1,11 @@
 #include "GameSettings.h"
 #include "GameProfile.h"
+#include "FileUtils.h"
+
 #include "MainMenu.h"
 #include "PuzzleSelection.h"
-
-#include "FileUtils.h"
+#include "ProfileStatistics.h"
+#include "ProfileUnlocks.h"
 
 USING_NS_CC;
 
@@ -23,8 +25,6 @@ bool MainMenu::init()
     {
         return false;
     }
-
-    Size visibleSize = Director::getInstance()->getVisibleSize();
 
     Sprite *logo = Sprite::create("utility/logo.png");
     logo->setPosition(Vec2(visibleSize.width / 2, visibleSize.height - 150));
@@ -146,12 +146,14 @@ void MainMenu::gotoPuzzleSelection(cocos2d::Ref *sender)
 
 void MainMenu::gotoUnlocks(cocos2d::Ref* sender)
 {
-
+    Director::getInstance()->replaceScene(
+        TransitionFade::create(0.5, ProfileUnlocks::createScene()));
 }
 
 void MainMenu::gotoStatistics(cocos2d::Ref* sender)
 {
-
+    Director::getInstance()->replaceScene(
+        TransitionFade::create(0.5, ProfileStatistics::createScene()));
 }
 
 void MainMenu::exitGame(cocos2d::Ref *pSender)

@@ -42,12 +42,15 @@ void GameSettings::setSegmentsY(int y)
 void GameSettings::enumeratePuzzles()
 {
     std::wstring executable_path = get_executable_path();
+
     std::vector<std::string> puzzlesJpg = 
         enumerate_files(executable_path + L"\\puzzles\\*.jpg");
-    //std::vector<std::string> puzzlesPng = enumerate_files(executable_path + L"\\puzzles\\*.png");
-    //puzzles.reserve(puzzlesJpg.size() + puzzlesPng.size());
+    std::vector<std::string> puzzlesPng = 
+        enumerate_files(executable_path + L"\\puzzles\\*.png");
+
+    puzzles.reserve(puzzlesJpg.size() + puzzlesPng.size());
     puzzles.insert(puzzles.end(), puzzlesJpg.begin(), puzzlesJpg.end());
-    //puzzles.insert(puzzles.end(), puzzlesPng.begin(), puzzlesPng.end());
+    puzzles.insert(puzzles.end(), puzzlesPng.begin(), puzzlesPng.end());
 }
 
 std::vector<std::string> GameSettings::getPuzzles()

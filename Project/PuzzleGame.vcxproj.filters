@@ -37,6 +37,12 @@
     <ClCompile Include="GameUnlock.cpp">
       <Filter>project\objects</Filter>
     </ClCompile>
+    <ClCompile Include="ProfileStatistics.cpp">
+      <Filter>project\scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="ProfileUnlocks.cpp">
+      <Filter>project\scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h">
@@ -74,6 +80,12 @@
     </ClInclude>
     <ClInclude Include="GameUnlock.h">
       <Filter>project\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="ProfileStatistics.h">
+      <Filter>project\scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="ProfileUnlocks.h">
+      <Filter>project\scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

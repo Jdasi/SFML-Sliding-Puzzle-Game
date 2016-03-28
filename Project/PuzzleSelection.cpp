@@ -27,14 +27,14 @@ bool PuzzleSelection::init()
     sceneTitle->setPosition
         (Vec2((visibleSize.width / 2) - 150, visibleSize.height - 100));
 
+    this->addChild(sceneTitle, 1);
+
     initBackdrop();
     initMenu();
     initSliders();
     initPreviewImage();
     initArrows();
     initRewardsPane();
-
-    this->addChild(sceneTitle, 1);
 
     return true;
 }

@@ -152,12 +152,14 @@ xcopy "$(SolutionDir)\cocos2d\bin\$(PlatformToolset)\$(Configuration)\*.dll" "$(
     <ClCompile Include="GameSettings.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenu.cpp" />
+    <ClCompile Include="ProfileUnlocks.cpp" />
     <ClCompile Include="Puzzle.cpp" />
     <ClCompile Include="PuzzlePiece.cpp" />
     <ClCompile Include="PuzzleGame.cpp" />
     <ClCompile Include="MySpriteAction.cpp" />
     <ClCompile Include="PuzzleSelection.cpp" />
     <ClCompile Include="GameUnlock.cpp" />
+    <ClCompile Include="ProfileStatistics.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h" />
@@ -166,12 +168,14 @@ xcopy "$(SolutionDir)\cocos2d\bin\$(PlatformToolset)\$(Configuration)\*.dll" "$(
     <ClInclude Include="GameSettings.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="MainMenu.h" />
+    <ClInclude Include="ProfileUnlocks.h" />
     <ClInclude Include="Puzzle.h" />
     <ClInclude Include="PuzzlePiece.h" />
     <ClInclude Include="PuzzleGame.h" />
     <ClInclude Include="MySpriteAction.h" />
     <ClInclude Include="PuzzleSelection.h" />
     <ClInclude Include="GameUnlock.h" />
+    <ClInclude Include="ProfileStatistics.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc" />
