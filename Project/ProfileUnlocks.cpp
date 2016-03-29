@@ -110,7 +110,8 @@ void ProfileUnlocks::initPreviewImages()
         this->addChild(spr, 1);
     }
 
-    //previewImages[GameSettings::getImageID()]->setOpacity(selectedOpacity);
+    previewImages[GameProfile::stringToBackgroundID
+        (GameProfile::getCurrentBackground())]->setOpacity(selectedOpacity);
 }
 
 bool ProfileUnlocks::imageClick(cocos2d::Touch *touch, cocos2d::Event *event)

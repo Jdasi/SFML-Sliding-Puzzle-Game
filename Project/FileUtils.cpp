@@ -14,7 +14,7 @@ static std::string wstring_to_string(const std::wstring &str)
     return converter.to_bytes(str);
 }
 
-std::wstring get_executable_path()
+std::wstring getExecutablePath()
 {
     const char executeableName[] = "PuzzleGame.exe";
 
@@ -33,7 +33,7 @@ std::wstring get_executable_path()
     return pathstr.substr(0, pathstr.length()-sizeof(executeableName));
 }
 
-std::vector<std::string> enumerate_files(const std::wstring& path)
+std::vector<std::string> enumerateFiles(const std::wstring& path)
 {
     WIN32_FIND_DATA ffd;
     HANDLE hFind = FindFirstFile(path.c_str(), &ffd);

@@ -44,7 +44,7 @@ std::string GameProfile::profileSettingToString(ProfileStat setting)
         }
         default:
         {
-            return "null";
+            throw std::runtime_error("Error in profileSettingToString");
         }
     }
 }
@@ -54,7 +54,7 @@ std::string GameProfile::getProfileStat(ProfileStat setting)
     return profileSettings[profileSettingToString(setting)];
 }
 
-void GameProfile::setProfileStat(ProfileStat setting, std::string val)
+void GameProfile::setProfileStat(ProfileStat setting, const std::string &val)
 {
     profileSettings[profileSettingToString(setting)] = val;
 }
@@ -85,24 +85,12 @@ void GameProfile::enumerateUnlocks()
 
     std::string unlockedBackgrounds = getProfileStat(ProfileStat::backgroundsUnlocked);
 
-    if (unlockedBackgrounds.find("regal") != std::string::npos)
+    for (GameUnlock g : unlocks)
     {
-        unlocks[backgroundNameToInt(BackgroundName::regal)].setLocked(false);
-    }
-
-    if (unlockedBackgrounds.find("nature") != std::string::npos)
-    {
-        unlocks[backgroundNameToInt(BackgroundName::nature)].setLocked(false);
-    }
-
-    if (unlockedBackgrounds.find("spooky") != std::string::npos)
-    {
-        unlocks[backgroundNameToInt(BackgroundName::spooky)].setLocked(false);
-    }
-
-    if (unlockedBackgrounds.find("alien") != std::string::npos)
-    {
-        unlocks[backgroundNameToInt(BackgroundName::alien)].setLocked(false);
+        if (unlockedBackgrounds.find(g.getName()) != std::string::npos)
+        {
+            unlocks[g.getID()].setLocked(false);
+        }
     }
 }
 
@@ -111,9 +99,17 @@ std::vector<GameUnlock> &GameProfile::getUnlocks()
     return unlocks;
 }
 
-int GameProfile::backgroundNameToInt(BackgroundName name)
+int GameProfile::stringToBackgroundID(const std::string &str)
 {
-    return static_cast<int>(name);
+    for (GameUnlock g : unlocks)
+    {
+        if (str == g.getName())
+        {
+            return g.getID();
+        }
+    }
+
+    throw std::runtime_error("Error in stringToBackgroundID");
 }
 
 bool GameProfile::isInitialised()

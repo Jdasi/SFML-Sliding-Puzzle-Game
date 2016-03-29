@@ -66,7 +66,7 @@ void PuzzleGame::initLabels()
 
     updateMovesLabel();
 
-    this->addChild(movesLabel, 1);
+    this->addChild(movesLabel, 2);
 }
 
 void PuzzleGame::initMenu()
@@ -94,7 +94,11 @@ void PuzzleGame::initMenu()
     menuChoose->setPositionY(-215);
     menuMain->setPositionY(-275);
 
-    this->addChild(menu, 1);
+    Sprite *pane = Sprite::create("utility/pane.png");
+    pane->setPosition(Vec2(visibleSize.width - 210, visibleSize.height / 2));
+
+    this->addChild(menu, 2);
+    this->addChild(pane, 1);
 }
 
 void PuzzleGame::initPreviewImage()
@@ -107,8 +111,8 @@ void PuzzleGame::initPreviewImage()
     Label *label = Label::createWithTTF("Preview", "fonts/Marker Felt.ttf", 24);
     label->setPosition(Vec2(preview->getPositionX(), preview->getPositionY() + 125));
 
-    this->addChild(label, 1);
-    this->addChild(preview, 1);
+    this->addChild(label, 2);
+    this->addChild(preview, 2);
 }
 
 void PuzzleGame::updateMovesLabel(int increment)

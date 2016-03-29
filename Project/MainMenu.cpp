@@ -162,6 +162,5 @@ void MainMenu::gotoStatistics(cocos2d::Ref* sender)
 void MainMenu::exitGame(cocos2d::Ref *pSender)
 {
     saveProfile();
-
     Director::getInstance()->end();
 }

@@ -13,14 +13,6 @@ enum class ProfileStat
     currentBackground
 };
 
-enum class BackgroundName
-{
-    regal = 0,
-    nature,
-    spooky,
-    alien
-};
-
 class GameProfile
 {
 public:
@@ -30,7 +22,7 @@ public:
     static std::string profileSettingToString(ProfileStat setting);
 
     static std::string getProfileStat(ProfileStat setting);
-    static void setProfileStat(ProfileStat setting, std::string val);
+    static void setProfileStat(ProfileStat setting, const std::string &val);
     static void modifyProfileStat(ProfileStat setting, int amount);
 
     static std::string getCurrentBackground();
@@ -39,7 +31,7 @@ public:
     static void enumerateUnlocks();
     static std::vector<GameUnlock> &getUnlocks();
 
-    static int backgroundNameToInt(BackgroundName name);
+    static int stringToBackgroundID(const std::string &str);
 
     static bool isInitialised();
     static void setInitialised(bool b);
