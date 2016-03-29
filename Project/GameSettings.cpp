@@ -18,7 +18,7 @@ std::string GameSettings::getImageName()
     return imageName;
 }
 
-void GameSettings::setImageName(std::string name, int id)
+void GameSettings::setImageName(const std::string &name, int id)
 {
     imageName = name;
     imageID = id;

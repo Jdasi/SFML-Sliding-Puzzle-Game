@@ -1,16 +1,15 @@
 #include "GameProfile.h"
 
-GameProfile::keymap GameProfile::profileSettings;
-std::string GameProfile::currentBackground;
+GameProfile::keymap GameProfile::profileStats;
 bool GameProfile::initialised = false;
 std::vector<GameUnlock> GameProfile::unlocks;
 
 GameProfile::keymap &GameProfile::getProfileKeymap()
 {
-    return profileSettings;
+    return profileStats;
 }
 
-std::string GameProfile::profileSettingToString(ProfileStat setting)
+std::string GameProfile::profileStatToString(ProfileStat setting)
 {
     switch (setting)
     {
@@ -44,36 +43,37 @@ std::string GameProfile::profileSettingToString(ProfileStat setting)
         }
         default:
         {
-            throw std::runtime_error("Error in profileSettingToString");
+            throw std::runtime_error("Error in profileStatToString");
         }
     }
 }
 
 std::string GameProfile::getProfileStat(ProfileStat setting)
 {
-    return profileSettings[profileSettingToString(setting)];
+    return profileStats[profileStatToString(setting)];
 }
 
 void GameProfile::setProfileStat(ProfileStat setting, const std::string &val)
 {
-    profileSettings[profileSettingToString(setting)] = val;
+    profileStats[profileStatToString(setting)] = val;
 }
 
 void GameProfile::modifyProfileStat(ProfileStat setting, int amount)
 {
-    std::string actualSetting = profileSettingToString(setting);
-    int tempVal = stoi(profileSettings[actualSetting]) + amount;
-    profileSettings[actualSetting] = std::to_string(tempVal);
+    std::string actualSetting = profileStatToString(setting);
+    int tempVal = stoi(profileStats[actualSetting]) + amount;
+    profileStats[actualSetting] = std::to_string(tempVal);
+}
+
+void GameProfile::modifyProfileStat(ProfileStat setting, const std::string &addition)
+{
+    std::string actualSetting = profileStatToString(setting);
+    profileStats[actualSetting] += " " + addition;
 }
 
 std::string GameProfile::getCurrentBackground()
 {
-    return currentBackground;
-}
-
-void GameProfile::setCurrentBackground(const std::string &str)
-{
-    currentBackground = str;
+    return profileStats[profileStatToString(ProfileStat::currentBackground)];
 }
 
 void GameProfile::enumerateUnlocks()

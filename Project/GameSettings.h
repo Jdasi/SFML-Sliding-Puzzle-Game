@@ -25,7 +25,7 @@ public:
     static int getImageID();
 
     static std::string getImageName();
-    static void setImageName(std::string name, int id);
+    static void setImageName(const std::string &name, int id);
     
     static coordinate getSegments();
     static void setSegmentsX(int x);

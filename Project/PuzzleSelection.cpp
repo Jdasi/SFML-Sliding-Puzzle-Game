@@ -199,7 +199,7 @@ void PuzzleSelection::initArrows()
 
     leftArrow->setPosition(Vec2(-325, 0));
     leftArrow->setScale(0.3f);
-    leftArrow->setRotation3D(Vec3(0, 180, 0));
+    leftArrow->setRotation(180.0f);
 
     rightArrow->setPosition(Vec2(325, 0));
     rightArrow->setScale(0.3f);

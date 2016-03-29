@@ -7,7 +7,8 @@ GameUnlock::GameUnlock()
 {
 }
 
-GameUnlock::GameUnlock(std::string str, int cost, std::vector<GameUnlock> &container, int iid)
+GameUnlock::GameUnlock
+    (const std::string &str, int cost, std::vector<GameUnlock> &container, int iid)
     : name(str)
     , id(iid)
     , locked(true)
@@ -21,7 +22,7 @@ std::string GameUnlock::getName()
     return name;
 }
 
-void GameUnlock::setName(std::string str)
+void GameUnlock::setName(const std::string &str)
 {
     name = str;
 }

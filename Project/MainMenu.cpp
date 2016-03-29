@@ -45,9 +45,6 @@ void MainMenu::initProfile()
     {
         loadProfile();
         GameProfile::enumerateUnlocks();
-        GameProfile::setCurrentBackground
-            (GameProfile::getProfileStat(ProfileStat::currentBackground));
-
         GameProfile::setInitialised(true);
     }
 }
@@ -60,7 +57,6 @@ void MainMenu::initSettings()
         GameSettings::setImageName("puzzles/" + GameSettings::getPuzzles()[0], 0);
         GameSettings::setSegmentsX(4);
         GameSettings::setSegmentsY(4);
-
         GameSettings::setInitialised(true);
     }
 }

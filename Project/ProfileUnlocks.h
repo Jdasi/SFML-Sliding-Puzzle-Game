@@ -4,6 +4,13 @@
 
 #include "cocos2d.h"
 
+enum class ContextAction
+{
+    select,
+    unlock,
+    null
+};
+
 class ProfileUnlocks : public cocos2d::Layer
 {
 public:
@@ -19,20 +26,23 @@ private:
 
     bool imageClick(cocos2d::Touch *touch, cocos2d::Event *event);
 
-    void contextAction(cocos2d::Ref *sender);
+    void performContextAction(cocos2d::Ref *sender);
     void updateActionButton();
+    void updateBackdrop();
 
     void gotoMainMenu(cocos2d::Ref *sender);
-
-    int fadedOpacity = 150;
-    int selectedOpacity = 255;
 
     static std::vector<GameUnlock> &unlocksRef;
     std::vector<cocos2d::Sprite*> previewImages;
 
+    cocos2d::Sprite *backdrop;
+
+    int fadedOpacity;
+    int selectedOpacity;
     int currentSelection;
 
     cocos2d::MenuItemSprite *actionButton;
+    ContextAction action;
 
     cocos2d::Size visibleSize{ cocos2d::Director::getInstance()->getVisibleSize() };
 };

@@ -19,14 +19,14 @@ public:
     using keymap = std::map<std::string, std::string>;
 
     static keymap &getProfileKeymap();
-    static std::string profileSettingToString(ProfileStat setting);
+    static std::string profileStatToString(ProfileStat setting);
 
     static std::string getProfileStat(ProfileStat setting);
     static void setProfileStat(ProfileStat setting, const std::string &val);
     static void modifyProfileStat(ProfileStat setting, int amount);
+    static void modifyProfileStat(ProfileStat setting, const std::string &addition);
 
     static std::string getCurrentBackground();
-    static void setCurrentBackground(const std::string &str);
 
     static void enumerateUnlocks();
     static std::vector<GameUnlock> &getUnlocks();
@@ -37,8 +37,7 @@ public:
     static void setInitialised(bool b);
     
 private:
-    static keymap profileSettings;
-    static std::string currentBackground;
+    static keymap profileStats;
     static bool initialised;
     static std::vector<GameUnlock> unlocks;
 };

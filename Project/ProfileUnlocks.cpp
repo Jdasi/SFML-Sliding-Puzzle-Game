@@ -24,9 +24,9 @@ bool ProfileUnlocks::init()
         return false;
     }
 
+    fadedOpacity = 150;
+    selectedOpacity = 255;
     currentSelection = 0;
-
-    //unlocksRef[GameProfile::backgroundNameToInt(BackgroundName::regal)].setLocked(false);
 
     Sprite *sceneTitle = Sprite::create("utility/unlocks.png");
     sceneTitle->setPosition
@@ -43,11 +43,9 @@ bool ProfileUnlocks::init()
 
 void ProfileUnlocks::initBackdrop()
 {
-    Sprite *backdrop = Sprite::create
-        ("backdrops/" + GameProfile::getCurrentBackground() + "_menu.jpg");
+    backdrop = Sprite::create();
 
-    backdrop->setAnchorPoint(Vec2(0, 0));
-    backdrop->setPosition(Vec2(0, 0));
+    updateBackdrop();
 
     this->addChild(backdrop, 0);
 }
@@ -55,11 +53,7 @@ void ProfileUnlocks::initBackdrop()
 void ProfileUnlocks::initMenu()
 {
     actionButton = new MenuItemSprite();
-    actionButton->initWithNormalSprite(
-        Sprite::create("utility/select_up.png"),
-        Sprite::create("utility/select_dn.png"),
-        nullptr,
-        CC_CALLBACK_1(ProfileUnlocks::contextAction, this));
+    updateActionButton();
 
     MenuItemSprite *menuMain = new MenuItemSprite();
     menuMain->initWithNormalSprite(
@@ -73,6 +67,9 @@ void ProfileUnlocks::initMenu()
 
     menuMain->setScale(0.66f);
     menuMain->setPosition(Vec2(0, -300));
+
+    actionButton->setScale(0.66f);
+    actionButton->setPosition(Vec2(0, -240));
 
     this->addChild(menu, 2);
 }
@@ -107,11 +104,18 @@ void ProfileUnlocks::initPreviewImages()
 
         previewImages.push_back(spr);
 
-        this->addChild(spr, 1);
+        this->addChild(spr, 2);
     }
 
     previewImages[GameProfile::stringToBackgroundID
         (GameProfile::getCurrentBackground())]->setOpacity(selectedOpacity);
+
+    Sprite *pane = Sprite::create("utility/pane.png");
+    pane->setPosition(Vec2(visibleSize.width / 2, (visibleSize.height / 2) + 50));
+    pane->setScaleY(2.0f);
+    pane->setRotation(90.0f);
+    
+    this->addChild(pane, 1);
 }
 
 bool ProfileUnlocks::imageClick(cocos2d::Touch *touch, cocos2d::Event *event)
@@ -141,12 +145,78 @@ bool ProfileUnlocks::imageClick(cocos2d::Touch *touch, cocos2d::Event *event)
 
 void ProfileUnlocks::updateActionButton()
 {
+    if (unlocksRef[currentSelection].isLocked())
+    {
+        if (stoi(GameProfile::getProfileStat
+            (ProfileStat::stars)) >= unlocksRef[currentSelection].getStarCost())
+        {
+            actionButton->initWithNormalSprite(
+                Sprite::create("utility/unlock_up.png"),
+                Sprite::create("utility/unlock_dn.png"),
+                nullptr,
+                CC_CALLBACK_1(ProfileUnlocks::performContextAction, this));
+            action = ContextAction::unlock;
+        }
+        else
+        {
+            actionButton->initWithNormalSprite(
+                Sprite::create("utility/locked_up.png"),
+                Sprite::create("utility/locked_dn.png"),
+                nullptr,
+                CC_CALLBACK_1(ProfileUnlocks::performContextAction, this));
+            action = ContextAction::null;
+        }
 
+        return;
+    }
+
+    actionButton->initWithNormalSprite(
+        Sprite::create("utility/select_up.png"),
+        Sprite::create("utility/select_dn.png"),
+        nullptr,
+        CC_CALLBACK_1(ProfileUnlocks::performContextAction, this));
+    action = ContextAction::select;
 }
 
-void ProfileUnlocks::contextAction(cocos2d::Ref *sender)
+void ProfileUnlocks::performContextAction(cocos2d::Ref *sender)
 {
-    
+    switch (action)
+    {
+        case ContextAction::unlock:
+        {
+            GameProfile::modifyProfileStat
+                (ProfileStat::stars, -unlocksRef[currentSelection].getStarCost());
+            GameProfile::modifyProfileStat
+                (ProfileStat::backgroundsUnlocked, unlocksRef[currentSelection].getName());
+
+            previewImages[currentSelection]->initWithFile
+                ("backdrops/" + unlocksRef[currentSelection].getName() + "_menu.jpg");
+
+            unlocksRef[currentSelection].setLocked(false);
+
+            break;
+        }
+        case ContextAction::select:
+        {
+            GameProfile::setProfileStat
+                (ProfileStat::currentBackground, unlocksRef[currentSelection].getName());
+
+            updateBackdrop();
+
+            break;
+        }
+        default: {}
+    }
+
+    updateActionButton();
+}
+
+void ProfileUnlocks::updateBackdrop()
+{
+    backdrop->initWithFile
+        ("backdrops/" + GameProfile::getCurrentBackground() + "_menu.jpg");
+    backdrop->setAnchorPoint(Vec2(0, 0));
+    backdrop->setPosition(Vec2(0, 0));
 }
 
 void ProfileUnlocks::gotoMainMenu(cocos2d::Ref *sender)
