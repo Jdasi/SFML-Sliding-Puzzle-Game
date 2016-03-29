@@ -6,10 +6,15 @@ class GameUnlock
 {
 public:
     GameUnlock();
+    GameUnlock(std::string str, int cost, std::vector<GameUnlock> &container, int iid);
+
     ~GameUnlock() = default;
 
     std::string getName();
     void setName(std::string str);
+
+    int getID();
+    void setID(int value);
 
     bool isLocked();
     void setLocked(bool lock);
@@ -19,6 +24,7 @@ public:
 
 private:
     std::string name;
+    int id;
     bool locked;
     int starCost;
 };

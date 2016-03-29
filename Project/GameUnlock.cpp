@@ -1,9 +1,19 @@
 #include "GameUnlock.h"
 
 GameUnlock::GameUnlock()
-    : locked(false)
+    : id(0)
+    , locked(true)
     , starCost(0)
 {
+}
+
+GameUnlock::GameUnlock(std::string str, int cost, std::vector<GameUnlock> &container, int iid)
+    : name(str)
+    , id(iid)
+    , locked(true)
+    , starCost(cost)
+{
+    container.push_back(*this);
 }
 
 std::string GameUnlock::getName()
@@ -14,6 +24,16 @@ std::string GameUnlock::getName()
 void GameUnlock::setName(std::string str)
 {
     name = str;
+}
+
+int GameUnlock::getID()
+{
+    return id;
+}
+
+void GameUnlock::setID(int value)
+{
+    id = value;
 }
 
 bool GameUnlock::isLocked()

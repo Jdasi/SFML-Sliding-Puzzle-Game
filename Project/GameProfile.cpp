@@ -3,10 +3,11 @@
 GameProfile::keymap GameProfile::profileSettings;
 std::string GameProfile::currentBackground;
 bool GameProfile::initialised = false;
+std::vector<GameUnlock> GameProfile::unlocks;
 
 GameProfile::keymap &GameProfile::getProfileKeymap()
 {
-   return profileSettings;
+    return profileSettings;
 }
 
 std::string GameProfile::profileSettingToString(ProfileStat setting)
@@ -70,9 +71,49 @@ std::string GameProfile::getCurrentBackground()
     return currentBackground;
 }
 
-void GameProfile::setCurrentBackground(std::string str)
+void GameProfile::setCurrentBackground(const std::string &str)
 {
     currentBackground = str;
+}
+
+void GameProfile::enumerateUnlocks()
+{
+    GameUnlock regal("regal", 0, unlocks, 0);
+    GameUnlock nature("nature", 4, unlocks, 1);
+    GameUnlock spooky("spooky", 8, unlocks, 2);
+    GameUnlock alien("alien", 16, unlocks, 3);
+
+    std::string unlockedBackgrounds = getProfileStat(ProfileStat::backgroundsUnlocked);
+
+    if (unlockedBackgrounds.find("regal") != std::string::npos)
+    {
+        unlocks[backgroundNameToInt(BackgroundName::regal)].setLocked(false);
+    }
+
+    if (unlockedBackgrounds.find("nature") != std::string::npos)
+    {
+        unlocks[backgroundNameToInt(BackgroundName::nature)].setLocked(false);
+    }
+
+    if (unlockedBackgrounds.find("spooky") != std::string::npos)
+    {
+        unlocks[backgroundNameToInt(BackgroundName::spooky)].setLocked(false);
+    }
+
+    if (unlockedBackgrounds.find("alien") != std::string::npos)
+    {
+        unlocks[backgroundNameToInt(BackgroundName::alien)].setLocked(false);
+    }
+}
+
+std::vector<GameUnlock> &GameProfile::getUnlocks()
+{
+    return unlocks;
+}
+
+int GameProfile::backgroundNameToInt(BackgroundName name)
+{
+    return static_cast<int>(name);
 }
 
 bool GameProfile::isInitialised()

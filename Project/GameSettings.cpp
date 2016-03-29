@@ -45,7 +45,7 @@ void GameSettings::enumeratePuzzles()
 
     std::vector<std::string> puzzlesJpg = 
         enumerate_files(executable_path + L"\\puzzles\\*.jpg");
-    std::vector<std::string> puzzlesPng = 
+    std::vector<std::string> puzzlesPng =
         enumerate_files(executable_path + L"\\puzzles\\*.png");
 
     puzzles.reserve(puzzlesJpg.size() + puzzlesPng.size());
@@ -62,6 +62,7 @@ int GameSettings::getCurrentPuzzleValue()
 {
     return currentPuzzleValue;
 }
+
 
 void GameSettings::setCurrentPuzzleValue(int value)
 {

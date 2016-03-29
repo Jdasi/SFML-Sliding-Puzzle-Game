@@ -2,7 +2,6 @@
 
 #include "GameUnlock.h"
 
-#include <string>
 #include <vector>
 
 struct coordinate
@@ -37,9 +36,6 @@ public:
 
     static int getCurrentPuzzleValue();
     static void setCurrentPuzzleValue(int value);
-
-    //static void enumerateUnlocks();
-    //static std::vector<GameUnlock> getUnlocks();
 
     static bool isInitialised();
     static void setInitialised(bool b);

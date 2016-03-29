@@ -23,7 +23,8 @@ std::wstring get_executable_path()
     // Check if the file path is too long.
     if (GetModuleFileName(nullptr, path, MAX_PATH - 1) == 0)
     {
-        throw std::runtime_error("Could not resolve runtime path.");
+        auto errorcode = GetLastError();
+        throw std::runtime_error("Could not resolve runtime path: Error " + std::to_string(errorcode));
     }
 
     std::wstring pathstr = path;
@@ -37,9 +38,20 @@ std::vector<std::string> enumerate_files(const std::wstring& path)
     WIN32_FIND_DATA ffd;
     HANDLE hFind = FindFirstFile(path.c_str(), &ffd);
 
+    switch (GetLastError())
+    {
+        case ERROR_SUCCESS: break; // Everything is a'ok.
+        case ERROR_FILE_NOT_FOUND: return {}; // No files were found in the folder
+        default:
+            throw std::runtime_error("Error in FindFirstFile");
+    }
+
     std::vector<std::string> files;
     do
     {
+        if (GetLastError() != ERROR_SUCCESS)
+            throw std::runtime_error("Error in FindNextFile");
+
         // If the current file is not a directory.
         if (!(ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
         {
@@ -48,7 +60,12 @@ std::vector<std::string> enumerate_files(const std::wstring& path)
         }
     } while (FindNextFile(hFind, &ffd) != 0);
     
-    FindClose(hFind);
+    if (GetLastError() != ERROR_NO_MORE_FILES)
+        throw std::runtime_error("Expected no more files at the end of the loop.");
+
+    if(FindClose(hFind) == 0)
+        throw std::runtime_error("Error in FindClose");
+
     return files;
 }
 

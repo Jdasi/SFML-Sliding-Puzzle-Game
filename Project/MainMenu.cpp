@@ -30,13 +30,26 @@ bool MainMenu::init()
     logo->setPosition(Vec2(visibleSize.width / 2, visibleSize.height - 150));
     this->addChild(logo, 1);
 
-    initSettings();
     initProfile();
+    initSettings();
     initStarDisplay();
     initBackdrop();
     initMenu();
 
     return true;
+}
+
+void MainMenu::initProfile()
+{
+    if (!GameProfile::isInitialised())
+    {
+        loadProfile();
+        GameProfile::enumerateUnlocks();
+        GameProfile::setCurrentBackground
+            (GameProfile::getProfileStat(ProfileStat::currentBackground));
+
+        GameProfile::setInitialised(true);
+    }
 }
 
 void MainMenu::initSettings()
@@ -47,18 +60,8 @@ void MainMenu::initSettings()
         GameSettings::setImageName("puzzles/" + GameSettings::getPuzzles()[0], 0);
         GameSettings::setSegmentsX(4);
         GameSettings::setSegmentsY(4);
-        GameSettings::setInitialised(true);
-    }
-}
 
-void MainMenu::initProfile()
-{
-    if (!GameProfile::isInitialised())
-    {
-        loadProfile();
-        GameProfile::setCurrentBackground
-            (GameProfile::getProfileStat(ProfileStat::currentBackground));
-        GameProfile::setInitialised(true);
+        GameSettings::setInitialised(true);
     }
 }
 

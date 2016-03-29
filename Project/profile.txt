@@ -1,4 +1,4 @@
-backgroundsUnlocked=0
+backgroundsUnlocked=regal
 currentBackground=regal
 puzzlesAttempted=0
 puzzlesCompleted=0

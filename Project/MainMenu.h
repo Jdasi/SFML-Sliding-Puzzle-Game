@@ -11,8 +11,8 @@ public:
     CREATE_FUNC(MainMenu);
 
 private:
-    void initSettings();
     void initProfile();
+    void initSettings();
     void initStarDisplay();
     void initBackdrop();
     void initMenu();
