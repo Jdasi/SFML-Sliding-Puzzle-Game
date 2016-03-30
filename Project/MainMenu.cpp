@@ -32,8 +32,8 @@ bool MainMenu::init()
 
     initProfile();
     initSettings();
-    initStarDisplay();
     initBackdrop();
+    initStarDisplay();
     initMenu();
 
     return true;
@@ -61,13 +61,23 @@ void MainMenu::initSettings()
     }
 }
 
+void MainMenu::initBackdrop()
+{
+    Sprite *backdrop = Sprite::create
+        ("backdrops/" + GameProfile::getCurrentBackground() + "_menu.jpg");
+
+    backdrop->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
+
+    this->addChild(backdrop, 0);
+}
+
 void MainMenu::initStarDisplay()
 {
     Sprite *star = Sprite::create("utility/star.png");
     star->setPosition(Vec2(visibleSize.width - 200, visibleSize.height - 100));
     star->setScale(0.4f);
 
-    cocos2d::Label *numStars = 
+    cocos2d::Label *numStars =
         Label::createWithTTF("numStars", "fonts/Marker Felt.ttf", 24);
     numStars->setPosition(Vec2(star->getPositionX() + 100, star->getPositionY() - 50));
     numStars->setString("x " + GameProfile::getProfileStat(ProfileStat::stars));
@@ -75,17 +85,6 @@ void MainMenu::initStarDisplay()
 
     this->addChild(star, 1);
     this->addChild(numStars, 1);
-}
-
-void MainMenu::initBackdrop()
-{
-    Sprite *backdrop = Sprite::create
-        ("backdrops/" + GameProfile::getCurrentBackground() + "_menu.jpg");
-
-    backdrop->setAnchorPoint(Vec2(0, 0));
-    backdrop->setPosition(Vec2(0, 0));
-
-    this->addChild(backdrop, 0);
 }
 
 void MainMenu::initMenu()

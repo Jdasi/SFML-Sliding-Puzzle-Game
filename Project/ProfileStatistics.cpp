@@ -38,8 +38,7 @@ void ProfileStatistics::initBackdrop()
     Sprite *backdrop = Sprite::create
         ("backdrops/" + GameProfile::getCurrentBackground() + "_menu.jpg");
 
-    backdrop->setAnchorPoint(Vec2(0, 0));
-    backdrop->setPosition(Vec2(0, 0));
+    backdrop->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
 
     this->addChild(backdrop, 0);
 }
@@ -59,9 +58,11 @@ void ProfileStatistics::initMenu()
     menuMain->setScale(0.66f);
     menuMain->setPosition(Vec2(0, -300));
 
-    Sprite *pane = Sprite::create("utility/pane.png");
+    Sprite *pane = Sprite::create();
+    pane->setTextureRect(Rect(0, 0, 600, 768));
     pane->setPosition(Vec2((visibleSize.width / 2), visibleSize.height / 2));
-    pane->setScaleX(2.5f);
+    pane->setColor(Color3B::BLACK);
+    pane->setOpacity(175);
 
     this->addChild(menu, 2);
     this->addChild(pane, 1);

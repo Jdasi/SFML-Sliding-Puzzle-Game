@@ -79,9 +79,9 @@ std::string GameProfile::getCurrentBackground()
 void GameProfile::enumerateUnlocks()
 {
     GameUnlock regal("regal", 0, unlocks, 0);
-    GameUnlock nature("nature", 4, unlocks, 1);
-    GameUnlock spooky("spooky", 8, unlocks, 2);
-    GameUnlock alien("alien", 16, unlocks, 3);
+    GameUnlock nature("nature", 2, unlocks, 1);
+    GameUnlock spooky("spooky", 4, unlocks, 2);
+    GameUnlock alien("alien", 8, unlocks, 3);
 
     std::string unlockedBackgrounds = getProfileStat(ProfileStat::backgroundsUnlocked);
 

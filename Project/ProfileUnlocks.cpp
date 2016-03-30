@@ -26,15 +26,14 @@ bool ProfileUnlocks::init()
 
     fadedOpacity = 150;
     selectedOpacity = 255;
-    currentSelection = 0;
-
-    Sprite *sceneTitle = Sprite::create("utility/unlocks.png");
-    sceneTitle->setPosition
-        (Vec2((visibleSize.width / 2), visibleSize.height - 100));
-
-    this->addChild(sceneTitle, 2);
+    currentSelection = GameProfile::stringToBackgroundID
+        (GameProfile::getCurrentBackground());
+    action = ContextAction::select;
+    selectionRect = Sprite::create();
 
     initBackdrop();
+    initLabels();
+    initStarDisplay();
     initMenu();
     initPreviewImages();
 
@@ -44,10 +43,44 @@ bool ProfileUnlocks::init()
 void ProfileUnlocks::initBackdrop()
 {
     backdrop = Sprite::create();
+    backdrop->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
 
     updateBackdrop();
 
     this->addChild(backdrop, 0);
+}
+
+void ProfileUnlocks::initLabels()
+{
+    Sprite *sceneTitle = Sprite::create("utility/unlocks.png");
+    sceneTitle->setPosition
+        (Vec2((visibleSize.width / 2), visibleSize.height - 100));
+
+    contextHintLabel = Label::createWithTTF("contextHint", "fonts/Marker Felt.ttf", 24);
+    contextHintLabel->setPosition
+        (Vec2(visibleSize.width / 2, (visibleSize.height / 2) - 75));
+    contextHintLabel->enableGlow(Color4B::BLACK);
+
+    updateContextHintLabel();
+
+    this->addChild(sceneTitle, 2);
+    this->addChild(contextHintLabel, 2);
+}
+
+void ProfileUnlocks::initStarDisplay()
+{
+    Sprite *star = Sprite::create("utility/star.png");
+    star->setPosition(Vec2(visibleSize.width - 200, visibleSize.height - 100));
+    star->setScale(0.4f);
+
+    numStars = Label::createWithTTF("numStars", "fonts/Marker Felt.ttf", 24);
+    numStars->setPosition(Vec2(star->getPositionX() + 100, star->getPositionY() - 50));
+    numStars->enableGlow(Color4B::BLACK);
+
+    updateNumStarsLabel();
+
+    this->addChild(star, 1);
+    this->addChild(numStars, 1);
 }
 
 void ProfileUnlocks::initMenu()
@@ -79,7 +112,7 @@ void ProfileUnlocks::initPreviewImages()
     std::string imgSuffix;
     for (int i = 0; i < 4; ++i)
     {
-        Sprite *spr = nullptr;
+        Sprite *spr = Sprite::create();
 
         if (unlocksRef[i].isLocked())
         {
@@ -90,8 +123,7 @@ void ProfileUnlocks::initPreviewImages()
             imgSuffix = "_puzzle.jpg";
         }
 
-        spr = Sprite::create("backdrops/" + unlocksRef[i].getName() + imgSuffix);
-
+        spr->initWithFile("backdrops/" + unlocksRef[i].getName() + imgSuffix);
         spr->setPosition(Vec2(250 + (i * 285) + (i * 2), (visibleSize.height / 2) + 100));
         spr->setScaleX(273 / spr->getContentSize().width);
         spr->setScaleY(154 / spr->getContentSize().height);
@@ -104,18 +136,29 @@ void ProfileUnlocks::initPreviewImages()
 
         previewImages.push_back(spr);
 
-        this->addChild(spr, 2);
+        Label *lbl = Label::createWithTTF
+            (unlocksRef[i].getName(), "fonts/Marker Felt.ttf", 26);
+        lbl->setPosition(Vec2(spr->getPositionX(), spr->getPositionY() - 100));
+
+        this->addChild(spr, 3);
+        this->addChild(lbl, 3);
     }
 
-    previewImages[GameProfile::stringToBackgroundID
-        (GameProfile::getCurrentBackground())]->setOpacity(selectedOpacity);
+    previewImages[currentSelection]->setOpacity(selectedOpacity);
 
-    Sprite *pane = Sprite::create("utility/pane.png");
+    Sprite *pane = Sprite::create();
+    pane->setTextureRect(Rect(0, 0, 1366, 300));
     pane->setPosition(Vec2(visibleSize.width / 2, (visibleSize.height / 2) + 50));
-    pane->setScaleY(2.0f);
-    pane->setRotation(90.0f);
+    pane->setColor(Color3B::BLACK);
+    pane->setOpacity(175);
+
+    selectionRect->setTextureRect(Rect(0, 0, 280, 165));
+    selectionRect->setColor(Color3B::YELLOW);
+
+    updateSelectionRect();
     
     this->addChild(pane, 1);
+    this->addChild(selectionRect, 2);
 }
 
 bool ProfileUnlocks::imageClick(cocos2d::Touch *touch, cocos2d::Event *event)
@@ -139,6 +182,8 @@ bool ProfileUnlocks::imageClick(cocos2d::Touch *touch, cocos2d::Event *event)
     currentSelection = spr->getTag();
 
     updateActionButton();
+    updateSelectionRect();
+    updateContextHintLabel();
 
     return true;
 }
@@ -190,9 +235,13 @@ void ProfileUnlocks::performContextAction(cocos2d::Ref *sender)
                 (ProfileStat::backgroundsUnlocked, unlocksRef[currentSelection].getName());
 
             previewImages[currentSelection]->initWithFile
-                ("backdrops/" + unlocksRef[currentSelection].getName() + "_menu.jpg");
+                ("backdrops/" + unlocksRef[currentSelection].getName() + "_puzzle.jpg");
 
             unlocksRef[currentSelection].setLocked(false);
+
+            updateActionButton();
+            updateContextHintLabel();
+            updateNumStarsLabel();
 
             break;
         }
@@ -205,19 +254,59 @@ void ProfileUnlocks::performContextAction(cocos2d::Ref *sender)
 
             break;
         }
-        default: {}
+        case ContextAction::null: {}
     }
-
-    updateActionButton();
 }
 
 void ProfileUnlocks::updateBackdrop()
 {
     backdrop->initWithFile
         ("backdrops/" + GameProfile::getCurrentBackground() + "_menu.jpg");
-    backdrop->setAnchorPoint(Vec2(0, 0));
-    backdrop->setPosition(Vec2(0, 0));
 }
+
+void ProfileUnlocks::updateSelectionRect()
+{
+    Vec2 currImagePos = previewImages[currentSelection]->getPosition();
+    selectionRect->setPosition(Vec2(currImagePos.x, currImagePos.y));
+}
+
+void ProfileUnlocks::updateContextHintLabel()
+{
+    GameUnlock uRef = unlocksRef[currentSelection];
+    std::string uRefCost = std::to_string(uRef.getStarCost());
+
+    std::string toString;
+
+    switch (action)
+    {
+        case ContextAction::unlock:
+        {
+            toString += "This backdrop costs " + uRefCost + " stars to unlock. ";
+            toString += "Press 'Unlock' to access '" + uRef.getName() + "' now!";
+            break;
+        }
+        case ContextAction::select:
+        {
+            toString += "You own this backdrop. Press 'Select' to set '" + uRef.getName();
+            toString += "' as your backdrop now!";
+            break;
+        }
+        case ContextAction::null:
+        {
+            toString += "This backdrop costs " + uRefCost + " stars to unlock. ";
+            toString += "Earn more stars by completing puzzles!";
+            break;
+        }
+    }
+
+    contextHintLabel->setString(toString);
+}
+
+void ProfileUnlocks::updateNumStarsLabel()
+{
+    numStars->setString("x " + GameProfile::getProfileStat(ProfileStat::stars));
+}
+
 
 void ProfileUnlocks::gotoMainMenu(cocos2d::Ref *sender)
 {

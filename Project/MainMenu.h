@@ -13,8 +13,8 @@ public:
 private:
     void initProfile();
     void initSettings();
-    void initStarDisplay();
     void initBackdrop();
+    void initStarDisplay();
     void initMenu();
 
     void gotoPuzzleSelection(cocos2d::Ref *sender);

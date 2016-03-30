@@ -21,6 +21,8 @@ public:
 
 private:
     void initBackdrop();
+    void initLabels();
+    void initStarDisplay();
     void initMenu();
     void initPreviewImages();
 
@@ -29,6 +31,9 @@ private:
     void performContextAction(cocos2d::Ref *sender);
     void updateActionButton();
     void updateBackdrop();
+    void updateSelectionRect();
+    void updateContextHintLabel();
+    void updateNumStarsLabel();
 
     void gotoMainMenu(cocos2d::Ref *sender);
 
@@ -36,12 +41,14 @@ private:
     std::vector<cocos2d::Sprite*> previewImages;
 
     cocos2d::Sprite *backdrop;
+    cocos2d::Sprite *selectionRect;
+    cocos2d::MenuItemSprite *actionButton;
+    cocos2d::Label *contextHintLabel;
+    cocos2d::Label *numStars;
 
     int fadedOpacity;
     int selectedOpacity;
     int currentSelection;
-
-    cocos2d::MenuItemSprite *actionButton;
     ContextAction action;
 
     cocos2d::Size visibleSize{ cocos2d::Director::getInstance()->getVisibleSize() };

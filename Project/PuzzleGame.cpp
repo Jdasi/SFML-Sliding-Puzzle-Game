@@ -42,8 +42,7 @@ void PuzzleGame::initBackdrop()
     Sprite *backdrop = Sprite::create
         ("backdrops/" + GameProfile::getCurrentBackground() + "_puzzle.jpg");
 
-    backdrop->setAnchorPoint(Vec2(0, 0));
-    backdrop->setPosition(Vec2(0, 0));
+    backdrop->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
 
     this->addChild(backdrop, 0);
 }
@@ -94,8 +93,11 @@ void PuzzleGame::initMenu()
     menuChoose->setPositionY(-215);
     menuMain->setPositionY(-275);
 
-    Sprite *pane = Sprite::create("utility/pane.png");
+    Sprite *pane = Sprite::create();
+    pane->setTextureRect(Rect(0, 0, 300, 768));
     pane->setPosition(Vec2(visibleSize.width - 210, visibleSize.height / 2));
+    pane->setColor(Color3B::BLACK);
+    pane->setOpacity(175);
 
     this->addChild(menu, 2);
     this->addChild(pane, 1);
