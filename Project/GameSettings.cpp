@@ -63,7 +63,6 @@ int GameSettings::getCurrentPuzzleValue()
     return currentPuzzleValue;
 }
 
-
 void GameSettings::setCurrentPuzzleValue(int value)
 {
     currentPuzzleValue = value;
