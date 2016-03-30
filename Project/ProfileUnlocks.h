@@ -21,10 +21,10 @@ public:
 
 private:
     void initBackdrop();
-    void initLabels();
     void initStarDisplay();
     void initMenu();
     void initPreviewImages();
+    void initLabels();
 
     bool imageClick(cocos2d::Touch *touch, cocos2d::Event *event);
 

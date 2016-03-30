@@ -32,10 +32,10 @@ bool ProfileUnlocks::init()
     selectionRect = Sprite::create();
 
     initBackdrop();
-    initLabels();
     initStarDisplay();
     initMenu();
     initPreviewImages();
+    initLabels();
 
     return true;
 }
@@ -48,23 +48,6 @@ void ProfileUnlocks::initBackdrop()
     updateBackdrop();
 
     this->addChild(backdrop, 0);
-}
-
-void ProfileUnlocks::initLabels()
-{
-    Sprite *sceneTitle = Sprite::create("utility/unlocks.png");
-    sceneTitle->setPosition
-        (Vec2((visibleSize.width / 2), visibleSize.height - 100));
-
-    contextHintLabel = Label::createWithTTF("contextHint", "fonts/Marker Felt.ttf", 24);
-    contextHintLabel->setPosition
-        (Vec2(visibleSize.width / 2, (visibleSize.height / 2) - 75));
-    contextHintLabel->enableGlow(Color4B::BLACK);
-
-    updateContextHintLabel();
-
-    this->addChild(sceneTitle, 2);
-    this->addChild(contextHintLabel, 2);
 }
 
 void ProfileUnlocks::initStarDisplay()
@@ -161,6 +144,23 @@ void ProfileUnlocks::initPreviewImages()
     this->addChild(selectionRect, 2);
 }
 
+void ProfileUnlocks::initLabels()
+{
+    Sprite *sceneTitle = Sprite::create("utility/unlocks.png");
+    sceneTitle->setPosition
+        (Vec2((visibleSize.width / 2), visibleSize.height - 100));
+
+    contextHintLabel = Label::createWithTTF("contextHint", "fonts/Marker Felt.ttf", 24);
+    contextHintLabel->setPosition
+        (Vec2(visibleSize.width / 2, (visibleSize.height / 2) - 75));
+    contextHintLabel->enableGlow(Color4B::BLACK);
+
+    updateContextHintLabel();
+
+    this->addChild(sceneTitle, 2);
+    this->addChild(contextHintLabel, 2);
+}
+
 bool ProfileUnlocks::imageClick(cocos2d::Touch *touch, cocos2d::Event *event)
 {
     Sprite *spr = static_cast<Sprite*>(event->getCurrentTarget());
@@ -240,8 +240,10 @@ void ProfileUnlocks::performContextAction(cocos2d::Ref *sender)
             unlocksRef[currentSelection].setLocked(false);
 
             updateActionButton();
-            updateContextHintLabel();
             updateNumStarsLabel();
+
+            action = ContextAction::select;
+            performContextAction(this);
 
             break;
         }
@@ -256,6 +258,8 @@ void ProfileUnlocks::performContextAction(cocos2d::Ref *sender)
         }
         case ContextAction::null: {}
     }
+
+    updateContextHintLabel();
 }
 
 void ProfileUnlocks::updateBackdrop()
@@ -287,8 +291,17 @@ void ProfileUnlocks::updateContextHintLabel()
         }
         case ContextAction::select:
         {
-            toString += "You own this backdrop. Press 'Select' to set '" + uRef.getName();
-            toString += "' as your backdrop now!";
+            if (previewImages[currentSelection]->getTag() == 
+                GameProfile::stringToBackgroundID(GameProfile::getCurrentBackground()))
+            {
+                toString += "This backdrop is currently enabled.";
+            }
+            else
+            {
+                toString += "You own this backdrop. Press 'Select' to set '";
+                toString += uRef.getName() + "' as your backdrop now!";
+            }
+
             break;
         }
         case ContextAction::null:
