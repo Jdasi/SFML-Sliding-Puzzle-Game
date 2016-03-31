@@ -41,21 +41,28 @@ private:
     void updateBlankspaceInfo();
     void moveBlankSpaceToStart();
 
+    void rewardPlayer();
+    void flashScreen();
+
+    void endGame();
+
     void gotoMainMenu(cocos2d::Ref *sender);
     void gotoPuzzleSelection(cocos2d::Ref *sender);
 
-    cocos2d::Size visibleSize { cocos2d::Director::getInstance()->getVisibleSize() };
     Puzzle puzzle;
+    int blankSpace;
+    static coordinate blankSpaceCoords;
+    bool gameOver;
 
     int startPosX;
     int startPosY;
 
     int currentPieceTag;
-
-    int blankSpace;
-    static coordinate blankSpaceCoords;
-
-    bool gameOver;
     int numMoves;
     cocos2d::Label *movesLabel;
+    cocos2d::Label *previewLabel;
+    cocos2d::Sprite *previewImage;
+    cocos2d::MenuItemSprite *menuPuzzle;
+
+    cocos2d::Size visibleSize{ cocos2d::Director::getInstance()->getVisibleSize() };
 };

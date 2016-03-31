@@ -77,7 +77,7 @@ void MainMenu::initStarDisplay()
     star->setPosition(Vec2(visibleSize.width - 200, visibleSize.height - 100));
     star->setScale(0.4f);
 
-    cocos2d::Label *numStars =
+    Label *numStars =
         Label::createWithTTF("numStars", "fonts/Marker Felt.ttf", 24);
     numStars->setPosition(Vec2(star->getPositionX() + 100, star->getPositionY() - 50));
     numStars->setString("x " + GameProfile::getProfileStat(ProfileStat::stars));

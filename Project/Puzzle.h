@@ -29,6 +29,8 @@ public:
 
     bool inBounds(int x, int y);
 
+    void hideAllPieces();
+
 private:
     void sanityCheckImage(cocos2d::Sprite *spr, int pad);
 

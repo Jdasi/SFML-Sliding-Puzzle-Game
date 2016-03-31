@@ -71,8 +71,8 @@ void Puzzle::initPuzzle(PuzzleGame *pScene, int startPosX, int startPosY)
 
 void Puzzle::sanityCheckImage(cocos2d::Sprite *spr, int pad)
 {
-    int paddingX = GameSettings::getSegments().x * pad;
-    int paddingY = GameSettings::getSegments().y * pad;
+    int paddingX = (GameSettings::getSegments().x - 1) * pad;
+    int paddingY = (GameSettings::getSegments().y - 1) * pad;
 
     if (sizeX + paddingX != 800)
     {
@@ -164,4 +164,12 @@ bool Puzzle::inBounds(int x, int y)
     }
 
     return true;
+}
+
+void Puzzle::hideAllPieces()
+{
+    for (PuzzlePiece *piece : puzzlePieces)
+    {
+        piece->setOpacity(0);
+    }
 }
