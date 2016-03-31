@@ -25,6 +25,10 @@ std::string GameProfile::profileStatToString(ProfileStat setting)
         {
             return "totalMoves";
         }
+        case ProfileStat::totalStarsCollected:
+        {
+            return "totalStarsCollected";
+        }
         case ProfileStat::puzzlesAttempted:
         {
             return "puzzlesAttempted";

@@ -29,6 +29,8 @@ bool ProfileStatistics::init()
 
     initBackdrop();
     initMenu();
+    initStaticLabels();
+    initDynamicLabels();
 
     return true;
 }
@@ -66,6 +68,84 @@ void ProfileStatistics::initMenu()
 
     this->addChild(menu, 2);
     this->addChild(pane, 1);
+}
+
+void ProfileStatistics::initStaticLabels()
+{
+    Label *playedLabel = Label::createWithTTF
+        ("Total Time Played:", "fonts/Marker Felt.ttf", 24);
+    playedLabel->setPosition(Vec2(visibleSize.width / 2 - 100, visibleSize.height - 200));
+
+    Label *starsLabel = Label::createWithTTF
+        ("Total Stars Collected:", "fonts/Marker Felt.ttf", 24);
+    starsLabel->setPosition
+        (Vec2(playedLabel->getPositionX(), playedLabel->getPositionY() - 80));
+
+    Label *movesLabel = Label::createWithTTF
+        ("Total Moves Made:", "fonts/Marker Felt.ttf", 24);
+    movesLabel->setPosition
+        (Vec2(starsLabel->getPositionX(), starsLabel->getPositionY() - 80));
+
+    Label *attemptedLabel = Label::createWithTTF
+        ("Total Puzzles Attempted:", "fonts/Marker Felt.ttf", 24);
+    attemptedLabel->setPosition
+        (Vec2(movesLabel->getPositionX(), movesLabel->getPositionY() - 80));
+
+    Label *completedLabel = Label::createWithTTF
+        ("Total Puzzles Completed:", "fonts/Marker Felt.ttf", 24);
+    completedLabel->setPosition
+        (Vec2(attemptedLabel->getPositionX(), attemptedLabel->getPositionY() - 80));
+
+    this->addChild(playedLabel, 2);
+    this->addChild(starsLabel, 2);
+    this->addChild(movesLabel, 2);
+    this->addChild(attemptedLabel, 2);
+    this->addChild(completedLabel, 2);
+}
+
+void ProfileStatistics::initDynamicLabels()
+{
+    Label *playedLabel = Label::createWithTTF
+        (calculateTime(GameProfile::getProfileStat(ProfileStat::timePlayed)),
+        "fonts/Marker Felt.ttf", 24);
+    playedLabel->setPosition(Vec2(visibleSize.width / 2 + 150, visibleSize.height - 200));
+
+    Label *starsLabel = Label::createWithTTF
+        (GameProfile::getProfileStat(ProfileStat::totalStarsCollected),
+        "fonts/Marker Felt.ttf", 24);
+    starsLabel->setPosition
+        (Vec2(playedLabel->getPositionX(), playedLabel->getPositionY() - 80));
+
+    Label *movesLabel = Label::createWithTTF
+        (GameProfile::getProfileStat(ProfileStat::totalMoves),
+        "fonts/Marker Felt.ttf", 24);
+    movesLabel->setPosition
+        (Vec2(starsLabel->getPositionX(), starsLabel->getPositionY() - 80));
+
+    Label *attemptedLabel = Label::createWithTTF
+        (GameProfile::getProfileStat(ProfileStat::puzzlesAttempted), 
+        "fonts/Marker Felt.ttf", 24);
+    attemptedLabel->setPosition
+        (Vec2(movesLabel->getPositionX(), movesLabel->getPositionY() - 80));
+
+    Label *completedLabel = Label::createWithTTF
+        (GameProfile::getProfileStat(ProfileStat::puzzlesCompleted),
+        "fonts/Marker Felt.ttf", 24);
+    completedLabel->setPosition
+        (Vec2(attemptedLabel->getPositionX(), attemptedLabel->getPositionY() - 80));
+
+    this->addChild(playedLabel, 2);
+    this->addChild(starsLabel, 2);
+    this->addChild(movesLabel, 2);
+    this->addChild(attemptedLabel, 2);
+    this->addChild(completedLabel, 2);
+}
+
+std::string ProfileStatistics::calculateTime(const std::string &str)
+{
+    // code for hours / minutes / seconds goes here...
+
+    return str;
 }
 
 void ProfileStatistics::gotoMainMenu(cocos2d::Ref *sender)

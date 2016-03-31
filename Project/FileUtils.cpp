@@ -99,6 +99,7 @@ void generateProfile()
     profileSettings["stars"] = "0";
     profileSettings["timePlayed"] = "0";
     profileSettings["totalMoves"] = "0";
+    profileSettings["totalStarsCollected"] = "0";
 
     saveProfile();
 }

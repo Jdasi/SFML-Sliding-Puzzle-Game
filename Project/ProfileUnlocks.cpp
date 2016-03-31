@@ -24,6 +24,11 @@ bool ProfileUnlocks::init()
         return false;
     }
 
+    Sprite *sceneTitle = Sprite::create("utility/unlocks.png");
+    sceneTitle->setPosition
+        (Vec2((visibleSize.width / 2), visibleSize.height - 100));
+    this->addChild(sceneTitle, 2);
+
     fadedOpacity = 150;
     selectedOpacity = 255;
     currentSelection = GameProfile::stringToBackgroundID
@@ -146,10 +151,6 @@ void ProfileUnlocks::initPreviewImages()
 
 void ProfileUnlocks::initLabels()
 {
-    Sprite *sceneTitle = Sprite::create("utility/unlocks.png");
-    sceneTitle->setPosition
-        (Vec2((visibleSize.width / 2), visibleSize.height - 100));
-
     contextHintLabel = Label::createWithTTF("contextHint", "fonts/Marker Felt.ttf", 24);
     contextHintLabel->setPosition
         (Vec2(visibleSize.width / 2, (visibleSize.height / 2) - 75));
@@ -157,7 +158,6 @@ void ProfileUnlocks::initLabels()
 
     updateContextHintLabel();
 
-    this->addChild(sceneTitle, 2);
     this->addChild(contextHintLabel, 2);
 }
 

@@ -7,6 +7,7 @@ enum class ProfileStat
     stars = 0,
     timePlayed,
     totalMoves,
+    totalStarsCollected,
     puzzlesAttempted,
     puzzlesCompleted,
     backgroundsUnlocked,

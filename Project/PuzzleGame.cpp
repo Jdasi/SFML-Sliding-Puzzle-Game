@@ -19,6 +19,11 @@ cocos2d::Scene *PuzzleGame::createScene()
 
 bool PuzzleGame::init()
 {
+    if (!Layer::init())
+    {
+        return false;
+    }
+
     startPosX = 100;
     startPosY = 80;
 
@@ -264,6 +269,8 @@ bool PuzzleGame::tryUserMove(int fromPiece, int toX, int toY)
         GameProfile::modifyProfileStat(ProfileStat::puzzlesCompleted, 1);
         GameProfile::modifyProfileStat
             (ProfileStat::stars, GameSettings::getCurrentPuzzleValue());
+        GameProfile::modifyProfileStat
+            (ProfileStat::totalStarsCollected, GameSettings::getCurrentPuzzleValue());
 
         puzzle.getPiece(puzzle.findBlankSpace()).setBlankSpace(false);
         gameOver = true;
