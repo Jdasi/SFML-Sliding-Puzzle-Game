@@ -280,7 +280,6 @@ void ProfileUnlocks::updateContextHintLabel()
     std::string uRefCost = std::to_string(uRef.getStarCost());
 
     std::string toString;
-
     switch (action)
     {
         case ContextAction::unlock:

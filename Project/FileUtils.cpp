@@ -6,7 +6,7 @@
 #include <fstream>
 
 // Because filenames are widestrings (accept international characters)
-// We need to convert them to regular strings
+// We need to convert them to regular strings.
 static std::string wstring_to_string(const std::wstring &str)
 {
     typedef std::codecvt_utf8<wchar_t> convert_type;
@@ -28,7 +28,7 @@ std::wstring getExecutablePath()
 
     std::wstring pathstr = path;
 
-    // Return the path minus EXECUTABLE_NAME.
+    // Return the path minus executableName.
     return pathstr.substr(0, pathstr.length()-sizeof(executeableName));
 }
 
@@ -37,10 +37,13 @@ std::vector<std::string> enumerateFiles(const std::wstring& path)
     WIN32_FIND_DATA ffd;
     HANDLE hFind = FindFirstFile(path.c_str(), &ffd);
 
+    // If there is a problem finding first file of expected type.
     if (hFind == INVALID_HANDLE_VALUE)
     {
         if (GetLastError() == ERROR_FILE_NOT_FOUND)
+        {
             return {};
+        }
 
         throw std::runtime_error("Error in FindFirstFile");
     }
@@ -56,8 +59,11 @@ std::vector<std::string> enumerateFiles(const std::wstring& path)
         }
     } while (FindNextFile(hFind, &ffd) != 0);
 
+    // If there are no more files.
     if(FindClose(hFind) == 0)
+    {
         throw std::runtime_error("Error in FindClose");
+    }
 
     return files;
 }
@@ -67,7 +73,9 @@ void saveProfile()
     std::ofstream file("profile.txt");
 
     if (!file.is_open())
+    {
         throw std::runtime_error("File not found");
+    }
 
     GameProfile::keymap &profileSettings = GameProfile::getProfileKeymap();
     for (auto itr : profileSettings)
@@ -99,7 +107,6 @@ void loadProfile()
 {
     std::ifstream file("profile.txt");
 
-    // There is no file. Generate one.
     if (!file.is_open())
     {
         generateProfile();

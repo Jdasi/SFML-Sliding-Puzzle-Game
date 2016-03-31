@@ -53,7 +53,6 @@ void PuzzleGame::initPuzzle()
 
     //int product = GameSettings::getSegments().x * GameSettings::getSegments().y;
     //generateRandomValidMoves(product * product);
-    generateRandomValidMoves(1);
 
     moveBlankSpaceToStart();
 }
@@ -70,10 +69,10 @@ void PuzzleGame::initLabels()
 
 void PuzzleGame::initMenu()
 {
-    MenuItemSprite *menuChoose = new MenuItemSprite();
-    menuChoose->initWithNormalSprite(
-        Sprite::create("utility/choose_up.png"),
-        Sprite::create("utility/choose_dn.png"),
+    MenuItemSprite *menuChange = new MenuItemSprite();
+    menuChange->initWithNormalSprite(
+        Sprite::create("utility/change_up.png"),
+        Sprite::create("utility/change_dn.png"),
         nullptr,
         CC_CALLBACK_1(PuzzleGame::gotoPuzzleSelection, this));
 
@@ -84,13 +83,13 @@ void PuzzleGame::initMenu()
         nullptr,
         CC_CALLBACK_1(PuzzleGame::gotoMainMenu, this));
 
-    Menu *menu = Menu::create(menuChoose, menuMain, nullptr);
+    Menu *menu = Menu::create(menuChange, menuMain, nullptr);
     menu->setPosition(Vec2(visibleSize.width - 210, visibleSize.height / 2));
 
-    menuChoose->setScale(0.66f);
+    menuChange->setScale(0.66f);
     menuMain->setScale(0.66f);
 
-    menuChoose->setPositionY(-215);
+    menuChange->setPositionY(-215);
     menuMain->setPositionY(-275);
 
     Sprite *pane = Sprite::create();
@@ -178,51 +177,51 @@ void PuzzleGame::generateRandomValidMoves(int times)
         bool tileSwapped = false;
         while (!tileSwapped)
         {
-            int randomDirection = rand() % 4;
+            SlideDirection direction = static_cast<SlideDirection>(rand() % 4);
 
-            switch (randomDirection)
+            switch (direction)
             {
-            case 0:
-            {
-                if (tryComputerMove(blankSpace, 
-                    blankSpaceCoords.x + 1, blankSpaceCoords.y))
+                case SlideDirection::right:
                 {
-                    tileSwapped = true;
-                }
+                    if (tryComputerMove(blankSpace, 
+                        blankSpaceCoords.x + 1, blankSpaceCoords.y))
+                    {
+                        tileSwapped = true;
+                    }
 
-                break;
-            }
-            case 1:
-            {
-                if (tryComputerMove(blankSpace, 
-                    blankSpaceCoords.x, blankSpaceCoords.y + 1))
+                    break;
+                }
+                case SlideDirection::up:
                 {
-                    tileSwapped = true;
-                }
+                    if (tryComputerMove(blankSpace, 
+                        blankSpaceCoords.x, blankSpaceCoords.y + 1))
+                    {
+                        tileSwapped = true;
+                    }
 
-                break;
-            }
-            case 2:
-            {
-                if (tryComputerMove(blankSpace, 
-                    blankSpaceCoords.x - 1, blankSpaceCoords.y))
+                    break;
+                }
+                case SlideDirection::left:
                 {
-                    tileSwapped = true;
-                }
+                    if (tryComputerMove(blankSpace, 
+                        blankSpaceCoords.x - 1, blankSpaceCoords.y))
+                    {
+                        tileSwapped = true;
+                    }
 
-                break;
-            }
-            case 3:
-            {
-                if (tryComputerMove(blankSpace, 
-                    blankSpaceCoords.x, blankSpaceCoords.y - 1))
+                    break;
+                }
+                case SlideDirection::down:
                 {
-                    tileSwapped = true;
-                }
+                    if (tryComputerMove(blankSpace, 
+                        blankSpaceCoords.x, blankSpaceCoords.y - 1))
+                    {
+                        tileSwapped = true;
+                    }
 
-                break;
-            }
-            default: {}
+                    break;
+                }
+                default: {}
             }
         }
     }

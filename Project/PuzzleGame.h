@@ -16,6 +16,14 @@ public:
     CREATE_FUNC(PuzzleGame);
 
 private:
+    enum class SlideDirection
+    {
+        up = 0,
+        right,
+        down,
+        left
+    };
+
     void initBackdrop();
     void initPuzzle();
     void initLabels();
