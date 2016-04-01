@@ -16,9 +16,6 @@
     <ClCompile Include="MainMenu.cpp">
       <Filter>project\scenes</Filter>
     </ClCompile>
-    <ClCompile Include="MySpriteAction.cpp">
-      <Filter>project\utility</Filter>
-    </ClCompile>
     <ClCompile Include="GameSettings.cpp">
       <Filter>project\utility</Filter>
     </ClCompile>
@@ -43,6 +40,9 @@
     <ClCompile Include="ProfileUnlocks.cpp">
       <Filter>project\scenes</Filter>
     </ClCompile>
+    <ClCompile Include="SimpleTimer.cpp">
+      <Filter>project\utility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h">
@@ -59,9 +59,6 @@
     </ClInclude>
     <ClInclude Include="MainMenu.h">
       <Filter>project\scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="MySpriteAction.h">
-      <Filter>project\utility</Filter>
     </ClInclude>
     <ClInclude Include="GameSettings.h">
       <Filter>project\utility</Filter>
@@ -86,6 +83,9 @@
     </ClInclude>
     <ClInclude Include="ProfileUnlocks.h">
       <Filter>project\scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="SimpleTimer.h">
+      <Filter>project\utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

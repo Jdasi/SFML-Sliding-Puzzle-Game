@@ -143,9 +143,17 @@ void ProfileStatistics::initDynamicLabels()
 
 std::string ProfileStatistics::calculateTime(const std::string &str)
 {
-    // code for hours / minutes / seconds goes here...
+    using namespace std;
 
-    return str;
+    int hours = (stoi(str) / 60) / 60;
+    int minutes = (stoi(str) / 60) - (hours * 60);
+    int seconds = stoi(str) % 60;
+
+    string timePlayed = to_string(hours / 10) + to_string(hours % 10) + ":" +
+                        to_string(minutes / 10) + to_string(minutes % 10) + ":" +
+                        to_string(seconds / 10) + to_string(seconds % 10);
+
+    return timePlayed;
 }
 
 void ProfileStatistics::gotoMainMenu(cocos2d::Ref *sender)

@@ -2,6 +2,7 @@
 
 #include "Puzzle.h"
 #include "GameSettings.h"
+#include "SimpleTimer.h"
 
 #include <cocos2d.h>
 
@@ -53,6 +54,7 @@ private:
     int blankSpace;
     static coordinate blankSpaceCoords;
     bool gameOver;
+    SimpleTimer timer;
 
     int startPosX;
     int startPosY;

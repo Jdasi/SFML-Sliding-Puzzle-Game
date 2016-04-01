@@ -31,6 +31,8 @@ bool PuzzleGame::init()
     numMoves = 0;
     gameOver = false;
 
+    timer.startTimer();
+
     initBackdrop();
     initPuzzle();
     initLabels();
@@ -351,6 +353,7 @@ void PuzzleGame::flashScreen()
 
 void PuzzleGame::endGame()
 {
+    timer.endTimerAndRecord();
     flashScreen();
     
     // Change existing elements.
@@ -400,12 +403,14 @@ void PuzzleGame::endGame()
 
 void PuzzleGame::gotoMainMenu(cocos2d::Ref *sender)
 {
+    timer.endTimerAndRecord();
     Director::getInstance()->replaceScene(
         TransitionFade::create(0.5, MainMenu::createScene()));
 }
 
 void PuzzleGame::gotoPuzzleSelection(cocos2d::Ref *sender)
 {
+    timer.endTimerAndRecord();
     Director::getInstance()->replaceScene(
         TransitionFade::create(0.5, PuzzleSelection::createScene()));
 }
