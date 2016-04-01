@@ -51,11 +51,21 @@ void GameSettings::enumeratePuzzles()
     puzzles.reserve(puzzlesJpg.size() + puzzlesPng.size());
     puzzles.insert(puzzles.end(), puzzlesJpg.begin(), puzzlesJpg.end());
     puzzles.insert(puzzles.end(), puzzlesPng.begin(), puzzlesPng.end());
+
+    if (puzzles.size() == 0)
+    {
+        throw std::runtime_error("Puzzles folder is empty");
+    }
 }
 
 std::vector<std::string> GameSettings::getPuzzles()
 {
     return puzzles;
+}
+
+void GameSettings::clearPuzzles()
+{
+    puzzles.clear();
 }
 
 int GameSettings::getCurrentPuzzleValue()

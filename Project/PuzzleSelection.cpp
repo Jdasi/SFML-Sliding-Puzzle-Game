@@ -23,6 +23,24 @@ bool PuzzleSelection::init()
         return false;
     }
 
+    GameSettings::clearPuzzles();
+    GameSettings::enumeratePuzzles();
+
+    // Circumvent most problems with image discrepencies since last enumeration.
+    unsigned int tempID = GameSettings::getImageID();
+    if (tempID < GameSettings::getPuzzles().size())
+    {
+        if (GameSettings::getImageName() !=
+            ("puzzles/" + GameSettings::getPuzzles()[GameSettings::getImageID()]))
+        {
+            setDefaultPuzzle();
+        }
+    }
+    else
+    {
+        setDefaultPuzzle();
+    }
+
     Sprite *sceneTitle = Sprite::create("utility/chooseLabel.png");
     sceneTitle->setPosition
         (Vec2((visibleSize.width / 2) - 150, visibleSize.height - 100));
@@ -299,4 +317,9 @@ void PuzzleSelection::gotoPuzzleGame(cocos2d::Ref *sender)
 
     Director::getInstance()->replaceScene(
         TransitionFade::create(0.5, PuzzleGame::createScene()));
+}
+
+void PuzzleSelection::setDefaultPuzzle()
+{
+    GameSettings::setImageName("puzzles/" + GameSettings::getPuzzles()[0], 0);
 }

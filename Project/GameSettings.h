@@ -33,6 +33,7 @@ public:
 
     static void enumeratePuzzles();
     static std::vector<std::string> getPuzzles();
+    static void clearPuzzles();
 
     static int getCurrentPuzzleValue();
     static void setCurrentPuzzleValue(int value);

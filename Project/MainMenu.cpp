@@ -53,8 +53,6 @@ void MainMenu::initSettings()
 {
     if (!GameSettings::isInitialised())
     {
-        GameSettings::enumeratePuzzles();
-        GameSettings::setImageName("puzzles/" + GameSettings::getPuzzles()[0], 0);
         GameSettings::setSegmentsX(4);
         GameSettings::setSegmentsY(4);
         GameSettings::setInitialised(true);

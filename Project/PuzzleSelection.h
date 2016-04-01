@@ -29,6 +29,8 @@ private:
     void gotoMainMenu(cocos2d::Ref *sender);
     void gotoPuzzleGame(cocos2d::Ref *sender);
 
+    void setDefaultPuzzle();
+
     cocos2d::Size visibleSize{ cocos2d::Director::getInstance()->getVisibleSize() };
 
     cocos2d::Label *xSliderLabel;
