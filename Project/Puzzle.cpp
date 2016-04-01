@@ -50,8 +50,9 @@ void Puzzle::initPuzzle(PuzzleGame *pScene, int startPosX, int startPosY)
                 (visibleSize.height - startPosY) - (((secY * yCycles) * scaleFactorY) + 
                 (yCycles * pad))));
 
-            piece->setTag((yCycles * segmentsX) + xCycles);
+            piece->setArrayPos((yCycles * segmentsX) + xCycles);
             piece->setID((yCycles * segmentsX) + xCycles);
+            piece->setCoordinates(xCycles, yCycles);
 
             pScene->addChild(piece, (yCycles * segmentsX) + xCycles);
             
@@ -90,7 +91,7 @@ PuzzlePiece &Puzzle::getPiece(int piece)
     return *puzzlePieces[piece];
 }
 
-bool Puzzle::isPieceBlankSpace(int piece)
+bool Puzzle::isPieceBlankSpace(int piece) const
 {
     return puzzlePieces[piece]->isBlankSpace();
 }
@@ -101,30 +102,43 @@ int Puzzle::findBlankSpace()
     {
         if (piece->isBlankSpace())
         {
-            return piece->getTag();
+            return piece->getArrayPos();
         }
     }
 
     return 0;
 }
 
+int Puzzle::calculateOffset(int x, int y) const
+{
+    return (y * GameSettings::getSegments().x) + x;
+}
+
 void Puzzle::swapPieces(int fromPiece, int toPiece)
 {
     std::swap(puzzlePieces[fromPiece], puzzlePieces[toPiece]);
 
-    int fromTag = puzzlePieces[fromPiece]->getTag();
-    int toTag = puzzlePieces[toPiece]->getTag();
+    // Save values temporarily.
+    int fromArrayPos = puzzlePieces[fromPiece]->getArrayPos();
+    int toArrayPos = puzzlePieces[toPiece]->getArrayPos();
 
-    puzzlePieces[fromPiece]->setTag(toTag);
-    puzzlePieces[toPiece]->setTag(fromTag);
+    coordinate fromCoords = puzzlePieces[fromPiece]->getCoordinates();
+    coordinate toCoords = puzzlePieces[toPiece]->getCoordinates();
+
+    // Re-assign using temporary values.
+    puzzlePieces[fromPiece]->setArrayPos(toArrayPos);
+    puzzlePieces[toPiece]->setArrayPos(fromArrayPos);
+
+    puzzlePieces[fromPiece]->setCoordinates(toCoords);
+    puzzlePieces[toPiece]->setCoordinates(fromCoords);
 }
 
-bool Puzzle::isPuzzleComplete()
+bool Puzzle::isPuzzleComplete() const
 {
     int correctPieces = 0;
     for (PuzzlePiece *piece : puzzlePieces)
     {
-        if (piece->getTag() == piece->getID())
+        if (piece->getArrayPos() == piece->getID())
         {
             ++correctPieces;
         }
@@ -138,20 +152,7 @@ bool Puzzle::isPuzzleComplete()
     return false;
 }
 
-int Puzzle::calculateOffset(int x, int y)
-{
-    return (y * GameSettings::getSegments().x) + x;
-}
-
-coordinate Puzzle::calculateCoordinates(int piece)
-{
-    int x = piece % GameSettings::getSegments().x;
-    int y = piece / GameSettings::getSegments().x;
-
-    return { x, y };
-}
-
-bool Puzzle::inBounds(int x, int y)
+bool Puzzle::inBounds(int x, int y) const
 {
     if (x >= GameSettings::getSegments().x || x < 0)
     {

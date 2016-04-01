@@ -1,20 +1,9 @@
 #pragma once
 
 #include "GameUnlock.h"
+#include "Coordinate.h"
 
 #include <vector>
-
-struct coordinate
-{
-    coordinate(int argX, int argY)
-        : x(argX)
-        , y(argY)
-    {
-    }
-
-    int x;
-    int y;
-};
 
 class GameSettings
 {

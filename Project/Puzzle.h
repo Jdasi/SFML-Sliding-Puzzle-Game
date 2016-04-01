@@ -6,7 +6,6 @@
 #include <Vector>
 
 class PuzzleGame;
-struct coordinate;
 
 class Puzzle : public cocos2d::Layer
 {
@@ -18,23 +17,20 @@ public:
 
     PuzzlePiece &getPiece(int piece);
 
-    bool isPieceBlankSpace(int piece);
+    bool isPieceBlankSpace(int piece) const;
     int findBlankSpace();
 
+    int calculateOffset(int x, int y) const;
+
     void swapPieces(int fromPiece, int toPiece);
-    bool isPuzzleComplete();
+    bool isPuzzleComplete() const;
 
-    int calculateOffset(int x, int y);
-    coordinate calculateCoordinates(int piece);
-
-    bool inBounds(int x, int y);
+    bool inBounds(int x, int y) const;
 
     void hideAllPieces();
 
 private:
     void sanityCheckImage(cocos2d::Sprite *spr, int pad);
-
-    cocos2d::Size visibleSize{ cocos2d::Director::getInstance()->getVisibleSize() };
 
     int totalPieces;
 
@@ -45,4 +41,6 @@ private:
     float scaleFactorY;
 
     std::vector<PuzzlePiece*> puzzlePieces;
+
+    cocos2d::Size visibleSize{ cocos2d::Director::getInstance()->getVisibleSize() };
 };

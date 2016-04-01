@@ -6,6 +6,7 @@
 class PuzzleSelection : public cocos2d::Layer
 {
 public:
+    PuzzleSelection();
     static cocos2d::Scene* createScene();
     virtual bool init();
 
@@ -19,17 +20,17 @@ private:
     void initArrows();
     void initRewardsPane();
 
-    void updateDisplayedImage();
-    void updateImageLabels();
-    void updateRewardsLabel();
+    void updateDisplayedImage() const;
+    void updateImageLabels() const;
+    void updateRewardsLabel() const;
 
     bool rightArrowClick(cocos2d::Ref *sender);
     bool leftArrowClick(cocos2d::Ref *sender);
 
-    void gotoMainMenu(cocos2d::Ref *sender);
-    void gotoPuzzleGame(cocos2d::Ref *sender);
+    void gotoMainMenu(cocos2d::Ref *sender) const;
+    void gotoPuzzleGame(cocos2d::Ref *sender) const;
 
-    void setDefaultPuzzle();
+    void setDefaultPuzzle() const;
 
     cocos2d::Size visibleSize{ cocos2d::Director::getInstance()->getVisibleSize() };
 

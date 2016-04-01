@@ -28,7 +28,7 @@ time_t SimpleTimer::getTime() const
     return std::chrono::duration_cast<std::chrono::seconds>(end - start).count();
 }
 
-void SimpleTimer::recordTime()
+void SimpleTimer::recordTime() const
 {
     GameProfile::modifyProfileStat(ProfileStat::timePlayed, getTime());
 }

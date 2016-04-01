@@ -9,9 +9,9 @@
 
 USING_NS_CC;
 
-cocos2d::Scene *MainMenu::createScene()
+Scene *MainMenu::createScene()
 {
-    cocos2d::Scene *scene = Scene::create();
+    Scene *scene = Scene::create();
     auto layer = MainMenu::create();
 
     scene->addChild(layer);

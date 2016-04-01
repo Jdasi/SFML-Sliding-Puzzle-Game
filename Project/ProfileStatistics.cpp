@@ -4,9 +4,9 @@
 
 USING_NS_CC;
 
-cocos2d::Scene *ProfileStatistics::createScene()
+Scene *ProfileStatistics::createScene()
 {
-    cocos2d::Scene *scene = Scene::create();
+    Scene *scene = Scene::create();
     auto layer = ProfileStatistics::create();
 
     scene->addChild(layer);
@@ -143,15 +143,16 @@ void ProfileStatistics::initDynamicLabels()
 
 std::string ProfileStatistics::calculateTime(const std::string &str)
 {
-    using namespace std;
+    int totalTime = stoi(str);
 
-    int hours = (stoi(str) / 60) / 60;
-    int minutes = (stoi(str) / 60) - (hours * 60);
-    int seconds = stoi(str) % 60;
+    int hours = (totalTime / 60) / 60;
+    int minutes = (totalTime / 60) - (hours * 60);
+    int seconds = totalTime % 60;
 
-    string timePlayed = to_string(hours / 10) + to_string(hours % 10) + ":" +
-                        to_string(minutes / 10) + to_string(minutes % 10) + ":" +
-                        to_string(seconds / 10) + to_string(seconds % 10);
+    std::string timePlayed = 
+        std::to_string(hours / 10) + std::to_string(hours % 10) + ":" +
+        std::to_string(minutes / 10) + std::to_string(minutes % 10) + ":" +
+        std::to_string(seconds / 10) + std::to_string(seconds % 10);
 
     return timePlayed;
 }

@@ -163,6 +163,7 @@ xcopy "$(SolutionDir)\cocos2d\bin\$(PlatformToolset)\$(Configuration)\*.dll" "$(
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h" />
+    <ClInclude Include="Coordinate.h" />
     <ClInclude Include="FileUtils.h" />
     <ClInclude Include="GameProfile.h" />
     <ClInclude Include="GameSettings.h" />

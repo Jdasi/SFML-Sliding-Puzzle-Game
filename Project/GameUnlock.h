@@ -11,16 +11,16 @@ public:
 
     ~GameUnlock() = default;
 
-    std::string getName();
+    std::string getName() const;
     void setName(const std::string &str);
 
-    int getID();
+    int getID() const;
     void setID(int value);
 
-    bool isLocked();
+    bool isLocked() const;
     void setLocked(bool lock);
 
-    int getStarCost();
+    int getStarCost() const;
     void setStarCost(int cost);
 
 private:

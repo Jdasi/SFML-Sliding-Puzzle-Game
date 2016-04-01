@@ -1,8 +1,0 @@
-backgroundsUnlocked=regal
-currentBackground=regal
-puzzlesAttempted=1
-puzzlesCompleted=0
-stars=0
-timePlayed=32
-totalMoves=95
-totalStarsCollected=0

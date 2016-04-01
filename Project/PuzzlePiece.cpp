@@ -2,9 +2,36 @@
 USING_NS_CC;
 
 PuzzlePiece::PuzzlePiece()
-    : blankSpace(false)
+    : arrayPos(0)
+    , coords{0, 0}
+    , blankSpace(false)
     , id(0)
 {
+}
+
+int PuzzlePiece::getArrayPos() const
+{
+    return arrayPos;
+}
+
+void PuzzlePiece::setArrayPos(int value)
+{
+    arrayPos = value;
+}
+
+coordinate PuzzlePiece::getCoordinates() const
+{
+    return coords;
+}
+
+void PuzzlePiece::setCoordinates(int x, int y)
+{
+    coords = { x, y };
+}
+
+void PuzzlePiece::setCoordinates(coordinate c)
+{
+    coords = c;
 }
 
 PuzzlePiece *PuzzlePiece::create(const std::string &file, const cocos2d::Rect &rect)

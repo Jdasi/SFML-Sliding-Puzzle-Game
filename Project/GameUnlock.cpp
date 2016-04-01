@@ -17,7 +17,7 @@ GameUnlock::GameUnlock
     container.push_back(*this);
 }
 
-std::string GameUnlock::getName()
+std::string GameUnlock::getName() const
 {
     return name;
 }
@@ -27,7 +27,7 @@ void GameUnlock::setName(const std::string &str)
     name = str;
 }
 
-int GameUnlock::getID()
+int GameUnlock::getID() const
 {
     return id;
 }
@@ -37,7 +37,7 @@ void GameUnlock::setID(int value)
     id = value;
 }
 
-bool GameUnlock::isLocked()
+bool GameUnlock::isLocked() const
 {
     return locked;
 }
@@ -47,7 +47,7 @@ void GameUnlock::setLocked(bool lock)
     locked = lock;
 }
 
-int GameUnlock::getStarCost()
+int GameUnlock::getStarCost() const
 {
     return starCost;
 }

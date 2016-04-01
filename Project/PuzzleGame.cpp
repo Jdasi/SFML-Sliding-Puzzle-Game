@@ -1,15 +1,29 @@
 #include "PuzzleGame.h"
+#include "GameSettings.h"
 #include "GameProfile.h"
 #include "MainMenu.h"
 #include "PuzzleSelection.h"
 
 USING_NS_CC;
 
-coordinate PuzzleGame::blankSpaceCoords{ 0, 0 };
-
-cocos2d::Scene *PuzzleGame::createScene()
+PuzzleGame::PuzzleGame()
+    : blankSpace(0)
+    , blankSpaceCoords({0, 0})
+    , gameOver(false)
+    , startPosX(100)
+    , startPosY(80)
+    , currentPieceArrayPos(0)
+    , numMoves(0)
+    , movesLabel(nullptr)
+    , previewLabel(nullptr)
+    , previewImage(nullptr)
+    , menuPuzzle(nullptr)
 {
-    cocos2d::Scene *scene = Scene::create();
+}
+
+Scene *PuzzleGame::createScene()
+{
+    Scene *scene = Scene::create();
     auto layer = PuzzleGame::create();
 
     scene->addChild(layer);
@@ -23,13 +37,6 @@ bool PuzzleGame::init()
     {
         return false;
     }
-
-    startPosX = 100;
-    startPosY = 80;
-
-    currentPieceTag = 0;
-    numMoves = 0;
-    gameOver = false;
 
     timer.startTimer();
 
@@ -137,7 +144,7 @@ bool PuzzleGame::interactWithPuzzle(cocos2d::Touch *touch, cocos2d::Event *event
         return false;
     }
 
-    PuzzlePiece *piece = static_cast<PuzzlePiece*>(event->getCurrentTarget());
+    PuzzlePiece *piece = dynamic_cast<PuzzlePiece*>(event->getCurrentTarget());
 
     if (piece->isBlankSpace())
     {
@@ -152,7 +159,7 @@ bool PuzzleGame::interactWithPuzzle(cocos2d::Touch *touch, cocos2d::Event *event
         return false;
     }
 
-    currentPieceTag = piece->getTag();
+    currentPieceArrayPos = piece->getArrayPos();
 
     generateValidMove();
 
@@ -161,24 +168,24 @@ bool PuzzleGame::interactWithPuzzle(cocos2d::Touch *touch, cocos2d::Event *event
 
 void PuzzleGame::generateValidMove()
 {
-    coordinate currPiece = puzzle.calculateCoordinates(currentPieceTag);
+    coordinate currPiece = puzzle.getPiece(currentPieceArrayPos).getCoordinates();
 
-    if (tryUserMove(currentPieceTag, currPiece.x + 1, currPiece.y))
+    if (tryUserMove(currentPieceArrayPos, currPiece.x + 1, currPiece.y))
     {
         return;
     }
 
-    if (tryUserMove(currentPieceTag, currPiece.x, currPiece.y + 1))
+    if (tryUserMove(currentPieceArrayPos, currPiece.x, currPiece.y + 1))
     {
         return;
     }
     
-    if (tryUserMove(currentPieceTag, currPiece.x - 1, currPiece.y))
+    if (tryUserMove(currentPieceArrayPos, currPiece.x - 1, currPiece.y))
     {
         return;
     }
     
-    tryUserMove(currentPieceTag, currPiece.x, currPiece.y - 1);
+    tryUserMove(currentPieceArrayPos, currPiece.x, currPiece.y - 1);
 }
 
 void PuzzleGame::generateRandomValidMoves(int times)
@@ -304,7 +311,7 @@ bool PuzzleGame::tryComputerMove(int fromPiece, int toX, int toY)
 void PuzzleGame::updateBlankspaceInfo()
 {
     blankSpace = puzzle.findBlankSpace();
-    blankSpaceCoords = puzzle.calculateCoordinates(blankSpace);
+    blankSpaceCoords = puzzle.getPiece(blankSpace).getCoordinates();
 }
 
 void PuzzleGame::moveBlankSpaceToStart()
@@ -330,7 +337,7 @@ void PuzzleGame::moveBlankSpaceToStart()
     }
 }
 
-void PuzzleGame::rewardPlayer()
+void PuzzleGame::rewardPlayer() const
 {
     GameProfile::modifyProfileStat(ProfileStat::puzzlesCompleted, 1);
     GameProfile::modifyProfileStat

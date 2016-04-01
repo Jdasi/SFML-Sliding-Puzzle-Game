@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Puzzle.h"
-#include "GameSettings.h"
 #include "SimpleTimer.h"
 
 #include <cocos2d.h>
@@ -9,6 +8,7 @@
 class PuzzleGame : public cocos2d::Layer
 {
 public:
+    PuzzleGame();
     static cocos2d::Scene *createScene();
     virtual bool init();
 
@@ -42,7 +42,7 @@ private:
     void updateBlankspaceInfo();
     void moveBlankSpaceToStart();
 
-    void rewardPlayer();
+    void rewardPlayer() const;
     void flashScreen();
 
     void endGame();
@@ -52,14 +52,14 @@ private:
 
     Puzzle puzzle;
     int blankSpace;
-    static coordinate blankSpaceCoords;
+    coordinate blankSpaceCoords;
     bool gameOver;
     SimpleTimer timer;
 
     int startPosX;
     int startPosY;
 
-    int currentPieceTag;
+    int currentPieceArrayPos;
     int numMoves;
     cocos2d::Label *movesLabel;
     cocos2d::Label *previewLabel;

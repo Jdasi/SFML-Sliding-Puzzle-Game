@@ -1,5 +1,6 @@
 #pragma once
 
+#include "GameProfile.h"
 #include "GameUnlock.h"
 
 #include "cocos2d.h"
@@ -14,6 +15,7 @@ enum class ContextAction
 class ProfileUnlocks : public cocos2d::Layer
 {
 public:
+    ProfileUnlocks();
     static cocos2d::Scene* createScene();
     virtual bool init();
 
@@ -37,7 +39,7 @@ private:
 
     void gotoMainMenu(cocos2d::Ref *sender);
 
-    static std::vector<GameUnlock> &unlocksRef;
+    std::vector<GameUnlock> &unlocksRef = GameProfile::getUnlocks();
     std::vector<cocos2d::Sprite*> previewImages;
 
     cocos2d::Sprite *backdrop;

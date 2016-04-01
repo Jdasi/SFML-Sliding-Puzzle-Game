@@ -6,9 +6,21 @@
 
 USING_NS_CC;
 
-cocos2d::Scene *PuzzleSelection::createScene()
+PuzzleSelection::PuzzleSelection()
+    : xSliderLabel(nullptr)
+    , ySliderLabel(nullptr)
+    , xSegmentsSlider(nullptr)
+    , ySegmentsSlider(nullptr)
+    , displayedImage(nullptr)
+    , imageName(nullptr)
+    , imageNumber(nullptr)
+    , puzzleValue(nullptr)
 {
-    cocos2d::Scene *scene = Scene::create();
+}
+
+Scene *PuzzleSelection::createScene()
+{
+    Scene *scene = Scene::create();
     auto layer = PuzzleSelection::create();
 
     scene->addChild(layer);
@@ -247,6 +259,27 @@ void PuzzleSelection::initRewardsPane()
     this->addChild(puzzleValue, 1);
 }
 
+void PuzzleSelection::updateDisplayedImage() const
+{
+    displayedImage->initWithFile(GameSettings::getImageName());
+    displayedImage->setScaleX(528 / displayedImage->getContentSize().width);
+    displayedImage->setScaleY(396 / displayedImage->getContentSize().height);
+}
+
+void PuzzleSelection::updateImageLabels() const
+{
+    imageName->setString(GameSettings::getImageName());
+    imageNumber->setString
+        ("( " + std::to_string(GameSettings::getImageID() + 1) + 
+         " / " + std::to_string(GameSettings::getPuzzles().size()) + " )");
+}
+
+void PuzzleSelection::updateRewardsLabel() const
+{
+    puzzleValue->setString("x " + std::to_string
+        ((GameSettings::getSegments().x * GameSettings::getSegments().y) / 2));
+}
+
 bool PuzzleSelection::leftArrowClick(cocos2d::Ref *sender)
 {
     int currentImageID = GameSettings::getImageID();
@@ -283,34 +316,13 @@ bool PuzzleSelection::rightArrowClick(cocos2d::Ref *sender)
     return true;
 }
 
-void PuzzleSelection::updateDisplayedImage()
-{
-    displayedImage->initWithFile(GameSettings::getImageName());
-    displayedImage->setScaleX(528 / displayedImage->getContentSize().width);
-    displayedImage->setScaleY(396 / displayedImage->getContentSize().height);
-}
-
-void PuzzleSelection::updateImageLabels()
-{
-    imageName->setString(GameSettings::getImageName());
-    imageNumber->setString
-        ("( " + std::to_string(GameSettings::getImageID() + 1) + 
-         " / " + std::to_string(GameSettings::getPuzzles().size()) + " )");
-}
-
-void PuzzleSelection::updateRewardsLabel()
-{
-    puzzleValue->setString("x " + std::to_string
-        ((GameSettings::getSegments().x * GameSettings::getSegments().y) / 2));
-}
-
-void PuzzleSelection::gotoMainMenu(cocos2d::Ref *sender)
+void PuzzleSelection::gotoMainMenu(cocos2d::Ref *sender) const
 {
     Director::getInstance()->replaceScene(
         TransitionFade::create(0.5, MainMenu::createScene()));
 }
 
-void PuzzleSelection::gotoPuzzleGame(cocos2d::Ref *sender)
+void PuzzleSelection::gotoPuzzleGame(cocos2d::Ref *sender) const
 {
     GameSettings::setCurrentPuzzleValue
         ((GameSettings::getSegments().x * GameSettings::getSegments().y) / 2);
@@ -319,7 +331,7 @@ void PuzzleSelection::gotoPuzzleGame(cocos2d::Ref *sender)
         TransitionFade::create(0.5, PuzzleGame::createScene()));
 }
 
-void PuzzleSelection::setDefaultPuzzle()
+void PuzzleSelection::setDefaultPuzzle() const
 {
     GameSettings::setImageName("puzzles/" + GameSettings::getPuzzles()[0], 0);
 }

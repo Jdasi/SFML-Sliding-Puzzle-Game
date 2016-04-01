@@ -5,11 +5,23 @@
 
 USING_NS_CC;
 
-std::vector<GameUnlock> &ProfileUnlocks::unlocksRef = GameProfile::getUnlocks();
-
-cocos2d::Scene *ProfileUnlocks::createScene()
+ProfileUnlocks::ProfileUnlocks()
+    : backdrop(nullptr)
+    , selectionRect(nullptr)
+    , actionButton (nullptr)
+    , contextHintLabel (nullptr)
+    , numStars(nullptr)
+    , fadedOpacity(150)
+    , selectedOpacity(255)
+    , currentSelection(GameProfile::stringToBackgroundID
+        (GameProfile::getCurrentBackground()))
+    , action(ContextAction::select)
 {
-    cocos2d::Scene *scene = Scene::create();
+}
+
+Scene *ProfileUnlocks::createScene()
+{
+    Scene *scene = Scene::create();
     auto layer = ProfileUnlocks::create();
 
     scene->addChild(layer);
@@ -28,13 +40,6 @@ bool ProfileUnlocks::init()
     sceneTitle->setPosition
         (Vec2((visibleSize.width / 2), visibleSize.height - 100));
     this->addChild(sceneTitle, 2);
-
-    fadedOpacity = 150;
-    selectedOpacity = 255;
-    currentSelection = GameProfile::stringToBackgroundID
-        (GameProfile::getCurrentBackground());
-    action = ContextAction::select;
-    selectionRect = Sprite::create();
 
     initBackdrop();
     initStarDisplay();
@@ -140,6 +145,7 @@ void ProfileUnlocks::initPreviewImages()
     pane->setColor(Color3B::BLACK);
     pane->setOpacity(175);
 
+    selectionRect = Sprite::create();
     selectionRect->setTextureRect(Rect(0, 0, 280, 165));
     selectionRect->setColor(Color3B::YELLOW);
 

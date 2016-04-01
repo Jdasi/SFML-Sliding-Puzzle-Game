@@ -87,6 +87,9 @@
     <ClInclude Include="SimpleTimer.h">
       <Filter>project\utility</Filter>
     </ClInclude>
+    <ClInclude Include="Coordinate.h">
+      <Filter>project\utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="resource">
