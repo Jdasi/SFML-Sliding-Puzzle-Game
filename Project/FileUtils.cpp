@@ -92,14 +92,22 @@ void generateProfile()
     GameProfile::keymap &profileSettings = GameProfile::getProfileKeymap();
     profileSettings.clear();
 
-    profileSettings["backgroundsUnlocked"] = "regal";
-    profileSettings["currentBackground"] = "regal";
-    profileSettings["puzzlesAttempted"] = "0";
-    profileSettings["puzzlesCompleted"] = "0";
-    profileSettings["stars"] = "0";
-    profileSettings["timePlayed"] = "0";
-    profileSettings["totalMoves"] = "0";
-    profileSettings["totalStarsCollected"] = "0";
+    profileSettings[GameProfile::profileStatToString
+        (ProfileStat::backgroundsUnlocked)] = "regal";
+    profileSettings[GameProfile::profileStatToString
+        (ProfileStat::currentBackground)] = "regal";
+    profileSettings[GameProfile::profileStatToString
+        (ProfileStat::puzzlesAttempted)] = "0";
+    profileSettings[GameProfile::profileStatToString
+        (ProfileStat::puzzlesCompleted)] = "0";
+    profileSettings[GameProfile::profileStatToString
+        (ProfileStat::stars)] = "0";
+    profileSettings[GameProfile::profileStatToString
+        (ProfileStat::timePlayed)] = "0";
+    profileSettings[GameProfile::profileStatToString
+        (ProfileStat::totalMoves)] = "0";
+    profileSettings[GameProfile::profileStatToString
+        (ProfileStat::totalStarsCollected)] = "0";
 
     saveProfile();
 }

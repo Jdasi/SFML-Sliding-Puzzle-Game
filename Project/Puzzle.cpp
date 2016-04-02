@@ -50,11 +50,11 @@ void Puzzle::initPuzzle(PuzzleGame *pScene, int startPosX, int startPosY)
                 (visibleSize.height - startPosY) - (((secY * yCycles) * scaleFactorY) + 
                 (yCycles * pad))));
 
-            piece->setArrayPos((yCycles * segmentsX) + xCycles);
-            piece->setID((yCycles * segmentsX) + xCycles);
+            piece->setArrayPos(calculateOffset(xCycles, yCycles));
+            piece->setID(calculateOffset(xCycles, yCycles));
             piece->setCoordinates(xCycles, yCycles);
 
-            pScene->addChild(piece, (yCycles * segmentsX) + xCycles);
+            pScene->addChild(piece, 1);
             
             auto listener = EventListenerTouchOneByOne::create();
             listener->onTouchBegan =

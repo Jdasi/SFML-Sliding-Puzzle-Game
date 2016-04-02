@@ -4,6 +4,7 @@
 SimpleTimer::SimpleTimer()
     : start()
     , end()
+    , recorded(false)
 {
 }
 
@@ -19,7 +20,7 @@ void SimpleTimer::endTimer()
 
 void SimpleTimer::endTimerAndRecord()
 {
-    end = std::chrono::steady_clock::now();
+    endTimer();
     recordTime();
 }
 
@@ -28,7 +29,13 @@ time_t SimpleTimer::getTime() const
     return std::chrono::duration_cast<std::chrono::seconds>(end - start).count();
 }
 
-void SimpleTimer::recordTime() const
+void SimpleTimer::recordTime()
 {
+    if (recorded)
+    {
+        return;
+    }
+
     GameProfile::modifyProfileStat(ProfileStat::timePlayed, getTime());
+    recorded = true;
 }
