@@ -33,13 +33,19 @@ private:
 
     void updateMovesLabel(int increment = 0);
 
+    //
+    bool sanityCheckMove(cocos2d::Rect &rect, cocos2d::Touch &touch, PuzzlePiece *piece);
     void generateMove(SlideDirection dir, float xMoveDist, float yMoveDist);
-    void generateRandomMoves(int times);
+    bool generateTileMoves(PuzzlePiece* piece);
+    bool pushBackTilesToBeMoved(std::vector<PuzzlePiece*> &container, coordinate pos);
+    void performMoves(std::vector<PuzzlePiece*> &container, int xMoveDist, int yMoveDist);
 
+    void generateRandomMoves(int times);
     bool tryComputerMove(int fromPiece, int toX, int toY);
 
     void updateBlankspaceInfo();
     void moveBlankSpaceToStart();
+    //
 
     void rewardPlayer() const;
     void flashScreen();
@@ -50,8 +56,10 @@ private:
     void gotoPuzzleSelection(cocos2d::Ref *sender);
 
     Puzzle puzzle;
+
     int blankSpace;
     coordinate blankSpaceCoords;
+
     bool gameOver;
     SimpleTimer timer;
 

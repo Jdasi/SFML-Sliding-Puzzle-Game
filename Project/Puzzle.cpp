@@ -90,6 +90,16 @@ PuzzlePiece &Puzzle::getPiece(int piece)
     return *puzzlePieces[piece];
 }
 
+PuzzlePiece &Puzzle::getPiece(coordinate coords)
+{
+    return getPiece(calculateOffset(coords));
+}
+
+PuzzlePiece &Puzzle::getPiece(int x, int y)
+{
+    return getPiece({ x, y });
+}
+
 bool Puzzle::isPieceBlankSpace(int piece) const
 {
     return puzzlePieces[piece]->isBlankSpace();
@@ -111,6 +121,11 @@ int Puzzle::findBlankSpace() const
 int Puzzle::calculateOffset(int x, int y) const
 {
     return (y * GameSettings::getSegments().x) + x;
+}
+
+int Puzzle::calculateOffset(coordinate coords) const
+{
+    return calculateOffset(coords.x, coords.y);
 }
 
 int Puzzle::getPadding() const
@@ -135,6 +150,11 @@ void Puzzle::swapPieces(int fromPiece, int toPiece)
 
     puzzlePieces[fromPiece]->setCoordinates(toCoords);
     puzzlePieces[toPiece]->setCoordinates(fromCoords);
+}
+
+void Puzzle::swapPieces(const PuzzlePiece &fromRef, const PuzzlePiece &toRef)
+{
+    swapPieces(fromRef.getArrayPos(), toRef.getArrayPos());
 }
 
 bool Puzzle::isPuzzleComplete() const

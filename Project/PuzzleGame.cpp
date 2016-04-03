@@ -139,18 +139,34 @@ void PuzzleGame::updateMovesLabel(int increment)
 
 bool PuzzleGame::interactWithPuzzle(cocos2d::Touch *touch, cocos2d::Event *event)
 {
+    Rect recTemp = event->getCurrentTarget()->getBoundingBox();
+    PuzzlePiece *piece = dynamic_cast<PuzzlePiece*>(event->getCurrentTarget());
+
+    if (!sanityCheckMove(recTemp, *touch, piece))
+    {
+        return false;
+    }
+
+    return generateTileMoves(piece);
+}
+
+bool PuzzleGame::sanityCheckMove(cocos2d::Rect &rect, cocos2d::Touch &touch, PuzzlePiece *piece)
+{
+    if (piece == nullptr)
+    {
+        return false;
+    }
+
     if (gameOver)
     {
         return false;
     }
 
-    Rect recTemp = event->getCurrentTarget()->getBoundingBox();
-    if (!recTemp.containsPoint(touch->getLocation()))
+    if (!rect.containsPoint(touch.getLocation()))
     {
         return false;
     }
 
-    PuzzlePiece *piece = dynamic_cast<PuzzlePiece*>(event->getCurrentTarget());
     if (piece->isBlankSpace())
     {
         return false;
@@ -161,6 +177,11 @@ bool PuzzleGame::interactWithPuzzle(cocos2d::Touch *touch, cocos2d::Event *event
         return false;
     }
 
+    return true;
+}
+
+bool PuzzleGame::generateTileMoves(PuzzlePiece* piece)
+{
     currentPieceArrayPos = piece->getArrayPos();
     coordinate currPieceCoords = piece->getCoordinates();
     updateBlankspaceInfo();
@@ -198,6 +219,8 @@ bool PuzzleGame::interactWithPuzzle(cocos2d::Touch *touch, cocos2d::Event *event
     return false;
 }
 
+
+
 void PuzzleGame::generateMove(SlideDirection dir, float xMoveDist, float yMoveDist)
 {
     std::vector<PuzzlePiece*> piecesToMove;
@@ -209,13 +232,10 @@ void PuzzleGame::generateMove(SlideDirection dir, float xMoveDist, float yMoveDi
             for (int i = puzzle.getPiece(currentPieceArrayPos).getCoordinates().y;
                      i > blankSpaceCoords.y; --i)
             {
-                int offset = puzzle.calculateOffset(blankSpaceCoords.x, i);
-                if (puzzle.getPiece(offset).isBlankSpace())
+                if (!pushBackTilesToBeMoved(piecesToMove, { blankSpaceCoords.x, i }))
                 {
                     break;
                 }
-
-                piecesToMove.push_back(&puzzle.getPiece(offset));
             }
 
             break;
@@ -225,13 +245,10 @@ void PuzzleGame::generateMove(SlideDirection dir, float xMoveDist, float yMoveDi
             for (int i = puzzle.getPiece(currentPieceArrayPos).getCoordinates().y;
                      i < blankSpaceCoords.y; ++i)
             {
-                int offset = puzzle.calculateOffset(blankSpaceCoords.x, i);
-                if (puzzle.getPiece(offset).isBlankSpace())
+                if (!pushBackTilesToBeMoved(piecesToMove, { blankSpaceCoords.x, i }))
                 {
                     break;
                 }
-
-                piecesToMove.push_back(&puzzle.getPiece(offset));
             }
 
             break;
@@ -241,13 +258,10 @@ void PuzzleGame::generateMove(SlideDirection dir, float xMoveDist, float yMoveDi
             for (int i = puzzle.getPiece(currentPieceArrayPos).getCoordinates().x;
                      i > blankSpaceCoords.x; --i)
             {
-                int offset = puzzle.calculateOffset(i, blankSpaceCoords.y);
-                if (puzzle.getPiece(offset).isBlankSpace())
+                if (!pushBackTilesToBeMoved(piecesToMove, { i, blankSpaceCoords.y }))
                 {
                     break;
                 }
-
-                piecesToMove.push_back(&puzzle.getPiece(offset));
             }
 
             break;
@@ -257,26 +271,40 @@ void PuzzleGame::generateMove(SlideDirection dir, float xMoveDist, float yMoveDi
             for (int i = puzzle.getPiece(currentPieceArrayPos).getCoordinates().x;
                      i < blankSpaceCoords.x; ++i)
             {
-                int offset = puzzle.calculateOffset(i, blankSpaceCoords.y);
-                if (puzzle.getPiece(offset).isBlankSpace())
+                if (!pushBackTilesToBeMoved(piecesToMove, { i, blankSpaceCoords.y }))
                 {
                     break;
                 }
-
-                piecesToMove.push_back(&puzzle.getPiece(offset));
             }
 
             break;
         }
         default:
         {
-            throw std::runtime_error("Error in generateVerticalMove");
+            throw std::runtime_error("Error in generateMove");
         }
     }
 
+    performMoves(piecesToMove, xMoveDist, yMoveDist);
+}
+
+bool PuzzleGame::pushBackTilesToBeMoved(std::vector<PuzzlePiece*> &container, coordinate pos)
+{
+    PuzzlePiece &pieceRef = puzzle.getPiece(pos);
+    if (pieceRef.isBlankSpace())
+    {
+        return false;
+    }
+
+    container.push_back(&pieceRef);
+    return true;
+}
+
+void PuzzleGame::performMoves(std::vector<PuzzlePiece*> &container, int xMoveDist, int yMoveDist)
+{
     // We need to reverse the vector because the pieces are pushed back in reverse order.
-    std::reverse(piecesToMove.begin(), piecesToMove.end());
-    for (PuzzlePiece *p : piecesToMove)
+    std::reverse(container.begin(), container.end());
+    for (PuzzlePiece *p : container)
     {
         MoveBy *move = MoveBy::create(0.1f, Vec2(xMoveDist, yMoveDist));
         p->runAction(move);
@@ -361,15 +389,16 @@ bool PuzzleGame::tryComputerMove(int fromPiece, int toX, int toY)
         return false;
     }
 
-    int toPiece = puzzle.calculateOffset(toX, toY);
+    PuzzlePiece &fromPieceRef = puzzle.getPiece(fromPiece);
+    PuzzlePiece &toPieceRef = puzzle.getPiece(toX, toY);
 
-    Vec2 fromPos = puzzle.getPiece(fromPiece).getPosition();
-    Vec2 toPos = puzzle.getPiece(toPiece).getPosition();
+    Vec2 fromPos = fromPieceRef.getPosition();
+    Vec2 toPos = toPieceRef.getPosition();
 
-    puzzle.getPiece(fromPiece).setPosition(toPos);
-    puzzle.getPiece(toPiece).setPosition(fromPos);
+    fromPieceRef.setPosition(toPos);
+    toPieceRef.setPosition(fromPos);
 
-    puzzle.swapPieces(fromPiece, toPiece);
+    puzzle.swapPieces(fromPieceRef, toPieceRef);
 
     return true;
 }
