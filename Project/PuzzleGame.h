@@ -33,10 +33,9 @@ private:
 
     void updateMovesLabel(int increment = 0);
 
-    void generateValidMove();
-    void generateRandomValidMoves(int times);
+    void generateMove(SlideDirection dir, float xMoveDist, float yMoveDist);
+    void generateRandomMoves(int times);
 
-    bool tryUserMove(int fromPiece, int toX, int toY);
     bool tryComputerMove(int fromPiece, int toX, int toY);
 
     void updateBlankspaceInfo();

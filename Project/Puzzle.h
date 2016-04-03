@@ -22,6 +22,8 @@ public:
 
     int calculateOffset(int x, int y) const;
 
+    int getPadding() const;
+
     void swapPieces(int fromPiece, int toPiece);
     bool isPuzzleComplete() const;
 
@@ -30,13 +32,12 @@ public:
     void hideAllPieces() const;
 
 private:
-    void sanityCheckImage(cocos2d::Sprite *spr, int pad);
+    void sanityCheckImage(cocos2d::Sprite *spr);
 
     int totalPieces;
-
+    int pad;
     float sizeX;
     float sizeY;
-
     float scaleFactorX;
     float scaleFactorY;
 

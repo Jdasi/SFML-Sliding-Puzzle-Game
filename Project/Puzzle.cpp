@@ -6,6 +6,7 @@ USING_NS_CC;
 
 Puzzle::Puzzle()
     : totalPieces(GameSettings::getSegments().x * GameSettings::getSegments().y)
+    , pad(2)
     , sizeX(0)
     , sizeY(0)
     , scaleFactorX(1.0f)
@@ -27,9 +28,7 @@ void Puzzle::initPuzzle(PuzzleGame *pScene, int startPosX, int startPosY)
     float secX = sizeX / segmentsX;
     float secY = sizeY / segmentsY;
 
-    int pad = 2;
-
-    sanityCheckImage(puzzle, pad);
+    sanityCheckImage(puzzle);
 
     // Splice puzzle image into PuzzlePieces.
     for (int yCycles = 0; yCycles < segmentsY; ++yCycles)
@@ -70,7 +69,7 @@ void Puzzle::initPuzzle(PuzzleGame *pScene, int startPosX, int startPosY)
     puzzlePieces[(segmentsX * segmentsY) - 1]->setBlankSpace(true);
 }
 
-void Puzzle::sanityCheckImage(cocos2d::Sprite *spr, int pad)
+void Puzzle::sanityCheckImage(cocos2d::Sprite *spr)
 {
     int paddingX = (GameSettings::getSegments().x - 1) * pad;
     int paddingY = (GameSettings::getSegments().y - 1) * pad;
@@ -112,6 +111,11 @@ int Puzzle::findBlankSpace() const
 int Puzzle::calculateOffset(int x, int y) const
 {
     return (y * GameSettings::getSegments().x) + x;
+}
+
+int Puzzle::getPadding() const
+{
+    return pad;
 }
 
 void Puzzle::swapPieces(int fromPiece, int toPiece)

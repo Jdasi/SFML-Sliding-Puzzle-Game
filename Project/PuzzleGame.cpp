@@ -66,7 +66,7 @@ void PuzzleGame::initPuzzle()
     puzzle.initPuzzle(this, startPosX, startPosY);
 
     int product = GameSettings::getSegments().x * GameSettings::getSegments().y;
-    generateRandomValidMoves(product * product);
+    generateRandomMoves(product * product);
 
     moveBlankSpaceToStart();
 }
@@ -144,51 +144,158 @@ bool PuzzleGame::interactWithPuzzle(cocos2d::Touch *touch, cocos2d::Event *event
         return false;
     }
 
-    PuzzlePiece *piece = dynamic_cast<PuzzlePiece*>(event->getCurrentTarget());
+    Rect recTemp = event->getCurrentTarget()->getBoundingBox();
+    if (!recTemp.containsPoint(touch->getLocation()))
+    {
+        return false;
+    }
 
+    PuzzlePiece *piece = dynamic_cast<PuzzlePiece*>(event->getCurrentTarget());
     if (piece->isBlankSpace())
     {
         return false;
     }
 
-    Point pt = touch->getLocation();
-    Rect recTemp = piece->getBoundingBox();
-
-    if (!recTemp.containsPoint(pt))
+    if (puzzle.getPiece(blankSpace).getNumberOfRunningActions() != 0)
     {
         return false;
     }
 
     currentPieceArrayPos = piece->getArrayPos();
+    coordinate currPieceCoords = piece->getCoordinates();
+    updateBlankspaceInfo();
 
-    generateValidMove();
+    if (currPieceCoords.x == blankSpaceCoords.x)
+    {
+        float moveDist = piece->getBoundingBox().size.height + puzzle.getPadding();
+        if (currPieceCoords.y > blankSpaceCoords.y)
+        {
+            generateMove(SlideDirection::up, 0, moveDist);
+        }
+        else
+        {
+            generateMove(SlideDirection::down, 0, -moveDist);
+        }
 
-    return true;
+        return true;
+    }
+
+    if (currPieceCoords.y == blankSpaceCoords.y)
+    {
+        float moveDist = piece->getBoundingBox().size.width + puzzle.getPadding();
+        if (currPieceCoords.x > blankSpaceCoords.x)
+        {
+            generateMove(SlideDirection::left, -moveDist, 0);
+        }
+        else
+        {
+            generateMove(SlideDirection::right, moveDist, 0);
+        }
+
+        return true;
+    }
+
+    return false;
 }
 
-void PuzzleGame::generateValidMove()
+void PuzzleGame::generateMove(SlideDirection dir, float xMoveDist, float yMoveDist)
 {
-    coordinate currPiece = puzzle.getPiece(currentPieceArrayPos).getCoordinates();
+    std::vector<PuzzlePiece*> piecesToMove;
 
-    if (tryUserMove(currentPieceArrayPos, currPiece.x + 1, currPiece.y))
+    switch (dir)
     {
-        return;
+        case SlideDirection::up:
+        {
+            for (int i = puzzle.getPiece(currentPieceArrayPos).getCoordinates().y;
+                     i > blankSpaceCoords.y; --i)
+            {
+                int offset = puzzle.calculateOffset(blankSpaceCoords.x, i);
+                if (puzzle.getPiece(offset).isBlankSpace())
+                {
+                    break;
+                }
+
+                piecesToMove.push_back(&puzzle.getPiece(offset));
+            }
+
+            break;
+        }
+        case SlideDirection::down:
+        {
+            for (int i = puzzle.getPiece(currentPieceArrayPos).getCoordinates().y;
+                     i < blankSpaceCoords.y; ++i)
+            {
+                int offset = puzzle.calculateOffset(blankSpaceCoords.x, i);
+                if (puzzle.getPiece(offset).isBlankSpace())
+                {
+                    break;
+                }
+
+                piecesToMove.push_back(&puzzle.getPiece(offset));
+            }
+
+            break;
+        }
+        case SlideDirection::left:
+        {
+            for (int i = puzzle.getPiece(currentPieceArrayPos).getCoordinates().x;
+                     i > blankSpaceCoords.x; --i)
+            {
+                int offset = puzzle.calculateOffset(i, blankSpaceCoords.y);
+                if (puzzle.getPiece(offset).isBlankSpace())
+                {
+                    break;
+                }
+
+                piecesToMove.push_back(&puzzle.getPiece(offset));
+            }
+
+            break;
+        }
+        case SlideDirection::right:
+        {
+            for (int i = puzzle.getPiece(currentPieceArrayPos).getCoordinates().x;
+                     i < blankSpaceCoords.x; ++i)
+            {
+                int offset = puzzle.calculateOffset(i, blankSpaceCoords.y);
+                if (puzzle.getPiece(offset).isBlankSpace())
+                {
+                    break;
+                }
+
+                piecesToMove.push_back(&puzzle.getPiece(offset));
+            }
+
+            break;
+        }
+        default:
+        {
+            throw std::runtime_error("Error in generateVerticalMove");
+        }
     }
 
-    if (tryUserMove(currentPieceArrayPos, currPiece.x, currPiece.y + 1))
+    // We need to reverse the vector because the pieces are pushed back in reverse order.
+    std::reverse(piecesToMove.begin(), piecesToMove.end());
+    for (PuzzlePiece *p : piecesToMove)
     {
-        return;
+        MoveBy *move = MoveBy::create(0.1f, Vec2(xMoveDist, yMoveDist));
+        p->runAction(move);
+
+        puzzle.swapPieces(p->getArrayPos(), blankSpace);
+        updateBlankspaceInfo();
+
+        GameProfile::modifyProfileStat(ProfileStat::totalMoves, 1);
+        updateMovesLabel(1);
+
+        if (puzzle.isPuzzleComplete())
+        {
+            gameOver = true;
+            endGame();
+        }
     }
-    
-    if (tryUserMove(currentPieceArrayPos, currPiece.x - 1, currPiece.y))
-    {
-        return;
-    }
-    
-    tryUserMove(currentPieceArrayPos, currPiece.x, currPiece.y - 1);
 }
 
-void PuzzleGame::generateRandomValidMoves(int times)
+void PuzzleGame::generateRandomMoves(int times)
 {
     for (int i = 0; i < times; ++i)
     {
@@ -211,7 +318,7 @@ void PuzzleGame::generateRandomValidMoves(int times)
 
                     break;
                 }
-                case SlideDirection::up:
+                case SlideDirection::down:
                 {
                     if (tryComputerMove(blankSpace, 
                         blankSpaceCoords.x, blankSpaceCoords.y + 1))
@@ -231,7 +338,7 @@ void PuzzleGame::generateRandomValidMoves(int times)
 
                     break;
                 }
-                case SlideDirection::down:
+                case SlideDirection::up:
                 {
                     if (tryComputerMove(blankSpace, 
                         blankSpaceCoords.x, blankSpaceCoords.y - 1))
@@ -245,47 +352,6 @@ void PuzzleGame::generateRandomValidMoves(int times)
             }
         }
     }
-}
-
-bool PuzzleGame::tryUserMove(int fromPiece, int toX, int toY)
-{
-    if (!puzzle.inBounds(toX, toY))
-    {
-        return false;
-    }
-
-    int toPiece = puzzle.calculateOffset(toX, toY);
-
-    if (!puzzle.isPieceBlankSpace(toPiece))
-    {
-        return false;
-    }
-
-    if (puzzle.getPiece(toPiece).getNumberOfRunningActions() != 0)
-    {
-        return false;
-    }
-
-    float time = 0.1f;
-
-    MoveTo *action1 = MoveTo::create(time, puzzle.getPiece(toPiece).getPosition());
-    MoveTo *action2 = MoveTo::create(time, puzzle.getPiece(fromPiece).getPosition());
-
-    puzzle.getPiece(fromPiece).runAction(action1);
-    puzzle.getPiece(toPiece).runAction(action2);
-
-    puzzle.swapPieces(fromPiece, toPiece);
-    updateMovesLabel(1);
-
-    GameProfile::modifyProfileStat(ProfileStat::totalMoves, 1);
-
-    if (puzzle.isPuzzleComplete())
-    {
-        gameOver = true;
-        endGame();
-    }
-
-    return true;
 }
 
 bool PuzzleGame::tryComputerMove(int fromPiece, int toX, int toY)
