@@ -39,7 +39,7 @@ bool MainMenu::init()
     return true;
 }
 
-void MainMenu::initProfile()
+void MainMenu::initProfile() const
 {
     if (!GameProfile::isInitialised())
     {
@@ -49,7 +49,7 @@ void MainMenu::initProfile()
     }
 }
 
-void MainMenu::initSettings()
+void MainMenu::initSettings() const
 {
     if (!GameSettings::isInitialised())
     {
@@ -134,25 +134,25 @@ void MainMenu::initMenu()
     this->addChild(menu, 1);
 }
 
-void MainMenu::gotoPuzzleSelection(cocos2d::Ref *sender)
+void MainMenu::gotoPuzzleSelection(cocos2d::Ref *sender) const
 {
     Director::getInstance()->replaceScene(
         TransitionFade::create(0.5, PuzzleSelection::createScene()));
 }
 
-void MainMenu::gotoUnlocks(cocos2d::Ref* sender)
+void MainMenu::gotoUnlocks(cocos2d::Ref* sender) const
 {
     Director::getInstance()->replaceScene(
         TransitionFade::create(0.5, ProfileUnlocks::createScene()));
 }
 
-void MainMenu::gotoStatistics(cocos2d::Ref* sender)
+void MainMenu::gotoStatistics(cocos2d::Ref* sender) const
 {
     Director::getInstance()->replaceScene(
         TransitionFade::create(0.5, ProfileStatistics::createScene()));
 }
 
-void MainMenu::exitGame(cocos2d::Ref *pSender)
+void MainMenu::exitGame(cocos2d::Ref *pSender) const
 {
     saveProfile();
     Director::getInstance()->end();

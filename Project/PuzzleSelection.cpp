@@ -280,7 +280,7 @@ void PuzzleSelection::updateRewardsLabel() const
         ((GameSettings::getSegments().x * GameSettings::getSegments().y) / 2));
 }
 
-bool PuzzleSelection::leftArrowClick(cocos2d::Ref *sender)
+bool PuzzleSelection::leftArrowClick(cocos2d::Ref *sender) const
 {
     int currentImageID = GameSettings::getImageID();
 
@@ -298,7 +298,7 @@ bool PuzzleSelection::leftArrowClick(cocos2d::Ref *sender)
     return true;
 }
 
-bool PuzzleSelection::rightArrowClick(cocos2d::Ref *sender)
+bool PuzzleSelection::rightArrowClick(cocos2d::Ref *sender) const
 {
     unsigned int currentImageID = GameSettings::getImageID();
 

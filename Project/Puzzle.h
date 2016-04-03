@@ -18,7 +18,7 @@ public:
     PuzzlePiece &getPiece(int piece);
 
     bool isPieceBlankSpace(int piece) const;
-    int findBlankSpace();
+    int findBlankSpace() const;
 
     int calculateOffset(int x, int y) const;
 
@@ -27,7 +27,7 @@ public:
 
     bool inBounds(int x, int y) const;
 
-    void hideAllPieces();
+    void hideAllPieces() const;
 
 private:
     void sanityCheckImage(cocos2d::Sprite *spr, int pad);

@@ -141,7 +141,7 @@ void ProfileStatistics::initDynamicLabels()
     this->addChild(completedLabel, 2);
 }
 
-std::string ProfileStatistics::calculateTime(const std::string &str)
+std::string ProfileStatistics::calculateTime(const std::string &str) const
 {
     int totalTime = stoi(str);
 
@@ -157,7 +157,7 @@ std::string ProfileStatistics::calculateTime(const std::string &str)
     return timePlayed;
 }
 
-void ProfileStatistics::gotoMainMenu(cocos2d::Ref *sender)
+void ProfileStatistics::gotoMainMenu(cocos2d::Ref *sender) const
 {
     Director::getInstance()->replaceScene(
         TransitionFade::create(0.5, MainMenu::createScene()));

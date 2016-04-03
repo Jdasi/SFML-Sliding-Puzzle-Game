@@ -268,7 +268,7 @@ void ProfileUnlocks::performContextAction(cocos2d::Ref *sender)
     updateContextHintLabel();
 }
 
-void ProfileUnlocks::updateBackdrop()
+void ProfileUnlocks::updateBackdrop() const
 {
     backdrop->initWithFile
         ("backdrops/" + GameProfile::getCurrentBackground() + "_menu.jpg");
@@ -320,13 +320,13 @@ void ProfileUnlocks::updateContextHintLabel()
     contextHintLabel->setString(toString);
 }
 
-void ProfileUnlocks::updateNumStarsLabel()
+void ProfileUnlocks::updateNumStarsLabel() const
 {
     numStars->setString("x " + GameProfile::getProfileStat(ProfileStat::stars));
 }
 
 
-void ProfileUnlocks::gotoMainMenu(cocos2d::Ref *sender)
+void ProfileUnlocks::gotoMainMenu(cocos2d::Ref *sender) const
 {
     Director::getInstance()->replaceScene(
         TransitionFade::create(0.5, MainMenu::createScene()));

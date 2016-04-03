@@ -24,8 +24,8 @@ private:
     void updateImageLabels() const;
     void updateRewardsLabel() const;
 
-    bool rightArrowClick(cocos2d::Ref *sender);
-    bool leftArrowClick(cocos2d::Ref *sender);
+    bool rightArrowClick(cocos2d::Ref *sender) const;
+    bool leftArrowClick(cocos2d::Ref *sender) const;
 
     void gotoMainMenu(cocos2d::Ref *sender) const;
     void gotoPuzzleGame(cocos2d::Ref *sender) const;

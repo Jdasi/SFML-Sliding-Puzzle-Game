@@ -96,7 +96,7 @@ bool Puzzle::isPieceBlankSpace(int piece) const
     return puzzlePieces[piece]->isBlankSpace();
 }
 
-int Puzzle::findBlankSpace()
+int Puzzle::findBlankSpace() const
 {
     for (PuzzlePiece *piece : puzzlePieces)
     {
@@ -167,7 +167,7 @@ bool Puzzle::inBounds(int x, int y) const
     return true;
 }
 
-void Puzzle::hideAllPieces()
+void Puzzle::hideAllPieces() const
 {
     for (PuzzlePiece *piece : puzzlePieces)
     {

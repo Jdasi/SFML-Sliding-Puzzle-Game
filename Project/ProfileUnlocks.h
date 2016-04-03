@@ -32,12 +32,12 @@ private:
 
     void performContextAction(cocos2d::Ref *sender);
     void updateActionButton();
-    void updateBackdrop();
+    void updateBackdrop() const;
     void updateSelectionRect();
     void updateContextHintLabel();
-    void updateNumStarsLabel();
+    void updateNumStarsLabel() const;
 
-    void gotoMainMenu(cocos2d::Ref *sender);
+    void gotoMainMenu(cocos2d::Ref *sender) const;
 
     std::vector<GameUnlock> &unlocksRef = GameProfile::getUnlocks();
     std::vector<cocos2d::Sprite*> previewImages;
