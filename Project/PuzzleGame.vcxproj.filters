@@ -43,6 +43,9 @@
     <ClCompile Include="SimpleTimer.cpp">
       <Filter>project\utility</Filter>
     </ClCompile>
+    <ClCompile Include="BoardManager.cpp">
+      <Filter>project\utility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h">
@@ -88,6 +91,12 @@
       <Filter>project\utility</Filter>
     </ClInclude>
     <ClInclude Include="Coordinate.h">
+      <Filter>project\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="BoardManager.h">
+      <Filter>project\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveSequence.h">
       <Filter>project\utility</Filter>
     </ClInclude>
   </ItemGroup>

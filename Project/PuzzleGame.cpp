@@ -3,16 +3,16 @@
 #include "GameProfile.h"
 #include "MainMenu.h"
 #include "PuzzleSelection.h"
+#include "MoveSequence.h"
 
 USING_NS_CC;
 
 PuzzleGame::PuzzleGame()
     : blankSpace(0)
-    , blankSpaceCoords({0, 0})
+    , boardManager(puzzle, blankSpace)
     , gameOver(false)
     , startPosX(100)
     , startPosY(80)
-    , currentPieceArrayPos(0)
     , numMoves(0)
     , movesLabel(nullptr)
     , previewLabel(nullptr)
@@ -66,9 +66,9 @@ void PuzzleGame::initPuzzle()
     puzzle.initPuzzle(this, startPosX, startPosY);
 
     int product = GameSettings::getSegments().x * GameSettings::getSegments().y;
-    generateRandomMoves(product * product);
+    boardManager.generateRandomMoves(product * product);
 
-    moveBlankSpaceToStart();
+    boardManager.moveBlankSpaceToStart();
 }
 
 void PuzzleGame::initLabels()
@@ -131,176 +131,39 @@ void PuzzleGame::initPreviewImage()
     this->addChild(previewImage, 2);
 }
 
-void PuzzleGame::updateMovesLabel(int increment)
-{
-    numMoves += increment;
-    movesLabel->setString("Moves: " + std::to_string(numMoves));
-}
-
 bool PuzzleGame::interactWithPuzzle(cocos2d::Touch *touch, cocos2d::Event *event)
 {
-    Rect recTemp = event->getCurrentTarget()->getBoundingBox();
-    PuzzlePiece *piece = dynamic_cast<PuzzlePiece*>(event->getCurrentTarget());
-
-    if (!sanityCheckMove(recTemp, *touch, piece))
-    {
-        return false;
-    }
-
-    return generateTileMoves(piece);
-}
-
-bool PuzzleGame::sanityCheckMove(cocos2d::Rect &rect, cocos2d::Touch &touch, PuzzlePiece *piece)
-{
-    if (piece == nullptr)
-    {
-        return false;
-    }
-
     if (gameOver)
     {
         return false;
     }
 
-    if (!rect.containsPoint(touch.getLocation()))
+    Rect recTemp = event->getCurrentTarget()->getBoundingBox();
+    PuzzlePiece *piece = dynamic_cast<PuzzlePiece*>(event->getCurrentTarget());
+
+    if (!boardManager.sanityCheckMove(recTemp, *touch, piece))
     {
         return false;
     }
 
-    if (piece->isBlankSpace())
-    {
-        return false;
-    }
-
-    if (puzzle.getPiece(blankSpace).getNumberOfRunningActions() != 0)
-    {
-        return false;
-    }
-
-    return true;
-}
-
-bool PuzzleGame::generateTileMoves(PuzzlePiece* piece)
-{
-    currentPieceArrayPos = piece->getArrayPos();
-    coordinate currPieceCoords = piece->getCoordinates();
-    updateBlankspaceInfo();
-
-    if (currPieceCoords.x == blankSpaceCoords.x)
-    {
-        float moveDist = piece->getBoundingBox().size.height + puzzle.getPadding();
-        if (currPieceCoords.y > blankSpaceCoords.y)
-        {
-            generateMove(SlideDirection::up, 0, moveDist);
-        }
-        else
-        {
-            generateMove(SlideDirection::down, 0, -moveDist);
-        }
-
-        return true;
-    }
-
-    if (currPieceCoords.y == blankSpaceCoords.y)
-    {
-        float moveDist = piece->getBoundingBox().size.width + puzzle.getPadding();
-        if (currPieceCoords.x > blankSpaceCoords.x)
-        {
-            generateMove(SlideDirection::left, -moveDist, 0);
-        }
-        else
-        {
-            generateMove(SlideDirection::right, moveDist, 0);
-        }
-
-        return true;
-    }
-
-    return false;
-}
-
-
-
-void PuzzleGame::generateMove(SlideDirection dir, float xMoveDist, float yMoveDist)
-{
+    //MoveSequence seq;
     std::vector<PuzzlePiece*> piecesToMove;
+    float xMoveDist = 0.0f;
+    float yMoveDist = 0.0f;
+    bool result = 
+        boardManager.generateTileMoves(piecesToMove, piece, xMoveDist, yMoveDist);
 
-    switch (dir)
+    if (!result)
     {
-        case SlideDirection::up:
-        {
-            for (int i = puzzle.getPiece(currentPieceArrayPos).getCoordinates().y;
-                     i > blankSpaceCoords.y; --i)
-            {
-                if (!pushBackTilesToBeMoved(piecesToMove, { blankSpaceCoords.x, i }))
-                {
-                    break;
-                }
-            }
-
-            break;
-        }
-        case SlideDirection::down:
-        {
-            for (int i = puzzle.getPiece(currentPieceArrayPos).getCoordinates().y;
-                     i < blankSpaceCoords.y; ++i)
-            {
-                if (!pushBackTilesToBeMoved(piecesToMove, { blankSpaceCoords.x, i }))
-                {
-                    break;
-                }
-            }
-
-            break;
-        }
-        case SlideDirection::left:
-        {
-            for (int i = puzzle.getPiece(currentPieceArrayPos).getCoordinates().x;
-                     i > blankSpaceCoords.x; --i)
-            {
-                if (!pushBackTilesToBeMoved(piecesToMove, { i, blankSpaceCoords.y }))
-                {
-                    break;
-                }
-            }
-
-            break;
-        }
-        case SlideDirection::right:
-        {
-            for (int i = puzzle.getPiece(currentPieceArrayPos).getCoordinates().x;
-                     i < blankSpaceCoords.x; ++i)
-            {
-                if (!pushBackTilesToBeMoved(piecesToMove, { i, blankSpaceCoords.y }))
-                {
-                    break;
-                }
-            }
-
-            break;
-        }
-        default:
-        {
-            throw std::runtime_error("Error in generateMove");
-        }
+        return false;
     }
 
     performMoves(piecesToMove, xMoveDist, yMoveDist);
-}
-
-bool PuzzleGame::pushBackTilesToBeMoved(std::vector<PuzzlePiece*> &container, coordinate pos)
-{
-    PuzzlePiece &pieceRef = puzzle.getPiece(pos);
-    if (pieceRef.isBlankSpace())
-    {
-        return false;
-    }
-
-    container.push_back(&pieceRef);
     return true;
 }
 
-void PuzzleGame::performMoves(std::vector<PuzzlePiece*> &container, int xMoveDist, int yMoveDist)
+void PuzzleGame::performMoves(std::vector<PuzzlePiece*> &container, float xMoveDist,
+                              float yMoveDist)
 {
     // We need to reverse the vector because the pieces are pushed back in reverse order.
     std::reverse(container.begin(), container.end());
@@ -310,7 +173,7 @@ void PuzzleGame::performMoves(std::vector<PuzzlePiece*> &container, int xMoveDis
         p->runAction(move);
 
         puzzle.swapPieces(p->getArrayPos(), blankSpace);
-        updateBlankspaceInfo();
+        boardManager.updateBlankspaceInfo();
 
         GameProfile::modifyProfileStat(ProfileStat::totalMoves, 1);
         updateMovesLabel(1);
@@ -323,113 +186,10 @@ void PuzzleGame::performMoves(std::vector<PuzzlePiece*> &container, int xMoveDis
     }
 }
 
-void PuzzleGame::generateRandomMoves(int times)
+void PuzzleGame::updateMovesLabel(int increment)
 {
-    for (int i = 0; i < times; ++i)
-    {
-        updateBlankspaceInfo();
-
-        bool tileSwapped = false;
-        while (!tileSwapped)
-        {
-            SlideDirection direction = static_cast<SlideDirection>(rand() % 4);
-
-            switch (direction)
-            {
-                case SlideDirection::right:
-                {
-                    if (tryComputerMove(blankSpace, 
-                        blankSpaceCoords.x + 1, blankSpaceCoords.y))
-                    {
-                        tileSwapped = true;
-                    }
-
-                    break;
-                }
-                case SlideDirection::down:
-                {
-                    if (tryComputerMove(blankSpace, 
-                        blankSpaceCoords.x, blankSpaceCoords.y + 1))
-                    {
-                        tileSwapped = true;
-                    }
-
-                    break;
-                }
-                case SlideDirection::left:
-                {
-                    if (tryComputerMove(blankSpace, 
-                        blankSpaceCoords.x - 1, blankSpaceCoords.y))
-                    {
-                        tileSwapped = true;
-                    }
-
-                    break;
-                }
-                case SlideDirection::up:
-                {
-                    if (tryComputerMove(blankSpace, 
-                        blankSpaceCoords.x, blankSpaceCoords.y - 1))
-                    {
-                        tileSwapped = true;
-                    }
-
-                    break;
-                }
-                default: {}
-            }
-        }
-    }
-}
-
-bool PuzzleGame::tryComputerMove(int fromPiece, int toX, int toY)
-{
-    if (!puzzle.inBounds(toX, toY))
-    {
-        return false;
-    }
-
-    PuzzlePiece &fromPieceRef = puzzle.getPiece(fromPiece);
-    PuzzlePiece &toPieceRef = puzzle.getPiece(toX, toY);
-
-    Vec2 fromPos = fromPieceRef.getPosition();
-    Vec2 toPos = toPieceRef.getPosition();
-
-    fromPieceRef.setPosition(toPos);
-    toPieceRef.setPosition(fromPos);
-
-    puzzle.swapPieces(fromPieceRef, toPieceRef);
-
-    return true;
-}
-
-void PuzzleGame::updateBlankspaceInfo()
-{
-    blankSpace = puzzle.findBlankSpace();
-    blankSpaceCoords = puzzle.getPiece(blankSpace).getCoordinates();
-}
-
-void PuzzleGame::moveBlankSpaceToStart()
-{
-    for (int i = 0; i < GameSettings::getSegments().x; ++i)
-    {
-        updateBlankspaceInfo();
-
-        if (!tryComputerMove(blankSpace, blankSpaceCoords.x + 1, blankSpaceCoords.y))
-        {
-            break;
-        }
-    }
-
-    for (int i = 0; i < GameSettings::getSegments().y; ++i)
-    {
-        updateBlankspaceInfo();
-
-        if (!tryComputerMove(blankSpace, blankSpaceCoords.x, blankSpaceCoords.y + 1))
-        {
-            break;
-        }
-    }
+    numMoves += increment;
+    movesLabel->setString("Moves: " + std::to_string(numMoves));
 }
 
 void PuzzleGame::rewardPlayer() const

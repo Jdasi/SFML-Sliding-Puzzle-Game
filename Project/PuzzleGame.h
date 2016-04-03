@@ -2,8 +2,9 @@
 
 #include "Puzzle.h"
 #include "SimpleTimer.h"
+#include "BoardManager.h"
 
-#include <cocos2d.h>
+#include "cocos2d.h"
 
 class PuzzleGame : public cocos2d::Layer
 {
@@ -17,48 +18,26 @@ public:
     CREATE_FUNC(PuzzleGame);
 
 private:
-    enum class SlideDirection
-    {
-        up = 0,
-        right,
-        down,
-        left
-    };
-
     void initBackdrop();
     void initPuzzle();
     void initLabels();
     void initMenu();
     void initPreviewImage();
 
+    void performMoves(std::vector<PuzzlePiece*> &container, float xMoveDist, 
+                      float yMoveDist);
     void updateMovesLabel(int increment = 0);
-
-    //
-    bool sanityCheckMove(cocos2d::Rect &rect, cocos2d::Touch &touch, PuzzlePiece *piece);
-    void generateMove(SlideDirection dir, float xMoveDist, float yMoveDist);
-    bool generateTileMoves(PuzzlePiece* piece);
-    bool pushBackTilesToBeMoved(std::vector<PuzzlePiece*> &container, coordinate pos);
-    void performMoves(std::vector<PuzzlePiece*> &container, int xMoveDist, int yMoveDist);
-
-    void generateRandomMoves(int times);
-    bool tryComputerMove(int fromPiece, int toX, int toY);
-
-    void updateBlankspaceInfo();
-    void moveBlankSpaceToStart();
-    //
 
     void rewardPlayer() const;
     void flashScreen();
-
     void endGame();
 
     void gotoMainMenu(cocos2d::Ref *sender);
     void gotoPuzzleSelection(cocos2d::Ref *sender);
 
     Puzzle puzzle;
-
     int blankSpace;
-    coordinate blankSpaceCoords;
+    BoardManager boardManager;
 
     bool gameOver;
     SimpleTimer timer;
@@ -66,7 +45,6 @@ private:
     int startPosX;
     int startPosY;
 
-    int currentPieceArrayPos;
     int numMoves;
     cocos2d::Label *movesLabel;
     cocos2d::Label *previewLabel;
