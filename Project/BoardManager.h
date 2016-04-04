@@ -24,7 +24,7 @@ class BoardManager
     };
 
 public:
-    BoardManager(Puzzle &ref, int &blankSpaceRef);
+    BoardManager(Puzzle &ref);
     ~BoardManager() = default;
 
     bool sanityCheckMove(cocos2d::Rect &rect, cocos2d::Touch &touch, PuzzlePiece *piece);
@@ -35,11 +35,12 @@ public:
     void generateRandomMoves(int times);
     bool tryComputerMove(int fromPiece, int toX, int toY);
 
+    int findBlankSpace() const;
     void updateBlankspaceInfo();
     void moveBlankSpaceToStart();
 
 private:
-    int &blankSpace;
+    int blankSpace;
     coordinate blankSpaceCoords;
     Puzzle &puzzle;
     int currentPieceArrayPos;

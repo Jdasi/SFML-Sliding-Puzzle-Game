@@ -6,8 +6,8 @@
 
 USING_NS_CC;
 
-BoardManager::BoardManager(Puzzle &ref, int &blankSpaceRef)
-    : blankSpace(blankSpaceRef)
+BoardManager::BoardManager(Puzzle &ref)
+    : blankSpace(0)
     , blankSpaceCoords({ 0, 0 }) 
     , puzzle(ref)
     , currentPieceArrayPos(0)
@@ -238,9 +238,23 @@ bool BoardManager::tryComputerMove(int fromPiece, int toX, int toY)
     return true;
 }
 
+int BoardManager::findBlankSpace() const
+{
+    std::vector<PuzzlePiece*> &piecesRef = puzzle.getPieces();
+    for (PuzzlePiece *piece : piecesRef)
+    {
+        if (piece->isBlankSpace())
+        {
+            return piece->getArrayPos();
+        }
+    }
+
+    throw std::runtime_error("Error in findBlankSpace");
+}
+
 void BoardManager::updateBlankspaceInfo()
 {
-    blankSpace = puzzle.findBlankSpace();
+    blankSpace = findBlankSpace();
     blankSpaceCoords = puzzle.getPiece(blankSpace).getCoordinates();
 }
 

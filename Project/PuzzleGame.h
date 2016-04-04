@@ -35,7 +35,6 @@ private:
     void gotoPuzzleSelection(cocos2d::Ref *sender);
 
     Puzzle puzzle;
-    int blankSpace;
     BoardManager boardManager;
 
     bool gameOver;

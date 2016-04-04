@@ -100,22 +100,14 @@ PuzzlePiece &Puzzle::getPiece(int x, int y)
     return getPiece({ x, y });
 }
 
+std::vector<PuzzlePiece*> &Puzzle::getPieces()
+{
+    return puzzlePieces;
+}
+
 bool Puzzle::isPieceBlankSpace(int piece) const
 {
     return puzzlePieces[piece]->isBlankSpace();
-}
-
-int Puzzle::findBlankSpace() const
-{
-    for (PuzzlePiece *piece : puzzlePieces)
-    {
-        if (piece->isBlankSpace())
-        {
-            return piece->getArrayPos();
-        }
-    }
-
-    return 0;
 }
 
 int Puzzle::calculateOffset(int x, int y) const

@@ -8,8 +8,7 @@
 USING_NS_CC;
 
 PuzzleGame::PuzzleGame()
-    : blankSpace(0)
-    , boardManager(puzzle, blankSpace)
+    : boardManager(puzzle)
     , gameOver(false)
     , startPosX(100)
     , startPosY(80)
@@ -167,7 +166,7 @@ void PuzzleGame::performMoves(MoveSequence &seq)
         MoveBy *move = MoveBy::create(0.1f, Vec2(seq.xMoveDist, seq.yMoveDist));
         p->runAction(move);
 
-        puzzle.swapPieces(p->getArrayPos(), blankSpace);
+        puzzle.swapPieces(p->getArrayPos(), boardManager.findBlankSpace());
         boardManager.updateBlankspaceInfo();
 
         GameProfile::modifyProfileStat(ProfileStat::totalMoves, 1);
@@ -214,7 +213,7 @@ void PuzzleGame::endGame()
     flashScreen();
     
     // Change existing elements.
-    puzzle.getPiece(puzzle.findBlankSpace()).setBlankSpace(false);
+    puzzle.getPiece(boardManager.findBlankSpace()).setBlankSpace(false);
     puzzle.hideAllPieces();
     previewLabel->setOpacity(0);
     previewImage->setOpacity(0);

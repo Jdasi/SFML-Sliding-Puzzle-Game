@@ -18,9 +18,9 @@ public:
     PuzzlePiece &getPiece(int piece);
     PuzzlePiece &getPiece(coordinate coords);
     PuzzlePiece &getPiece(int x, int y);
+    std::vector<PuzzlePiece*> &getPieces();
 
     bool isPieceBlankSpace(int piece) const;
-    int findBlankSpace() const;
 
     int calculateOffset(int x, int y) const;
     int calculateOffset(coordinate coords) const;
