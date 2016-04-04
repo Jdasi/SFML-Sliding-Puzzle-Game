@@ -5,8 +5,9 @@ std::string GameSettings::imageName;
 int GameSettings::imageID = 0;
 Coordinate GameSettings::segments { 0, 0 };
 int GameSettings::currentPuzzleValue = 0;
-bool GameSettings::initialised = false;
 std::vector<std::string> GameSettings::puzzles;
+std::string GameSettings::fontName;
+bool GameSettings::initialised = false;
 
 int GameSettings::getImageID()
 {
@@ -76,6 +77,16 @@ int GameSettings::getCurrentPuzzleValue()
 void GameSettings::setCurrentPuzzleValue(int value)
 {
     currentPuzzleValue = value;
+}
+
+std::string GameSettings::getFontName()
+{
+    return fontName;
+}
+
+void GameSettings::setFontName(const std::string& str)
+{
+    fontName = str;
 }
 
 bool GameSettings::isInitialised()

@@ -1,5 +1,6 @@
 #include "ProfileUnlocks.h"
 #include "GameProfile.h"
+#include "GameSettings.h"
 #include "MainMenu.h"
 
 USING_NS_CC;
@@ -65,7 +66,7 @@ void ProfileUnlocks::initStarDisplay()
     star->setPosition(Vec2(visibleSize.width - 200, visibleSize.height - 100));
     star->setScale(0.4f);
 
-    numStars = Label::createWithTTF("numStars", "fonts/Marker Felt.ttf", 24);
+    numStars = Label::createWithTTF("numStars", GameSettings::getFontName(), 26);
     numStars->setPosition(Vec2(star->getPositionX() + 100, star->getPositionY() - 50));
     numStars->enableGlow(Color4B::BLACK);
 
@@ -129,7 +130,7 @@ void ProfileUnlocks::initPreviewImages()
         previewImages.push_back(spr);
 
         Label *lbl = Label::createWithTTF
-            (unlocksRef[i].getName(), "fonts/Marker Felt.ttf", 26);
+            (unlocksRef[i].getName(), GameSettings::getFontName(), 28);
         lbl->setPosition(Vec2(spr->getPositionX(), spr->getPositionY() - 100));
 
         this->addChild(spr, 3);
@@ -156,10 +157,12 @@ void ProfileUnlocks::initPreviewImages()
 
 void ProfileUnlocks::initLabels()
 {
-    contextHintLabel = Label::createWithTTF("contextHint", "fonts/Marker Felt.ttf", 24);
+    contextHintLabel = Label::createWithTTF
+        ("contextHint", GameSettings::getFontName(), 26);
     contextHintLabel->setPosition
         (Vec2(visibleSize.width / 2, (visibleSize.height / 2) - 75));
-    contextHintLabel->enableGlow(Color4B::BLACK);
+    contextHintLabel->setColor(Color3B::YELLOW);
+    //contextHintLabel->enableGlow(Color4B::BLACK);
 
     updateContextHintLabel();
 

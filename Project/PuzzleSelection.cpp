@@ -127,8 +127,8 @@ void PuzzleSelection::initSliders()
     xSegmentsSlider->setPercent(GameSettings::getSegments().x - 3);
     xSegmentsSlider->setMaxPercent(7);
 
-    xSliderLabel = Label::createWithTTF("X Segments: " + 
-        std::to_string(xSegmentsSlider->getPercent() + 3), "fonts/Marker Felt.ttf", 24);
+    xSliderLabel = Label::createWithTTF("X Segments: " + std::to_string
+        (xSegmentsSlider->getPercent() + 3), GameSettings::getFontName(), 26);
     xSliderLabel->setPosition(Vec2
         (xSegmentsSlider->getPosition().x, xSegmentsSlider->getPosition().y + 30));
 
@@ -159,8 +159,8 @@ void PuzzleSelection::initSliders()
     ySegmentsSlider->setPercent(GameSettings::getSegments().y - 3);
     ySegmentsSlider->setMaxPercent(7);
 
-    ySliderLabel = Label::createWithTTF("Y Segments: " + 
-        std::to_string(ySegmentsSlider->getPercent() + 3), "fonts/Marker Felt.ttf", 24);
+    ySliderLabel = Label::createWithTTF("Y Segments: " + std::to_string
+        (ySegmentsSlider->getPercent() + 3), GameSettings::getFontName(), 26);
     ySliderLabel->setPosition(Vec2
         (ySegmentsSlider->getPosition().x, ySegmentsSlider->getPosition().y + 30));
 
@@ -195,11 +195,11 @@ void PuzzleSelection::initPreviewImage()
 
     updateDisplayedImage();
 
-    imageName = Label::createWithTTF("imageName", "fonts/Marker Felt.ttf", 26);
+    imageName = Label::createWithTTF("imageName", GameSettings::getFontName(), 28);
     imageName->setPosition(Vec2((visibleSize.width / 2) - 150, 150));
     imageName->enableGlow(Color4B::BLACK);
 
-    imageNumber = Label::createWithTTF("imageNumber", "fonts/Marker Felt.ttf", 24);
+    imageNumber = Label::createWithTTF("imageNumber", GameSettings::getFontName(), 26);
     imageNumber->setPosition(Vec2((visibleSize.width / 2) - 150, 120));
     imageNumber->enableGlow(Color4B::BLACK);
 
@@ -242,14 +242,14 @@ void PuzzleSelection::initArrows()
 void PuzzleSelection::initRewardsPane()
 {
     Label *rewardDesc = Label::createWithTTF
-        ("This Puzzle is worth:", "fonts/Marker Felt.ttf", 26);
+        ("This Puzzle is worth:", GameSettings::getFontName(), 26);
     rewardDesc->setPosition(Vec2((visibleSize.width / 2) + 400, 350));
 
     Sprite *star = Sprite::create("utility/star.png");
     star->setPosition(Vec2((visibleSize.width / 2) + 400, 280));
     star->setScale(0.25f);
     
-    puzzleValue = Label::createWithTTF("puzzleValue", "fonts/Marker Felt.ttf", 24);
+    puzzleValue = Label::createWithTTF("puzzleValue", GameSettings::getFontName(), 24);
     puzzleValue->setPosition(Vec2(star->getPositionX() + 75, star->getPositionY()));
 
     updateRewardsLabel();

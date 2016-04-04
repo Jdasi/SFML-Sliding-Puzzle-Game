@@ -161,6 +161,7 @@ xcopy "$(SolutionDir)\cocos2d\bin\$(PlatformToolset)\$(Configuration)\*.dll" "$(
     <ClCompile Include="GameUnlock.cpp" />
     <ClCompile Include="ProfileStatistics.cpp" />
     <ClCompile Include="SimpleTimer.cpp" />
+    <ClCompile Include="TimeUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h" />
@@ -180,6 +181,7 @@ xcopy "$(SolutionDir)\cocos2d\bin\$(PlatformToolset)\$(Configuration)\*.dll" "$(
     <ClInclude Include="GameUnlock.h" />
     <ClInclude Include="ProfileStatistics.h" />
     <ClInclude Include="SimpleTimer.h" />
+    <ClInclude Include="TimeUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc" />

@@ -27,6 +27,9 @@ public:
     static int getCurrentPuzzleValue();
     static void setCurrentPuzzleValue(int value);
 
+    static std::string getFontName();
+    static void setFontName(const std::string &str);
+
     static bool isInitialised();
     static void setInitialised(bool b);
 
@@ -35,6 +38,7 @@ private:
     static int imageID;
     static Coordinate segments;
     static int currentPuzzleValue;
-    static bool initialised;
     static std::vector<std::string> puzzles;
+    static std::string fontName;
+    static bool initialised;
 };

@@ -1,6 +1,8 @@
 #include "ProfileStatistics.h"
 #include "GameProfile.h"
+#include "GameSettings.h"
 #include "MainMenu.h"
+#include "TimeUtils.h"
 
 USING_NS_CC;
 
@@ -73,26 +75,26 @@ void ProfileStatistics::initMenu()
 void ProfileStatistics::initStaticLabels()
 {
     Label *playedLabel = Label::createWithTTF
-        ("Total Time Played:", "fonts/Marker Felt.ttf", 24);
+        ("Total Time Played:", GameSettings::getFontName(), 24);
     playedLabel->setPosition(Vec2(visibleSize.width / 2 - 100, visibleSize.height - 200));
 
     Label *starsLabel = Label::createWithTTF
-        ("Total Stars Collected:", "fonts/Marker Felt.ttf", 24);
+        ("Total Stars Collected:", GameSettings::getFontName(), 24);
     starsLabel->setPosition
         (Vec2(playedLabel->getPositionX(), playedLabel->getPositionY() - 80));
 
     Label *movesLabel = Label::createWithTTF
-        ("Total Moves Made:", "fonts/Marker Felt.ttf", 24);
+        ("Total Moves Made:", GameSettings::getFontName(), 24);
     movesLabel->setPosition
         (Vec2(starsLabel->getPositionX(), starsLabel->getPositionY() - 80));
 
     Label *attemptedLabel = Label::createWithTTF
-        ("Total Puzzles Attempted:", "fonts/Marker Felt.ttf", 24);
+        ("Total Puzzles Attempted:", GameSettings::getFontName(), 24);
     attemptedLabel->setPosition
         (Vec2(movesLabel->getPositionX(), movesLabel->getPositionY() - 80));
 
     Label *completedLabel = Label::createWithTTF
-        ("Total Puzzles Completed:", "fonts/Marker Felt.ttf", 24);
+        ("Total Puzzles Completed:", GameSettings::getFontName(), 24);
     completedLabel->setPosition
         (Vec2(attemptedLabel->getPositionX(), attemptedLabel->getPositionY() - 80));
 
@@ -107,30 +109,30 @@ void ProfileStatistics::initDynamicLabels()
 {
     Label *playedLabel = Label::createWithTTF
         (calculateTime(GameProfile::getProfileStat(ProfileStat::timePlayed)),
-        "fonts/Marker Felt.ttf", 24);
+        GameSettings::getFontName(), 24);
     playedLabel->setPosition(Vec2(visibleSize.width / 2 + 150, visibleSize.height - 200));
 
     Label *starsLabel = Label::createWithTTF
         (GameProfile::getProfileStat(ProfileStat::totalStarsCollected),
-        "fonts/Marker Felt.ttf", 24);
+        GameSettings::getFontName(), 24);
     starsLabel->setPosition
         (Vec2(playedLabel->getPositionX(), playedLabel->getPositionY() - 80));
 
     Label *movesLabel = Label::createWithTTF
         (GameProfile::getProfileStat(ProfileStat::totalMoves),
-        "fonts/Marker Felt.ttf", 24);
+        GameSettings::getFontName(), 24);
     movesLabel->setPosition
         (Vec2(starsLabel->getPositionX(), starsLabel->getPositionY() - 80));
 
     Label *attemptedLabel = Label::createWithTTF
         (GameProfile::getProfileStat(ProfileStat::puzzlesAttempted), 
-        "fonts/Marker Felt.ttf", 24);
+        GameSettings::getFontName(), 24);
     attemptedLabel->setPosition
         (Vec2(movesLabel->getPositionX(), movesLabel->getPositionY() - 80));
 
     Label *completedLabel = Label::createWithTTF
         (GameProfile::getProfileStat(ProfileStat::puzzlesCompleted),
-        "fonts/Marker Felt.ttf", 24);
+        GameSettings::getFontName(), 24);
     completedLabel->setPosition
         (Vec2(attemptedLabel->getPositionX(), attemptedLabel->getPositionY() - 80));
 
@@ -139,22 +141,6 @@ void ProfileStatistics::initDynamicLabels()
     this->addChild(movesLabel, 2);
     this->addChild(attemptedLabel, 2);
     this->addChild(completedLabel, 2);
-}
-
-std::string ProfileStatistics::calculateTime(const std::string &str) const
-{
-    int totalTime = stoi(str);
-
-    int hours = (totalTime / 60) / 60;
-    int minutes = (totalTime / 60) - (hours * 60);
-    int seconds = totalTime % 60;
-
-    std::string timePlayed = 
-        std::to_string(hours / 10) + std::to_string(hours % 10) + ":" +
-        std::to_string(minutes / 10) + std::to_string(minutes % 10) + ":" +
-        std::to_string(seconds / 10) + std::to_string(seconds % 10);
-
-    return timePlayed;
 }
 
 void ProfileStatistics::gotoMainMenu(cocos2d::Ref *sender) const

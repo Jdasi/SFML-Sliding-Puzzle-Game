@@ -9,6 +9,7 @@ public:
     ~SimpleTimer() = default;
 
     void startTimer();
+    void makeTimePoint();
     void endTimer();
     void endTimerAndRecord();
     time_t getTime() const;

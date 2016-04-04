@@ -4,6 +4,7 @@
 #include "MainMenu.h"
 #include "PuzzleSelection.h"
 #include "MoveSequence.h"
+#include "TimeUtils.h"
 
 USING_NS_CC;
 
@@ -14,6 +15,7 @@ PuzzleGame::PuzzleGame()
     , startPosY(0)
     , numMoves(0)
     , movesLabel(nullptr)
+    , timeLabel(nullptr)
     , previewLabel(nullptr)
     , previewImage(nullptr)
     , menuPuzzle(nullptr)
@@ -47,6 +49,8 @@ bool PuzzleGame::init()
 
     GameProfile::modifyProfileStat(ProfileStat::puzzlesAttempted, 1);
 
+    this->scheduleUpdate();
+
     return true;
 }
 
@@ -74,12 +78,18 @@ void PuzzleGame::initPuzzle()
 
 void PuzzleGame::initLabels()
 {
-    movesLabel = Label::createWithTTF("Moves: ", "fonts/Marker Felt.ttf", 30);
-    movesLabel->setPosition(Vec2(visibleSize.width - 210, (visibleSize.height / 2) - 50));
+    movesLabel = Label::createWithTTF("Moves: ", GameSettings::getFontName(), 30);
+    movesLabel->setPosition(Vec2(visibleSize.width - 210, (visibleSize.height / 2) - 20));
 
     updateMovesLabel();
 
+    timeLabel = Label::createWithTTF("Time: ", GameSettings::getFontName(), 30);
+    timeLabel->setPosition(Vec2(visibleSize.width - 210, (visibleSize.height / 2) + 20));
+
+    updateTimeLabel();
+
     this->addChild(movesLabel, 2);
+    this->addChild(timeLabel, 2);
 }
 
 void PuzzleGame::initMenu()
@@ -124,7 +134,7 @@ void PuzzleGame::initPreviewImage()
     previewImage->setScaleX(264 / previewImage->getContentSize().width);
     previewImage->setScaleY(198 / previewImage->getContentSize().height);
 
-    previewLabel = Label::createWithTTF("Preview", "fonts/Marker Felt.ttf", 24);
+    previewLabel = Label::createWithTTF("Preview", GameSettings::getFontName(), 26);
     previewLabel->setPosition
         (Vec2(previewImage->getPositionX(), previewImage->getPositionY() + 125));
 
@@ -188,6 +198,20 @@ void PuzzleGame::updateMovesLabel(int increment)
     movesLabel->setString("Moves: " + std::to_string(numMoves));
 }
 
+void PuzzleGame::updateTimeLabel()
+{
+    timer.makeTimePoint();
+    timeLabel->setString("Time: " + calculateTime(std::to_string(timer.getTime())));
+}
+
+void PuzzleGame::update(float delta)
+{
+    if (!gameOver)
+    {
+        updateTimeLabel();
+    }
+}
+
 void PuzzleGame::rewardPlayer() const
 {
     GameProfile::modifyProfileStat(ProfileStat::puzzlesCompleted, 1);
@@ -213,8 +237,13 @@ void PuzzleGame::endGame()
 {
     timer.endTimerAndRecord();
     flashScreen();
-    
-    // Change existing elements.
+
+    changeExistingElements();
+    createEndGameElements();
+}
+
+void PuzzleGame::changeExistingElements()
+{
     boardManager.hideAllPieces();
     previewLabel->setOpacity(0);
     previewImage->setOpacity(0);
@@ -224,8 +253,10 @@ void PuzzleGame::endGame()
         nullptr,
         CC_CALLBACK_1(PuzzleGame::gotoPuzzleSelection, this));
     rewardPlayer();
+}
 
-    // Create new elements.
+void PuzzleGame::createEndGameElements()
+{
     Sprite *completedPuzzle = Sprite::create(GameSettings::getImageName());
     completedPuzzle->setAnchorPoint(Vec2(0, 1));
     completedPuzzle->setPosition(Vec2(startPosX, startPosY));
@@ -235,21 +266,19 @@ void PuzzleGame::endGame()
     Sprite *youWin = Sprite::create("utility/win.png");
     youWin->setPosition(Vec2(previewLabel->getPositionX(), visibleSize.height - 100));
 
-    Label *tip = Label::createWithTTF("tip", "fonts/Marker Felt.ttf", 24);
+    Label *tip = Label::createWithTTF("tip", GameSettings::getFontName(), 24);
     tip->setPosition(Vec2(previewLabel->getPositionX(), visibleSize.height - 160));
     tip->setString("You earned " +
         std::to_string(GameSettings::getCurrentPuzzleValue()) + " stars!");
-    tip->enableGlow(Color4B::BLACK);
 
     Sprite *star = Sprite::create("utility/star.png");
     star->setPosition(Vec2(previewImage->getPositionX(), tip->getPositionY() - 70));
     star->setScale(0.25f);
 
     Label *numStars =
-        Label::createWithTTF("numStars", "fonts/Marker Felt.ttf", 24);
+        Label::createWithTTF("numStars", GameSettings::getFontName(), 24);
     numStars->setPosition(Vec2(star->getPositionX() + 75, star->getPositionY()));
     numStars->setString("x " + std::to_string(GameSettings::getCurrentPuzzleValue()));
-    numStars->enableGlow(Color4B::BLACK);
 
     this->addChild(completedPuzzle, 1);
     this->addChild(youWin, 2);

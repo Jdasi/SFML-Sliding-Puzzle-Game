@@ -52,6 +52,7 @@ void MainMenu::initSettings() const
 {
     if (!GameSettings::isInitialised())
     {
+        GameSettings::setFontName("fonts/forte.ttf");
         GameSettings::setSegmentsX(4);
         GameSettings::setSegmentsY(4);
         GameSettings::setInitialised(true);
@@ -75,7 +76,7 @@ void MainMenu::initStarDisplay()
     star->setScale(0.4f);
 
     Label *numStars =
-        Label::createWithTTF("numStars", "fonts/Marker Felt.ttf", 24);
+        Label::createWithTTF("numStars", GameSettings::getFontName(), 26);
     numStars->setPosition(Vec2(star->getPositionX() + 100, star->getPositionY() - 50));
     numStars->setString("x " + GameProfile::getProfileStat(ProfileStat::stars));
     numStars->enableGlow(Color4B::BLACK);

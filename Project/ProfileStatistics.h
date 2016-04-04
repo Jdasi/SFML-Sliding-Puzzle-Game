@@ -16,8 +16,6 @@ private:
     void initStaticLabels();
     void initDynamicLabels();
 
-    std::string calculateTime(const std::string &str) const;
-
     void gotoMainMenu(cocos2d::Ref *sender) const;
 
     cocos2d::Size visibleSize{ cocos2d::Director::getInstance()->getVisibleSize() };

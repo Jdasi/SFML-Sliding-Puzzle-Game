@@ -13,6 +13,11 @@ void SimpleTimer::startTimer()
     start = std::chrono::steady_clock::now();
 }
 
+void SimpleTimer::makeTimePoint()
+{
+    endTimer();
+}
+
 void SimpleTimer::endTimer()
 {
     end = std::chrono::steady_clock::now();

@@ -26,10 +26,15 @@ private:
 
     void performMoves(MoveSequence &seq);
     void updateMovesLabel(int increment = 0);
+    void updateTimeLabel();
+
+    void update(float delta) override;
 
     void rewardPlayer() const;
     void flashScreen();
     void endGame();
+    void changeExistingElements();
+    void createEndGameElements();
 
     void gotoMainMenu(cocos2d::Ref *sender);
     void gotoPuzzleSelection(cocos2d::Ref *sender);
@@ -45,6 +50,7 @@ private:
 
     int numMoves;
     cocos2d::Label *movesLabel;
+    cocos2d::Label *timeLabel;
     cocos2d::Label *previewLabel;
     cocos2d::Sprite *previewImage;
     cocos2d::MenuItemSprite *menuPuzzle;
