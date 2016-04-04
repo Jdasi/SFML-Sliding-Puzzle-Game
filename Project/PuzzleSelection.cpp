@@ -276,8 +276,7 @@ void PuzzleSelection::updateImageLabels() const
 
 void PuzzleSelection::updateRewardsLabel() const
 {
-    puzzleValue->setString("x " + std::to_string
-        ((GameSettings::getSegments().x * GameSettings::getSegments().y) / 2));
+    puzzleValue->setString("x " + std::to_string(calculatePuzzleValue()));
 }
 
 bool PuzzleSelection::leftArrowClick(cocos2d::Ref *sender) const
@@ -324,8 +323,7 @@ void PuzzleSelection::gotoMainMenu(cocos2d::Ref *sender) const
 
 void PuzzleSelection::gotoPuzzleGame(cocos2d::Ref *sender) const
 {
-    GameSettings::setCurrentPuzzleValue
-        ((GameSettings::getSegments().x * GameSettings::getSegments().y) / 2);
+    GameSettings::setCurrentPuzzleValue(calculatePuzzleValue());
 
     Director::getInstance()->replaceScene(
         TransitionFade::create(0.5, PuzzleGame::createScene()));
@@ -334,4 +332,12 @@ void PuzzleSelection::gotoPuzzleGame(cocos2d::Ref *sender) const
 void PuzzleSelection::setDefaultPuzzle() const
 {
     GameSettings::setImageName("puzzles/" + GameSettings::getPuzzles()[0], 0);
+}
+
+int PuzzleSelection::calculatePuzzleValue() const
+{
+    int xSegments = GameSettings::getSegments().x;
+    int ySegments = GameSettings::getSegments().y;
+
+    return ((xSegments * ySegments) * 2) / 2;
 }

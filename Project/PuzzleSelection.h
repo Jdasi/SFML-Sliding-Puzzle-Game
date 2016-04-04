@@ -31,6 +31,7 @@ private:
     void gotoPuzzleGame(cocos2d::Ref *sender) const;
 
     void setDefaultPuzzle() const;
+    int calculatePuzzleValue() const;
 
     cocos2d::Size visibleSize{ cocos2d::Director::getInstance()->getVisibleSize() };
 
