@@ -1,12 +1,5 @@
 #include "GameUnlock.h"
 
-GameUnlock::GameUnlock()
-    : id(0)
-    , locked(true)
-    , starCost(0)
-{
-}
-
 GameUnlock::GameUnlock
     (const std::string &str, int cost, std::vector<GameUnlock> &container, int iid)
     : name(str)

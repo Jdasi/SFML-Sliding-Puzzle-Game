@@ -146,30 +146,25 @@ bool PuzzleGame::interactWithPuzzle(cocos2d::Touch *touch, cocos2d::Event *event
         return false;
     }
 
-    //MoveSequence seq;
-    std::vector<PuzzlePiece*> piecesToMove;
-    float xMoveDist = 0.0f;
-    float yMoveDist = 0.0f;
-    bool result = 
-        boardManager.generateTileMoves(piecesToMove, piece, xMoveDist, yMoveDist);
+    MoveSequence sequence;
+    bool result = boardManager.generateTileMoves(sequence, piece);
 
     if (!result)
     {
         return false;
     }
 
-    performMoves(piecesToMove, xMoveDist, yMoveDist);
+    performMoves(sequence);
     return true;
 }
 
-void PuzzleGame::performMoves(std::vector<PuzzlePiece*> &container, float xMoveDist,
-                              float yMoveDist)
+void PuzzleGame::performMoves(MoveSequence &seq)
 {
     // We need to reverse the vector because the pieces are pushed back in reverse order.
-    std::reverse(container.begin(), container.end());
-    for (PuzzlePiece *p : container)
+    std::reverse(seq.pieceContainer.begin(), seq.pieceContainer.end());
+    for (PuzzlePiece *p : seq.pieceContainer)
     {
-        MoveBy *move = MoveBy::create(0.1f, Vec2(xMoveDist, yMoveDist));
+        MoveBy *move = MoveBy::create(0.1f, Vec2(seq.xMoveDist, seq.yMoveDist));
         p->runAction(move);
 
         puzzle.swapPieces(p->getArrayPos(), blankSpace);

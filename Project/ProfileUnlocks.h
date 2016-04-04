@@ -5,15 +5,15 @@
 
 #include "cocos2d.h"
 
-enum class ContextAction
-{
-    select,
-    unlock,
-    null
-};
-
 class ProfileUnlocks : public cocos2d::Layer
 {
+    enum class ContextAction
+    {
+        select,
+        unlock,
+        null
+    };
+
 public:
     ProfileUnlocks();
     static cocos2d::Scene* createScene();

@@ -24,8 +24,7 @@ private:
     void initMenu();
     void initPreviewImage();
 
-    void performMoves(std::vector<PuzzlePiece*> &container, float xMoveDist, 
-                      float yMoveDist);
+    void performMoves(MoveSequence &seq);
     void updateMovesLabel(int increment = 0);
 
     void rewardPlayer() const;

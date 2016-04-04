@@ -2,6 +2,7 @@
 #include "GameSettings.h"
 #include "Puzzle.h"
 #include "PuzzlePiece.h"
+#include "MoveSequence.h"
 
 USING_NS_CC;
 
@@ -39,9 +40,7 @@ bool BoardManager::sanityCheckMove(cocos2d::Rect &rect, cocos2d::Touch &touch,
     return true;
 }
 
-bool BoardManager::generateTileMoves(std::vector<PuzzlePiece*> &piecesToMove, 
-                                     PuzzlePiece *piece, float &xMoveDist, 
-                                     float &yMoveDist)
+bool BoardManager::generateTileMoves(MoveSequence &seq, PuzzlePiece *piece)
 {
     currentPieceArrayPos = piece->getArrayPos();
     coordinate currPieceCoords = piece->getCoordinates();
@@ -51,13 +50,13 @@ bool BoardManager::generateTileMoves(std::vector<PuzzlePiece*> &piecesToMove,
     {
         if (currPieceCoords.y > blankSpaceCoords.y)
         {
-            yMoveDist = piece->getBoundingBox().size.height + puzzle.getPadding();
-            generateMove(piecesToMove, SlideDirection::up);
+            seq.yMoveDist = piece->getBoundingBox().size.height + puzzle.getPadding();
+            generateMove(seq, SlideDirection::up);
         }
         else
         {
-            yMoveDist = -(piece->getBoundingBox().size.height + puzzle.getPadding());
-            generateMove(piecesToMove, SlideDirection::down);
+            seq.yMoveDist = -(piece->getBoundingBox().size.height + puzzle.getPadding());
+            generateMove(seq, SlideDirection::down);
         }
 
         return true;
@@ -67,13 +66,13 @@ bool BoardManager::generateTileMoves(std::vector<PuzzlePiece*> &piecesToMove,
     {
         if (currPieceCoords.x > blankSpaceCoords.x)
         {
-            xMoveDist = -(piece->getBoundingBox().size.width + puzzle.getPadding());
-            generateMove(piecesToMove, SlideDirection::left);
+            seq.xMoveDist = -(piece->getBoundingBox().size.width + puzzle.getPadding());
+            generateMove(seq, SlideDirection::left);
         }
         else
         {
-            xMoveDist = piece->getBoundingBox().size.width + puzzle.getPadding();
-            generateMove(piecesToMove, SlideDirection::right);
+            seq.xMoveDist = piece->getBoundingBox().size.width + puzzle.getPadding();
+            generateMove(seq, SlideDirection::right);
         }
 
         return true;
@@ -82,17 +81,16 @@ bool BoardManager::generateTileMoves(std::vector<PuzzlePiece*> &piecesToMove,
     return false;
 }
 
-void BoardManager::generateMove(std::vector<PuzzlePiece*> &piecesToMove, 
-                                SlideDirection dir)
+void BoardManager::generateMove(MoveSequence &seq, SlideDirection dir)
 {
     switch (dir)
     {
         case SlideDirection::up:
         {
             for (int i = puzzle.getPiece(currentPieceArrayPos).getCoordinates().y;
-            i > blankSpaceCoords.y; --i)
+                 i > blankSpaceCoords.y; --i)
             {
-                if (!pushBackTilesToBeMoved(piecesToMove, { blankSpaceCoords.x, i }))
+                if (!pushBackTilesToBeMoved(seq.pieceContainer, { blankSpaceCoords.x, i }))
                 {
                     break;
                 }
@@ -103,9 +101,9 @@ void BoardManager::generateMove(std::vector<PuzzlePiece*> &piecesToMove,
         case SlideDirection::down:
         {
             for (int i = puzzle.getPiece(currentPieceArrayPos).getCoordinates().y;
-            i < blankSpaceCoords.y; ++i)
+                 i < blankSpaceCoords.y; ++i)
             {
-                if (!pushBackTilesToBeMoved(piecesToMove, { blankSpaceCoords.x, i }))
+                if (!pushBackTilesToBeMoved(seq.pieceContainer, { blankSpaceCoords.x, i }))
                 {
                     break;
                 }
@@ -116,9 +114,9 @@ void BoardManager::generateMove(std::vector<PuzzlePiece*> &piecesToMove,
         case SlideDirection::left:
         {
             for (int i = puzzle.getPiece(currentPieceArrayPos).getCoordinates().x;
-            i > blankSpaceCoords.x; --i)
+                 i > blankSpaceCoords.x; --i)
             {
-                if (!pushBackTilesToBeMoved(piecesToMove, { i, blankSpaceCoords.y }))
+                if (!pushBackTilesToBeMoved(seq.pieceContainer, { i, blankSpaceCoords.y }))
                 {
                     break;
                 }
@@ -129,9 +127,9 @@ void BoardManager::generateMove(std::vector<PuzzlePiece*> &piecesToMove,
         case SlideDirection::right:
         {
             for (int i = puzzle.getPiece(currentPieceArrayPos).getCoordinates().x;
-            i < blankSpaceCoords.x; ++i)
+                 i < blankSpaceCoords.x; ++i)
             {
-                if (!pushBackTilesToBeMoved(piecesToMove, { i, blankSpaceCoords.y }))
+                if (!pushBackTilesToBeMoved(seq.pieceContainer, { i, blankSpaceCoords.y }))
                 {
                     break;
                 }

@@ -11,6 +11,7 @@ namespace cocos2d {
 }
 
 class Puzzle;
+struct MoveSequence;
 
 class BoardManager
 {
@@ -27,9 +28,8 @@ public:
     ~BoardManager() = default;
 
     bool sanityCheckMove(cocos2d::Rect &rect, cocos2d::Touch &touch, PuzzlePiece *piece);
-    void generateMove(std::vector<PuzzlePiece*> &piecesToMove, SlideDirection dir);
-    bool generateTileMoves(std::vector<PuzzlePiece*> &piecesToMove, PuzzlePiece* piece, 
-                           float &xMoveDist, float &yMoveDist);
+    bool generateTileMoves(MoveSequence &seq, PuzzlePiece *piece);
+    void generateMove(MoveSequence &seq, SlideDirection dir);
     bool pushBackTilesToBeMoved(std::vector<PuzzlePiece*> &container, coordinate pos);
 
     void generateRandomMoves(int times);
