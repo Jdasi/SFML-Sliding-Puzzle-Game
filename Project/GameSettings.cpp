@@ -42,6 +42,11 @@ void GameSettings::setSegmentsY(int y)
 
 void GameSettings::enumeratePuzzles()
 {
+    if (puzzles.size() != 0)
+    {
+        clearPuzzles();
+    }
+
     std::wstring executable_path = getExecutablePath();
 
     std::vector<std::string> puzzlesJpg = 

@@ -35,7 +35,6 @@ bool PuzzleSelection::init()
         return false;
     }
 
-    GameSettings::clearPuzzles();
     GameSettings::enumeratePuzzles();
 
     // Circumvent most problems with image discrepencies since last enumeration.
@@ -135,8 +134,8 @@ void PuzzleSelection::initSliders()
         "utility/SliderNode_Press.png",
         "utility/SliderNode_Disable.png");
     xSegmentsSlider->loadProgressBarTexture("utility/Slider_PressBar.png");
-    xSegmentsSlider->setPosition(Vec2(
-        (visibleSize.width / 2) + 400, (visibleSize.height / 2) + 150));
+    xSegmentsSlider->setPosition(Vec2
+        ((visibleSize.width / 2) + 400, (visibleSize.height / 2) + 150));
     xSegmentsSlider->setPercent(GameSettings::getSegments().x - 3);
     xSegmentsSlider->setMaxPercent(7);
 
@@ -167,8 +166,8 @@ void PuzzleSelection::initSliders()
         "utility/SliderNode_Press.png",
         "utility/SliderNode_Disable.png");
     ySegmentsSlider->loadProgressBarTexture("utility/Slider_PressBar.png");
-    ySegmentsSlider->setPosition(Vec2(
-        (visibleSize.width / 2) + 400, (visibleSize.height / 2) + 50));
+    ySegmentsSlider->setPosition(Vec2
+        ((visibleSize.width / 2) + 400, (visibleSize.height / 2) + 50));
     ySegmentsSlider->setPercent(GameSettings::getSegments().y - 3);
     ySegmentsSlider->setMaxPercent(7);
 
@@ -328,10 +327,13 @@ bool PuzzleSelection::rightArrowClick(cocos2d::Ref *sender) const
 
 void PuzzleSelection::puzzleTip(cocos2d::Ref* sender) const
 {
-    MessageBox(
-        "You can expand your puzzle library by adding images to the puzzles folder.", 
-        "Square Slide: Puzzles Tip"
-    );
+    const char tip[124]
+    {
+        "You can expand your puzzle library by adding images to the puzzles folder. \
+        (Accepted image types are .jpg and .png)"
+    };
+
+    MessageBox(tip, "Square Slide: Puzzles Tip");
 }
 
 void PuzzleSelection::gotoMainMenu(cocos2d::Ref *sender) const
