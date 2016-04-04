@@ -33,8 +33,6 @@ private:
     void setDefaultPuzzle() const;
     int calculatePuzzleValue() const;
 
-    cocos2d::Size visibleSize{ cocos2d::Director::getInstance()->getVisibleSize() };
-
     cocos2d::Label *xSliderLabel;
     cocos2d::Label *ySliderLabel;
 
@@ -45,4 +43,6 @@ private:
     cocos2d::Label *imageName;
     cocos2d::Label *imageNumber;
     cocos2d::Label *puzzleValue;
+
+    cocos2d::Size visibleSize{ cocos2d::Director::getInstance()->getVisibleSize() };
 };

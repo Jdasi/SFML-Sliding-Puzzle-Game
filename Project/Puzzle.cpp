@@ -44,10 +44,9 @@ void Puzzle::initPuzzle(PuzzleGame *pScene, Coordinate startPos)
             // Set anchor point to top left of piece.
             piece->setAnchorPoint(Vec2(0, 1));
 
-            piece->setPosition
-                (Vec2(startPos.x + (((secX * xCycles) * scaleFactorX) + (xCycles * pad)),
-                (visibleSize.height - startPos.y) - (((secY * yCycles) * scaleFactorY) + 
-                (yCycles * pad))));
+            piece->setPosition(Vec2(startPos.x + (((secX * xCycles) * scaleFactorX) + 
+                              (xCycles * pad)), startPos.y - (((secY * yCycles) * 
+                              scaleFactorY) + (yCycles * pad))));
 
             piece->setArrayPos(calculateOffset(xCycles, yCycles));
             piece->setID(calculateOffset(xCycles, yCycles));

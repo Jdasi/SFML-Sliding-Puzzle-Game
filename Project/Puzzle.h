@@ -44,6 +44,4 @@ private:
     float scaleFactorY;
 
     std::vector<PuzzlePiece*> puzzlePieces;
-
-    cocos2d::Size visibleSize{ cocos2d::Director::getInstance()->getVisibleSize() };
 };

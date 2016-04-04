@@ -10,8 +10,8 @@ USING_NS_CC;
 PuzzleGame::PuzzleGame()
     : boardManager(puzzle)
     , gameOver(false)
-    , startPosX(100)
-    , startPosY(80)
+    , startPosX(0)
+    , startPosY(0)
     , numMoves(0)
     , movesLabel(nullptr)
     , previewLabel(nullptr)
@@ -62,6 +62,8 @@ void PuzzleGame::initBackdrop()
 
 void PuzzleGame::initPuzzle()
 {
+    startPosX = 100;
+    startPosY = visibleSize.height - 80;
     puzzle.initPuzzle(this, { startPosX, startPosY });
 
     int product = GameSettings::getSegments().x * GameSettings::getSegments().y;
