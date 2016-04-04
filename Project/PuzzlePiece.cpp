@@ -1,4 +1,6 @@
 #include "PuzzlePiece.h"
+#include "GameSettings.h"
+#include "PuzzleGame.h"
 
 USING_NS_CC;
 
@@ -7,6 +9,7 @@ PuzzlePiece::PuzzlePiece()
     , coords{0, 0}
     , blankSpace(false)
     , id(0)
+    , numLabel(nullptr)
 {
 }
 
@@ -59,13 +62,15 @@ void PuzzlePiece::setBlankSpace(bool b)
 {
     blankSpace = b;
 
-    if (this->isBlankSpace())
+    if (isBlankSpace())
     {
-        this->setOpacity(0);
+        setOpacity(0);
+        enableLabel(false);
     }
     else
     {
-        this->setOpacity(255);
+        setOpacity(255);
+        enableLabel(true);
     }
 }
 
@@ -77,4 +82,44 @@ int PuzzlePiece::getID() const
 void PuzzlePiece::setID(int value)
 {
     id = value;
+}
+
+void PuzzlePiece::initNumLabel(PuzzleGame *pScene)
+{
+    Size rectSize = this->getBoundingBox().size;
+    float fontSize = (rectSize.width * 0.10) + (rectSize.height * 0.15);
+
+    numLabel = Label::createWithTTF
+        (std::to_string(this->getID() + 1), GameSettings::getFontName(), fontSize);
+    numLabel->enableGlow(Color4B::BLACK);
+    setNumLabelPos();
+    enableLabel(false);
+
+    pScene->addChild(numLabel, 2);
+}
+
+void PuzzlePiece::setNumLabelPos() const
+{
+    Size rectSize = this->getBoundingBox().size;
+    Vec2 rectPos = this->getPosition();
+
+    numLabel->setPosition(Vec2(rectPos.x + (rectSize.width * 0.2), 
+                               rectPos.y - (rectSize.height * 0.25)));
+}
+
+cocos2d::Label* PuzzlePiece::getNumLabel() const
+{
+    return numLabel;
+}
+
+void PuzzlePiece::enableLabel(bool enable) const
+{
+    if (enable)
+    {
+        numLabel->setOpacity(255);
+    }
+    else
+    {
+        numLabel->setOpacity(0);
+    }
 }

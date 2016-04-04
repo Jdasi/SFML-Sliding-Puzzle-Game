@@ -90,7 +90,8 @@ void BoardManager::generateMove(MoveSequence &seq, SlideDirection dir)
             for (int i = puzzle.getPiece(currentPieceArrayPos).getCoordinates().y;
                  i > blankSpaceCoords.y; --i)
             {
-                if (!pushBackTilesToBeMoved(seq.pieceContainer, { blankSpaceCoords.x, i }))
+                if (!pushBackTilesToBeMoved(seq.pieceContainer, seq.labelContainer, 
+                                           { blankSpaceCoords.x, i }))
                 {
                     break;
                 }
@@ -103,7 +104,8 @@ void BoardManager::generateMove(MoveSequence &seq, SlideDirection dir)
             for (int i = puzzle.getPiece(currentPieceArrayPos).getCoordinates().y;
                  i < blankSpaceCoords.y; ++i)
             {
-                if (!pushBackTilesToBeMoved(seq.pieceContainer, { blankSpaceCoords.x, i }))
+                if (!pushBackTilesToBeMoved(seq.pieceContainer, seq.labelContainer,
+                                           { blankSpaceCoords.x, i }))
                 {
                     break;
                 }
@@ -116,7 +118,8 @@ void BoardManager::generateMove(MoveSequence &seq, SlideDirection dir)
             for (int i = puzzle.getPiece(currentPieceArrayPos).getCoordinates().x;
                  i > blankSpaceCoords.x; --i)
             {
-                if (!pushBackTilesToBeMoved(seq.pieceContainer, { i, blankSpaceCoords.y }))
+                if (!pushBackTilesToBeMoved(seq.pieceContainer, seq.labelContainer,
+                                           { i, blankSpaceCoords.y }))
                 {
                     break;
                 }
@@ -129,7 +132,8 @@ void BoardManager::generateMove(MoveSequence &seq, SlideDirection dir)
             for (int i = puzzle.getPiece(currentPieceArrayPos).getCoordinates().x;
                  i < blankSpaceCoords.x; ++i)
             {
-                if (!pushBackTilesToBeMoved(seq.pieceContainer, { i, blankSpaceCoords.y }))
+                if (!pushBackTilesToBeMoved(seq.pieceContainer, seq.labelContainer,
+                                           { i, blankSpaceCoords.y }))
                 {
                     break;
                 }
@@ -145,7 +149,8 @@ void BoardManager::generateMove(MoveSequence &seq, SlideDirection dir)
 
 }
 
-bool BoardManager::pushBackTilesToBeMoved(std::vector<PuzzlePiece*> &container, 
+bool BoardManager::pushBackTilesToBeMoved(std::vector<PuzzlePiece*> &pieceContainer, 
+                                          std::vector<Label*> &labelContainer,
                                           Coordinate pos)
 {
     PuzzlePiece &pieceRef = puzzle.getPiece(pos);
@@ -154,7 +159,8 @@ bool BoardManager::pushBackTilesToBeMoved(std::vector<PuzzlePiece*> &container,
         return false;
     }
 
-    container.push_back(&pieceRef);
+    pieceContainer.push_back(&pieceRef);
+    labelContainer.push_back(pieceRef.getNumLabel());
     return true;
 }
 
@@ -173,8 +179,8 @@ void BoardManager::generateRandomMoves(int times)
             {
                 case SlideDirection::right:
                 {
-                    if (tryComputerMove(blankSpace,
-                        blankSpaceCoords.x + 1, blankSpaceCoords.y))
+                    if (tryComputerMove(blankSpace, 
+                                       { blankSpaceCoords.x + 1, blankSpaceCoords.y }))
                     {
                         tileSwapped = true;
                     }
@@ -184,7 +190,7 @@ void BoardManager::generateRandomMoves(int times)
                 case SlideDirection::down:
                 {
                     if (tryComputerMove(blankSpace,
-                        blankSpaceCoords.x, blankSpaceCoords.y + 1))
+                                       { blankSpaceCoords.x , blankSpaceCoords.y + 1 }))
                     {
                         tileSwapped = true;
                     }
@@ -194,7 +200,7 @@ void BoardManager::generateRandomMoves(int times)
                 case SlideDirection::left:
                 {
                     if (tryComputerMove(blankSpace,
-                        blankSpaceCoords.x - 1, blankSpaceCoords.y))
+                                       { blankSpaceCoords.x - 1, blankSpaceCoords.y }))
                     {
                         tileSwapped = true;
                     }
@@ -204,7 +210,7 @@ void BoardManager::generateRandomMoves(int times)
                 case SlideDirection::up:
                 {
                     if (tryComputerMove(blankSpace,
-                        blankSpaceCoords.x, blankSpaceCoords.y - 1))
+                                       { blankSpaceCoords.x , blankSpaceCoords.y - 1 }))
                     {
                         tileSwapped = true;
                     }
@@ -217,25 +223,44 @@ void BoardManager::generateRandomMoves(int times)
     }
 }
 
-bool BoardManager::tryComputerMove(int fromPiece, int toX, int toY)
+bool BoardManager::tryComputerMove(int fromPiece, Coordinate coords)
 {
-    if (!puzzle.inBounds(toX, toY))
+    if (!puzzle.inBounds(coords.x, coords.y))
     {
         return false;
     }
 
     PuzzlePiece &fromPieceRef = puzzle.getPiece(fromPiece);
-    PuzzlePiece &toPieceRef = puzzle.getPiece(toX, toY);
+    PuzzlePiece &toPieceRef = puzzle.getPiece(coords.x, coords.y);
 
-    Vec2 fromPos = fromPieceRef.getPosition();
-    Vec2 toPos = toPieceRef.getPosition();
-
-    fromPieceRef.setPosition(toPos);
-    toPieceRef.setPosition(fromPos);
+    computerMovePiece(fromPieceRef, toPieceRef);
+    computerMovePieceLabel(fromPieceRef, coords);
 
     puzzle.swapPieces(fromPieceRef, toPieceRef);
 
     return true;
+}
+
+void BoardManager::computerMovePiece(PuzzlePiece &fromPieceRef, PuzzlePiece &toPieceRef)
+    const
+{
+    Vec2 pieceFromPos = fromPieceRef.Node::getPosition();
+    Vec2 pieceToPos = toPieceRef.Node::getPosition();
+
+    fromPieceRef.Sprite::setPosition(pieceToPos);
+    toPieceRef.Sprite::setPosition(pieceFromPos);
+}
+
+void BoardManager::computerMovePieceLabel(PuzzlePiece &fromPieceRef, Coordinate coords)
+{
+    Label *fromPieceLabelPtr = fromPieceRef.getNumLabel();
+    Label *toPieceLabelPtr = puzzle.getPiece(coords.x, coords.y).getNumLabel();
+
+    Vec2 labelFromPos = fromPieceLabelPtr->getPosition();
+    Vec2 labelToPos = toPieceLabelPtr->getPosition();
+
+    fromPieceLabelPtr->setPosition(labelToPos);
+    toPieceLabelPtr->setPosition(labelFromPos);
 }
 
 int BoardManager::findBlankSpace() const
@@ -264,7 +289,7 @@ void BoardManager::moveBlankSpaceToStart()
     {
         updateBlankspaceInfo();
 
-        if (!tryComputerMove(blankSpace, blankSpaceCoords.x + 1, blankSpaceCoords.y))
+        if (!tryComputerMove(blankSpace, { blankSpaceCoords.x + 1, blankSpaceCoords.y }))
         {
             break;
         }
@@ -274,7 +299,7 @@ void BoardManager::moveBlankSpaceToStart()
     {
         updateBlankspaceInfo();
 
-        if (!tryComputerMove(blankSpace, blankSpaceCoords.x, blankSpaceCoords.y + 1))
+        if (!tryComputerMove(blankSpace, { blankSpaceCoords.x , blankSpaceCoords.y + 1 }))
         {
             break;
         }
@@ -291,11 +316,41 @@ bool BoardManager::isPuzzleComplete() const
     return puzzle.isPuzzleComplete();
 }
 
-void BoardManager::hideAllPieces() const
+void BoardManager::hideAllPieces(bool hide) const
 {
     std::vector<PuzzlePiece*> &piecesRef = puzzle.getPieces();
+
     for (PuzzlePiece *piece : piecesRef)
     {
-        piece->setBlankSpace(true);
+        if (hide)
+        {
+            piece->setBlankSpace(true);
+        }
+        else
+        {
+            piece->setBlankSpace(false);
+        }
+    }
+}
+
+void BoardManager::enableAllLabels(bool enable) const
+{
+    std::vector<PuzzlePiece*> &piecesRef = puzzle.getPieces();
+
+    for (PuzzlePiece *piece : piecesRef)
+    {
+        if (piece->isBlankSpace())
+        {
+            continue;
+        }
+
+        if (enable)
+        {
+            piece->enableLabel(true);
+        }
+        else
+        {
+            piece->enableLabel(false);
+        }
     }
 }

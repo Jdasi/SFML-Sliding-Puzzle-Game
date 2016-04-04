@@ -51,6 +51,7 @@ void Puzzle::initPuzzle(PuzzleGame *pScene, Coordinate startPos)
             piece->setArrayPos(calculateOffset(xCycles, yCycles));
             piece->setID(calculateOffset(xCycles, yCycles));
             piece->setCoordinates(xCycles, yCycles);
+            piece->initNumLabel(pScene);
 
             pScene->addChild(piece, 1);
             

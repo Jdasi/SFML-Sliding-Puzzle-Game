@@ -10,15 +10,18 @@ USING_NS_CC;
 
 PuzzleGame::PuzzleGame()
     : boardManager(puzzle)
-    , gameOver(false)
     , startPosX(0)
     , startPosY(0)
+    , gameOver(false)
     , numMoves(0)
+    , showHints(false)
     , movesLabel(nullptr)
     , timeLabel(nullptr)
     , previewLabel(nullptr)
     , previewImage(nullptr)
     , menuPuzzle(nullptr)
+    , hintSwitch(nullptr)
+    , switchLabel(nullptr)
 {
 }
 
@@ -47,6 +50,7 @@ bool PuzzleGame::init()
     initMenu();
     initMenuPane();
     initPreviewImage();
+    initHintSwitch();
 
     GameProfile::modifyProfileStat(ProfileStat::puzzlesAttempted, 1);
 
@@ -137,12 +141,36 @@ void PuzzleGame::initPreviewImage()
     previewImage->setScaleX(264 / previewImage->getContentSize().width);
     previewImage->setScaleY(198 / previewImage->getContentSize().height);
 
-    previewLabel = Label::createWithTTF("Preview", GameSettings::getFontName(), 26);
+    previewLabel = Label::createWithTTF("Preview", GameSettings::getFontName(), 28);
     previewLabel->setPosition
         (Vec2(previewImage->getPositionX(), previewImage->getPositionY() + 125));
+    previewLabel->setColor(Color3B::YELLOW);
 
     this->addChild(previewLabel, 2);
     this->addChild(previewImage, 2);
+}
+
+void PuzzleGame::initHintSwitch()
+{
+    hintSwitch = Sprite::create("utility/switch_off.png");
+    hintSwitch->setPosition(Vec2
+        (visibleSize.width - 210, (visibleSize.height / 2) - 125));
+    hintSwitch->setScale(0.66f);
+
+    auto listener = EventListenerTouchOneByOne::create();
+    listener->onTouchBegan =
+        CC_CALLBACK_2(PuzzleGame::flipHintSwitch, this);
+    _eventDispatcher->
+        addEventListenerWithSceneGraphPriority(listener, hintSwitch);
+
+    switchLabel = Label::createWithTTF
+        ("Show Hints", GameSettings::getFontName(), 26);
+    switchLabel->setPosition(Vec2
+        (hintSwitch->getPositionX(), hintSwitch->getPositionY() + 50));
+    switchLabel->setColor(Color3B::YELLOW);
+
+    this->addChild(hintSwitch, 2);
+    this->addChild (switchLabel, 2);
 }
 
 bool PuzzleGame::interactWithPuzzle(cocos2d::Touch *touch, cocos2d::Event *event)
@@ -174,8 +202,10 @@ bool PuzzleGame::interactWithPuzzle(cocos2d::Touch *touch, cocos2d::Event *event
 
 void PuzzleGame::performMoves(MoveSequence &seq)
 {
-    // We need to reverse the vector because the pieces are pushed back in reverse order.
+    // We need to reverse the vectors because the pieces are pushed back in reverse order.
     std::reverse(seq.pieceContainer.begin(), seq.pieceContainer.end());
+    std::reverse(seq.labelContainer.begin(), seq.labelContainer.end());
+
     for (PuzzlePiece *p : seq.pieceContainer)
     {
         MoveBy *move = MoveBy::create(0.1f, Vec2(seq.xMoveDist, seq.yMoveDist));
@@ -186,12 +216,18 @@ void PuzzleGame::performMoves(MoveSequence &seq)
 
         GameProfile::modifyProfileStat(ProfileStat::totalMoves, 1);
         updateMovesLabel(1);
+    }
 
-        if (boardManager.isPuzzleComplete())
-        {
-            gameOver = true;
-            endGame();
-        }
+    for (Label *l : seq.labelContainer)
+    {
+        MoveBy *move = MoveBy::create(0.1f, Vec2(seq.xMoveDist, seq.yMoveDist));
+        l->runAction(move);
+    }
+
+    if (boardManager.isPuzzleComplete())
+    {
+        gameOver = true;
+        endGame();
     }
 }
 
@@ -205,6 +241,42 @@ void PuzzleGame::updateTimeLabel()
 {
     timer.makeTimePoint();
     timeLabel->setString("Time: " + calculateTime(std::to_string(timer.getTime())));
+}
+
+bool PuzzleGame::flipHintSwitch(cocos2d::Touch *touch, cocos2d::Event *event)
+{
+    if (gameOver)
+    {
+        return false;
+    }
+
+    Rect recTemp = event->getCurrentTarget()->getBoundingBox();
+    Sprite *spr = static_cast<Sprite*>(event->getCurrentTarget());
+
+    if (!recTemp.containsPoint(touch->getLocation()))
+    {
+        return false;
+    }
+
+    updateHintStatus();
+
+    return true;
+}
+
+void PuzzleGame::updateHintStatus()
+{
+    if (!showHints)
+    {
+        hintSwitch->initWithFile("utility/switch_on.png");
+        boardManager.enableAllLabels(true);
+        showHints = true;
+    }
+    else
+    {
+        hintSwitch->initWithFile("utility/switch_off.png");
+        boardManager.enableAllLabels(false);
+        showHints = false;
+    }
 }
 
 void PuzzleGame::update(float delta)
@@ -243,19 +315,21 @@ void PuzzleGame::endGame()
 
     changeExistingElements();
     createEndGameElements();
+    rewardPlayer();
 }
 
 void PuzzleGame::changeExistingElements()
 {
-    boardManager.hideAllPieces();
+    boardManager.hideAllPieces(true);
     previewLabel->setOpacity(0);
     previewImage->setOpacity(0);
+    hintSwitch->setOpacity(0);
+    switchLabel->setOpacity(0);
     menuPuzzle->initWithNormalSprite(
         Sprite::create("utility/new_up.png"),
         Sprite::create("utility/new_dn.png"),
         nullptr,
         CC_CALLBACK_1(PuzzleGame::gotoPuzzleSelection, this));
-    rewardPlayer();
 }
 
 void PuzzleGame::createEndGameElements()

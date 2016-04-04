@@ -24,10 +24,14 @@ private:
     void initMenu();
     void initMenuPane();
     void initPreviewImage();
+    void initHintSwitch();
 
     void performMoves(MoveSequence &seq);
     void updateMovesLabel(int increment = 0);
     void updateTimeLabel();
+
+    bool flipHintSwitch(cocos2d::Touch *touch, cocos2d::Event *event);
+    void updateHintStatus();
 
     void update(float delta) override;
 
@@ -43,18 +47,21 @@ private:
     Puzzle puzzle;
     BoardManager boardManager;
 
-    bool gameOver;
-    SimpleTimer timer;
-
     int startPosX;
     int startPosY;
 
+    bool gameOver;
+    SimpleTimer timer;
     int numMoves;
+    bool showHints;
+
     cocos2d::Label *movesLabel;
     cocos2d::Label *timeLabel;
     cocos2d::Label *previewLabel;
     cocos2d::Sprite *previewImage;
     cocos2d::MenuItemSprite *menuPuzzle;
+    cocos2d::Sprite *hintSwitch;
+    cocos2d::Label *switchLabel;
 
     cocos2d::Size visibleSize{ cocos2d::Director::getInstance()->getVisibleSize() };
 };
