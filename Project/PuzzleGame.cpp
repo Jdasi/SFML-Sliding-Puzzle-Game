@@ -94,15 +94,13 @@ void PuzzleGame::initLabels()
 
 void PuzzleGame::initMenu()
 {
-    menuPuzzle = new MenuItemSprite();
-    menuPuzzle->initWithNormalSprite(
+    menuPuzzle = MenuItemSprite::create(
         Sprite::create("utility/change_up.png"),
         Sprite::create("utility/change_dn.png"),
         nullptr,
         CC_CALLBACK_1(PuzzleGame::gotoPuzzleSelection, this));
 
-    MenuItemSprite *menuMain = new MenuItemSprite();
-    menuMain->initWithNormalSprite(
+    MenuItemSprite *menuMain = MenuItemSprite::create(
         Sprite::create("utility/main_up.png"),
         Sprite::create("utility/main_dn.png"),
         nullptr,

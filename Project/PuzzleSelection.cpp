@@ -81,15 +81,13 @@ void PuzzleSelection::initBackdrop()
 
 void PuzzleSelection::initMenu()
 {
-    MenuItemSprite *menuPlay = new MenuItemSprite();
-    menuPlay->initWithNormalSprite(
+    MenuItemSprite *menuPlay = MenuItemSprite::create(
         Sprite::create("utility/play_up.png"),
         Sprite::create("utility/play_dn.png"),
         nullptr,
         CC_CALLBACK_1(PuzzleSelection::gotoPuzzleGame, this));
 
-    MenuItemSprite *menuMain = new MenuItemSprite();
-    menuMain->initWithNormalSprite(
+    MenuItemSprite *menuMain = MenuItemSprite::create(
         Sprite::create("utility/main_up.png"),
         Sprite::create("utility/main_dn.png"),
         nullptr,
@@ -109,6 +107,14 @@ void PuzzleSelection::initMenu()
     pane->setPosition(Vec2((visibleSize.width / 2) + 400, visibleSize.height / 2));
     pane->setColor(Color3B::BLACK);
     pane->setOpacity(175);
+    
+    /*
+    MenuItemSprite *menuHelp = MenuItemSprite::create(
+        Sprite::create("utility/help_up.png"),
+        Sprite::create("utility/help_dn.png"),
+        nullptr,
+        CC_CALLBACK_1(PuzzleSelection::gotoPuzzleGame, this));
+    */
 
     this->addChild(menu, 2);
     this->addChild(pane, 1);
@@ -212,15 +218,13 @@ void PuzzleSelection::initPreviewImage()
 
 void PuzzleSelection::initArrows()
 {
-    MenuItemSprite *leftArrow = new MenuItemSprite();
-    leftArrow->initWithNormalSprite(
+    MenuItemSprite *leftArrow = MenuItemSprite::create(
         Sprite::create("utility/arrow_up.png"),
         Sprite::create("utility/arrow_dn.png"),
         nullptr,
         CC_CALLBACK_1(PuzzleSelection::leftArrowClick, this));
 
-    MenuItemSprite *rightArrow = new MenuItemSprite();
-    rightArrow->initWithNormalSprite(
+    MenuItemSprite *rightArrow = MenuItemSprite::create(
         Sprite::create("utility/arrow_up.png"),
         Sprite::create("utility/arrow_dn.png"),
         nullptr,
@@ -249,8 +253,8 @@ void PuzzleSelection::initRewardsPane()
     star->setPosition(Vec2((visibleSize.width / 2) + 400, 280));
     star->setScale(0.25f);
     
-    puzzleValue = Label::createWithTTF("puzzleValue", GameSettings::getFontName(), 24);
-    puzzleValue->setPosition(Vec2(star->getPositionX() + 75, star->getPositionY()));
+    puzzleValue = Label::createWithTTF("puzzleValue", GameSettings::getFontName(), 26);
+    puzzleValue->setPosition(Vec2(star->getPositionX() + 80, star->getPositionY()));
 
     updateRewardsLabel();
 

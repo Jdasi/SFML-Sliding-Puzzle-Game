@@ -66,7 +66,7 @@ void ProfileUnlocks::initStarDisplay()
     star->setPosition(Vec2(visibleSize.width - 200, visibleSize.height - 100));
     star->setScale(0.4f);
 
-    numStars = Label::createWithTTF("numStars", GameSettings::getFontName(), 26);
+    numStars = Label::createWithTTF("numStars", GameSettings::getFontName(), 28);
     numStars->setPosition(Vec2(star->getPositionX() + 100, star->getPositionY() - 50));
     numStars->enableGlow(Color4B::BLACK);
 
@@ -78,11 +78,13 @@ void ProfileUnlocks::initStarDisplay()
 
 void ProfileUnlocks::initMenu()
 {
-    actionButton = new MenuItemSprite();
-    updateActionButton();
+    actionButton = MenuItemSprite::create(
+        Sprite::create("utility/select_up.png"),
+        Sprite::create("utility/select_dn.png"),
+        nullptr,
+        CC_CALLBACK_1(ProfileUnlocks::performContextAction, this));
 
-    MenuItemSprite *menuMain = new MenuItemSprite();
-    menuMain->initWithNormalSprite(
+    MenuItemSprite *menuMain = MenuItemSprite::create(
         Sprite::create("utility/main_up.png"),
         Sprite::create("utility/main_dn.png"),
         nullptr,

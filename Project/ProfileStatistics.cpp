@@ -49,8 +49,7 @@ void ProfileStatistics::initBackdrop()
 
 void ProfileStatistics::initMenu()
 {
-    MenuItemSprite *menuMain = new MenuItemSprite();
-    menuMain->initWithNormalSprite(
+    MenuItemSprite *menuMain = MenuItemSprite::create(
         Sprite::create("utility/main_up.png"),
         Sprite::create("utility/main_dn.png"),
         nullptr,
@@ -75,26 +74,26 @@ void ProfileStatistics::initMenu()
 void ProfileStatistics::initStaticLabels()
 {
     Label *playedLabel = Label::createWithTTF
-        ("Total Time Played:", GameSettings::getFontName(), 24);
+        ("Total Time Played:", GameSettings::getFontName(), 26);
     playedLabel->setPosition(Vec2(visibleSize.width / 2 - 100, visibleSize.height - 200));
 
     Label *starsLabel = Label::createWithTTF
-        ("Total Stars Collected:", GameSettings::getFontName(), 24);
+        ("Total Stars Collected:", GameSettings::getFontName(), 26);
     starsLabel->setPosition
         (Vec2(playedLabel->getPositionX(), playedLabel->getPositionY() - 80));
 
     Label *movesLabel = Label::createWithTTF
-        ("Total Moves Made:", GameSettings::getFontName(), 24);
+        ("Total Moves Made:", GameSettings::getFontName(), 26);
     movesLabel->setPosition
         (Vec2(starsLabel->getPositionX(), starsLabel->getPositionY() - 80));
 
     Label *attemptedLabel = Label::createWithTTF
-        ("Total Puzzles Attempted:", GameSettings::getFontName(), 24);
+        ("Total Puzzles Attempted:", GameSettings::getFontName(), 26);
     attemptedLabel->setPosition
         (Vec2(movesLabel->getPositionX(), movesLabel->getPositionY() - 80));
 
     Label *completedLabel = Label::createWithTTF
-        ("Total Puzzles Completed:", GameSettings::getFontName(), 24);
+        ("Total Puzzles Completed:", GameSettings::getFontName(), 26);
     completedLabel->setPosition
         (Vec2(attemptedLabel->getPositionX(), attemptedLabel->getPositionY() - 80));
 
@@ -109,30 +108,30 @@ void ProfileStatistics::initDynamicLabels()
 {
     Label *playedLabel = Label::createWithTTF
         (calculateTime(GameProfile::getProfileStat(ProfileStat::timePlayed)),
-        GameSettings::getFontName(), 24);
+        GameSettings::getFontName(), 26);
     playedLabel->setPosition(Vec2(visibleSize.width / 2 + 150, visibleSize.height - 200));
 
     Label *starsLabel = Label::createWithTTF
         (GameProfile::getProfileStat(ProfileStat::totalStarsCollected),
-        GameSettings::getFontName(), 24);
+        GameSettings::getFontName(), 26);
     starsLabel->setPosition
         (Vec2(playedLabel->getPositionX(), playedLabel->getPositionY() - 80));
 
     Label *movesLabel = Label::createWithTTF
         (GameProfile::getProfileStat(ProfileStat::totalMoves),
-        GameSettings::getFontName(), 24);
+        GameSettings::getFontName(), 26);
     movesLabel->setPosition
         (Vec2(starsLabel->getPositionX(), starsLabel->getPositionY() - 80));
 
     Label *attemptedLabel = Label::createWithTTF
         (GameProfile::getProfileStat(ProfileStat::puzzlesAttempted), 
-        GameSettings::getFontName(), 24);
+        GameSettings::getFontName(), 26);
     attemptedLabel->setPosition
         (Vec2(movesLabel->getPositionX(), movesLabel->getPositionY() - 80));
 
     Label *completedLabel = Label::createWithTTF
         (GameProfile::getProfileStat(ProfileStat::puzzlesCompleted),
-        GameSettings::getFontName(), 24);
+        GameSettings::getFontName(), 26);
     completedLabel->setPosition
         (Vec2(attemptedLabel->getPositionX(), attemptedLabel->getPositionY() - 80));
 

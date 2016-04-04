@@ -76,7 +76,7 @@ void MainMenu::initStarDisplay()
     star->setScale(0.4f);
 
     Label *numStars =
-        Label::createWithTTF("numStars", GameSettings::getFontName(), 26);
+        Label::createWithTTF("numStars", GameSettings::getFontName(), 28);
     numStars->setPosition(Vec2(star->getPositionX() + 100, star->getPositionY() - 50));
     numStars->setString("x " + GameProfile::getProfileStat(ProfileStat::stars));
     numStars->enableGlow(Color4B::BLACK);
@@ -87,29 +87,25 @@ void MainMenu::initStarDisplay()
 
 void MainMenu::initMenu()
 {
-    MenuItemSprite *menuPlay = new MenuItemSprite();
-    menuPlay->initWithNormalSprite(
+    MenuItemSprite *menuPlay = MenuItemSprite::create(
         Sprite::create("launchpad/play_up.png"),
         Sprite::create("launchpad/play_dn.png"),
         nullptr,
         CC_CALLBACK_1(MainMenu::gotoPuzzleSelection, this));
 
-    MenuItemSprite *menuUnlocks = new MenuItemSprite();
-    menuUnlocks->initWithNormalSprite(
+    MenuItemSprite *menuUnlocks = MenuItemSprite::create(
         Sprite::create("launchpad/unlocks_up.png"),
         Sprite::create("launchpad/unlocks_dn.png"),
         nullptr,
         CC_CALLBACK_1(MainMenu::gotoUnlocks, this));
 
-    MenuItemSprite *menuStatistics = new MenuItemSprite();
-    menuStatistics->initWithNormalSprite(
+    MenuItemSprite *menuStatistics = MenuItemSprite::create(
         Sprite::create("launchpad/statistics_up.png"),
         Sprite::create("launchpad/statistics_dn.png"),
         nullptr,
         CC_CALLBACK_1(MainMenu::gotoStatistics, this));
 
-    MenuItemSprite *menuExit = new MenuItemSprite();
-    menuExit->initWithNormalSprite(
+    MenuItemSprite *menuExit = MenuItemSprite::create(
         Sprite::create("launchpad/quit_up.png"),
         Sprite::create("launchpad/quit_dn.png"),
         nullptr,
