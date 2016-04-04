@@ -31,6 +31,7 @@ bool ProfileStatistics::init()
 
     initBackdrop();
     initMenu();
+    initMenuPane();
     initStaticLabels();
     initDynamicLabels();
 
@@ -61,13 +62,17 @@ void ProfileStatistics::initMenu()
     menuMain->setScale(0.66f);
     menuMain->setPosition(Vec2(0, -300));
 
+    this->addChild(menu, 2);
+}
+
+void ProfileStatistics::initMenuPane()
+{
     Sprite *pane = Sprite::create();
     pane->setTextureRect(Rect(0, 0, 600, 768));
     pane->setPosition(Vec2((visibleSize.width / 2), visibleSize.height / 2));
     pane->setColor(Color3B::BLACK);
     pane->setOpacity(175);
 
-    this->addChild(menu, 2);
     this->addChild(pane, 1);
 }
 

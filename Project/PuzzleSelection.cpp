@@ -61,6 +61,7 @@ bool PuzzleSelection::init()
 
     initBackdrop();
     initMenu();
+    initMenuPane();
     initSliders();
     initPreviewImage();
     initArrows();
@@ -86,37 +87,43 @@ void PuzzleSelection::initMenu()
         Sprite::create("utility/play_dn.png"),
         nullptr,
         CC_CALLBACK_1(PuzzleSelection::gotoPuzzleGame, this));
+    menuPlay->setScale(0.66f);
 
     MenuItemSprite *menuMain = MenuItemSprite::create(
         Sprite::create("utility/main_up.png"),
         Sprite::create("utility/main_dn.png"),
         nullptr,
         CC_CALLBACK_1(PuzzleSelection::gotoMainMenu, this));
-
-    cocos2d::Menu *menu = Menu::create(menuPlay, menuMain, nullptr);
-    menu->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
-
-    menuPlay->setScale(0.66f);
     menuMain->setScale(0.66f);
 
+    cocos2d::Menu *sceneMenu = Menu::create(menuPlay, menuMain, nullptr);
+    sceneMenu->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
     menuPlay->setPosition(Vec2(400, -240));
     menuMain->setPosition(Vec2(400, -300));
 
+    MenuItemSprite *menuHelp = MenuItemSprite::create(
+        Sprite::create("utility/help_up.png"),
+        Sprite::create("utility/help_dn.png"),
+        nullptr,
+        CC_CALLBACK_1(PuzzleSelection::puzzleTip, this));
+    menuHelp->setScale(0.5f);
+
+    cocos2d::Menu *helpMenu = Menu::create(menuHelp, nullptr);
+    helpMenu->setPosition(Vec2
+        ((visibleSize.width / 2) + 100, (visibleSize.height / 2) + 200));
+
+    this->addChild(sceneMenu, 2);
+    this->addChild(helpMenu, 2);
+}
+
+void PuzzleSelection::initMenuPane()
+{
     Sprite *pane = Sprite::create();
     pane->setTextureRect(Rect(0, 0, 300, 768));
     pane->setPosition(Vec2((visibleSize.width / 2) + 400, visibleSize.height / 2));
     pane->setColor(Color3B::BLACK);
     pane->setOpacity(175);
-    
-    /*
-    MenuItemSprite *menuHelp = MenuItemSprite::create(
-        Sprite::create("utility/help_up.png"),
-        Sprite::create("utility/help_dn.png"),
-        nullptr,
-        CC_CALLBACK_1(PuzzleSelection::gotoPuzzleGame, this));
-    */
 
-    this->addChild(menu, 2);
     this->addChild(pane, 1);
 }
 
@@ -317,6 +324,14 @@ bool PuzzleSelection::rightArrowClick(cocos2d::Ref *sender) const
     updateImageLabels();
 
     return true;
+}
+
+void PuzzleSelection::puzzleTip(cocos2d::Ref* sender) const
+{
+    MessageBox(
+        "You can expand your puzzle library by adding images to the puzzles folder.", 
+        "Square Slide: Puzzles Tip"
+    );
 }
 
 void PuzzleSelection::gotoMainMenu(cocos2d::Ref *sender) const

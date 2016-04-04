@@ -15,6 +15,7 @@ public:
 private:
     void initBackdrop();
     void initMenu();
+    void initMenuPane();
     void initSliders();
     void initPreviewImage();
     void initArrows();
@@ -26,6 +27,8 @@ private:
 
     bool rightArrowClick(cocos2d::Ref *sender) const;
     bool leftArrowClick(cocos2d::Ref *sender) const;
+
+    void puzzleTip(cocos2d::Ref *sender) const;
 
     void gotoMainMenu(cocos2d::Ref *sender) const;
     void gotoPuzzleGame(cocos2d::Ref *sender) const;

@@ -22,6 +22,7 @@ private:
     void initPuzzle();
     void initLabels();
     void initMenu();
+    void initMenuPane();
     void initPreviewImage();
 
     void performMoves(MoveSequence &seq);

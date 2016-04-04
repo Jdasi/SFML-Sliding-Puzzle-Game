@@ -44,6 +44,7 @@ bool ProfileUnlocks::init()
     initBackdrop();
     initStarDisplay();
     initMenu();
+    initMenuPane();
     initPreviewImages();
     initLabels();
 
@@ -102,6 +103,17 @@ void ProfileUnlocks::initMenu()
     this->addChild(menu, 2);
 }
 
+void ProfileUnlocks::initMenuPane()
+{
+    Sprite *pane = Sprite::create();
+    pane->setTextureRect(Rect(0, 0, 1366, 300));
+    pane->setPosition(Vec2(visibleSize.width / 2, (visibleSize.height / 2) + 50));
+    pane->setColor(Color3B::BLACK);
+    pane->setOpacity(175);
+
+    this->addChild(pane, 1);
+}
+
 void ProfileUnlocks::initPreviewImages()
 {
     std::string imgSuffix;
@@ -141,19 +153,12 @@ void ProfileUnlocks::initPreviewImages()
 
     previewImages[currentSelection]->setOpacity(selectedOpacity);
 
-    Sprite *pane = Sprite::create();
-    pane->setTextureRect(Rect(0, 0, 1366, 300));
-    pane->setPosition(Vec2(visibleSize.width / 2, (visibleSize.height / 2) + 50));
-    pane->setColor(Color3B::BLACK);
-    pane->setOpacity(175);
-
     selectionRect = Sprite::create();
     selectionRect->setTextureRect(Rect(0, 0, 280, 165));
     selectionRect->setColor(Color3B::YELLOW);
 
     updateSelectionRect();
     
-    this->addChild(pane, 1);
     this->addChild(selectionRect, 2);
 }
 

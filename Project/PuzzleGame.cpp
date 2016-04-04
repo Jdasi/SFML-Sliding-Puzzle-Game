@@ -45,6 +45,7 @@ bool PuzzleGame::init()
     initPuzzle();
     initLabels();
     initMenu();
+    initMenuPane();
     initPreviewImage();
 
     GameProfile::modifyProfileStat(ProfileStat::puzzlesAttempted, 1);
@@ -115,13 +116,17 @@ void PuzzleGame::initMenu()
     menuPuzzle->setPositionY(-215);
     menuMain->setPositionY(-275);
 
+    this->addChild(menu, 2);
+}
+
+void PuzzleGame::initMenuPane()
+{
     Sprite *pane = Sprite::create();
     pane->setTextureRect(Rect(0, 0, 300, 768));
     pane->setPosition(Vec2(visibleSize.width - 210, visibleSize.height / 2));
     pane->setColor(Color3B::BLACK);
     pane->setOpacity(175);
 
-    this->addChild(menu, 2);
     this->addChild(pane, 1);
 }
 

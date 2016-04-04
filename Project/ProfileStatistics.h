@@ -13,6 +13,7 @@ public:
 private:
     void initBackdrop();
     void initMenu();
+    void initMenuPane();
     void initStaticLabels();
     void initDynamicLabels();
 

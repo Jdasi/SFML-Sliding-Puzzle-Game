@@ -25,6 +25,7 @@ private:
     void initBackdrop();
     void initStarDisplay();
     void initMenu();
+    void initMenuPane();
     void initPreviewImages();
     void initLabels();
 
