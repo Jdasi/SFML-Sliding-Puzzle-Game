@@ -16,7 +16,7 @@ public:
     static std::string getImageName();
     static void setImageName(const std::string &name, int id);
     
-    static coordinate getSegments();
+    static Coordinate getSegments();
     static void setSegmentsX(int x);
     static void setSegmentsY(int y);
 
@@ -33,7 +33,7 @@ public:
 private:
     static std::string imageName;
     static int imageID;
-    static coordinate segments;
+    static Coordinate segments;
     static int currentPuzzleValue;
     static bool initialised;
     static std::vector<std::string> puzzles;

@@ -19,7 +19,7 @@ void PuzzlePiece::setArrayPos(int value)
     arrayPos = value;
 }
 
-coordinate PuzzlePiece::getCoordinates() const
+Coordinate PuzzlePiece::getCoordinates() const
 {
     return coords;
 }
@@ -29,7 +29,7 @@ void PuzzlePiece::setCoordinates(int x, int y)
     coords = { x, y };
 }
 
-void PuzzlePiece::setCoordinates(coordinate c)
+void PuzzlePiece::setCoordinates(Coordinate c)
 {
     coords = c;
 }

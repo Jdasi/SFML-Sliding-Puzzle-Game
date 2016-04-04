@@ -13,17 +13,17 @@ public:
     Puzzle();
     ~Puzzle() = default;
 
-    void initPuzzle(PuzzleGame *pScene, int startPosX, int startPosY);
+    void initPuzzle(PuzzleGame *pScene, Coordinate startPos);
 
     PuzzlePiece &getPiece(int piece);
-    PuzzlePiece &getPiece(coordinate coords);
+    PuzzlePiece &getPiece(Coordinate coords);
     PuzzlePiece &getPiece(int x, int y);
     std::vector<PuzzlePiece*> &getPieces();
 
     bool isPieceBlankSpace(int piece) const;
 
     int calculateOffset(int x, int y) const;
-    int calculateOffset(coordinate coords) const;
+    int calculateOffset(Coordinate coords) const;
 
     int getPadding() const;
 
@@ -32,8 +32,6 @@ public:
     bool isPuzzleComplete() const;
 
     bool inBounds(int x, int y) const;
-
-    void hideAllPieces() const;
 
 private:
     void sanityCheckImage(cocos2d::Sprite *spr);

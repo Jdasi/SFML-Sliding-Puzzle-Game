@@ -3,7 +3,7 @@
 
 std::string GameSettings::imageName;
 int GameSettings::imageID = 0;
-coordinate GameSettings::segments { 0, 0 };
+Coordinate GameSettings::segments { 0, 0 };
 int GameSettings::currentPuzzleValue = 0;
 bool GameSettings::initialised = false;
 std::vector<std::string> GameSettings::puzzles;
@@ -24,7 +24,7 @@ void GameSettings::setImageName(const std::string &name, int id)
     imageID = id;
 }
 
-coordinate GameSettings::getSegments()
+Coordinate GameSettings::getSegments()
 {
     return segments;
 }

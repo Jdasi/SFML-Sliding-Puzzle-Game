@@ -14,7 +14,7 @@ Puzzle::Puzzle()
 {
 }
 
-void Puzzle::initPuzzle(PuzzleGame *pScene, int startPosX, int startPosY)
+void Puzzle::initPuzzle(PuzzleGame *pScene, Coordinate startPos)
 {
     int segmentsX = GameSettings::getSegments().x;
     int segmentsY = GameSettings::getSegments().y;
@@ -45,8 +45,8 @@ void Puzzle::initPuzzle(PuzzleGame *pScene, int startPosX, int startPosY)
             piece->setAnchorPoint(Vec2(0, 1));
 
             piece->setPosition
-                (Vec2(startPosX + (((secX * xCycles) * scaleFactorX) + (xCycles * pad)),
-                (visibleSize.height - startPosY) - (((secY * yCycles) * scaleFactorY) + 
+                (Vec2(startPos.x + (((secX * xCycles) * scaleFactorX) + (xCycles * pad)),
+                (visibleSize.height - startPos.y) - (((secY * yCycles) * scaleFactorY) + 
                 (yCycles * pad))));
 
             piece->setArrayPos(calculateOffset(xCycles, yCycles));
@@ -90,7 +90,7 @@ PuzzlePiece &Puzzle::getPiece(int piece)
     return *puzzlePieces[piece];
 }
 
-PuzzlePiece &Puzzle::getPiece(coordinate coords)
+PuzzlePiece &Puzzle::getPiece(Coordinate coords)
 {
     return getPiece(calculateOffset(coords));
 }
@@ -115,7 +115,7 @@ int Puzzle::calculateOffset(int x, int y) const
     return (y * GameSettings::getSegments().x) + x;
 }
 
-int Puzzle::calculateOffset(coordinate coords) const
+int Puzzle::calculateOffset(Coordinate coords) const
 {
     return calculateOffset(coords.x, coords.y);
 }
@@ -133,8 +133,8 @@ void Puzzle::swapPieces(int fromPiece, int toPiece)
     int fromArrayPos = puzzlePieces[fromPiece]->getArrayPos();
     int toArrayPos = puzzlePieces[toPiece]->getArrayPos();
 
-    coordinate fromCoords = puzzlePieces[fromPiece]->getCoordinates();
-    coordinate toCoords = puzzlePieces[toPiece]->getCoordinates();
+    Coordinate fromCoords = puzzlePieces[fromPiece]->getCoordinates();
+    Coordinate toCoords = puzzlePieces[toPiece]->getCoordinates();
 
     // Re-assign using temporary values.
     puzzlePieces[fromPiece]->setArrayPos(toArrayPos);
@@ -181,12 +181,4 @@ bool Puzzle::inBounds(int x, int y) const
     }
 
     return true;
-}
-
-void Puzzle::hideAllPieces() const
-{
-    for (PuzzlePiece *piece : puzzlePieces)
-    {
-        piece->setOpacity(0);
-    }
 }

@@ -1,8 +1,8 @@
 #pragma once
 
-struct coordinate
+struct Coordinate
 {
-    coordinate(int argX, int argY)
+    Coordinate(int argX, int argY)
         : x(argX)
         , y(argY)
     {

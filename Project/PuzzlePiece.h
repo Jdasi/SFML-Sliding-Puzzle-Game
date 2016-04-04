@@ -15,9 +15,9 @@ public:
     int getArrayPos() const;
     void setArrayPos(int value);
 
-    coordinate getCoordinates() const;
+    Coordinate getCoordinates() const;
     void setCoordinates(int x, int y);
-    void setCoordinates(coordinate c);
+    void setCoordinates(Coordinate c);
 
     bool isBlankSpace() const;
     void setBlankSpace(bool b);
@@ -27,7 +27,7 @@ public:
 
 private:
     int arrayPos;
-    coordinate coords;
+    Coordinate coords;
     bool blankSpace;
     int id;
 };

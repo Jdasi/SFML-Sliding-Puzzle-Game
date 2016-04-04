@@ -43,7 +43,7 @@ bool BoardManager::sanityCheckMove(cocos2d::Rect &rect, cocos2d::Touch &touch,
 bool BoardManager::generateTileMoves(MoveSequence &seq, PuzzlePiece *piece)
 {
     currentPieceArrayPos = piece->getArrayPos();
-    coordinate currPieceCoords = piece->getCoordinates();
+    Coordinate currPieceCoords = piece->getCoordinates();
     updateBlankspaceInfo();
 
     if (currPieceCoords.x == blankSpaceCoords.x)
@@ -146,7 +146,7 @@ void BoardManager::generateMove(MoveSequence &seq, SlideDirection dir)
 }
 
 bool BoardManager::pushBackTilesToBeMoved(std::vector<PuzzlePiece*> &container, 
-                                          coordinate pos)
+                                          Coordinate pos)
 {
     PuzzlePiece &pieceRef = puzzle.getPiece(pos);
     if (pieceRef.isBlankSpace())
@@ -278,5 +278,24 @@ void BoardManager::moveBlankSpaceToStart()
         {
             break;
         }
+    }
+}
+
+void BoardManager::swapPieces(int fromPiece, int toPiece)
+{
+    puzzle.swapPieces(fromPiece, toPiece);
+}
+
+bool BoardManager::isPuzzleComplete() const
+{
+    return puzzle.isPuzzleComplete();
+}
+
+void BoardManager::hideAllPieces() const
+{
+    std::vector<PuzzlePiece*> &piecesRef = puzzle.getPieces();
+    for (PuzzlePiece *piece : piecesRef)
+    {
+        piece->setBlankSpace(true);
     }
 }

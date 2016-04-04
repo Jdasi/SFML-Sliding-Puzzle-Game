@@ -62,7 +62,7 @@ void PuzzleGame::initBackdrop()
 
 void PuzzleGame::initPuzzle()
 {
-    puzzle.initPuzzle(this, startPosX, startPosY);
+    puzzle.initPuzzle(this, { startPosX, startPosY });
 
     int product = GameSettings::getSegments().x * GameSettings::getSegments().y;
     boardManager.generateRandomMoves(product * product);
@@ -166,13 +166,13 @@ void PuzzleGame::performMoves(MoveSequence &seq)
         MoveBy *move = MoveBy::create(0.1f, Vec2(seq.xMoveDist, seq.yMoveDist));
         p->runAction(move);
 
-        puzzle.swapPieces(p->getArrayPos(), boardManager.findBlankSpace());
+        boardManager.swapPieces(p->getArrayPos(), boardManager.findBlankSpace());
         boardManager.updateBlankspaceInfo();
 
         GameProfile::modifyProfileStat(ProfileStat::totalMoves, 1);
         updateMovesLabel(1);
 
-        if (puzzle.isPuzzleComplete())
+        if (boardManager.isPuzzleComplete())
         {
             gameOver = true;
             endGame();
@@ -213,8 +213,7 @@ void PuzzleGame::endGame()
     flashScreen();
     
     // Change existing elements.
-    puzzle.getPiece(boardManager.findBlankSpace()).setBlankSpace(false);
-    puzzle.hideAllPieces();
+    boardManager.hideAllPieces();
     previewLabel->setOpacity(0);
     previewImage->setOpacity(0);
     menuPuzzle->initWithNormalSprite(
