@@ -2,6 +2,8 @@
 
 #include "GameUnlock.h"
 
+#include <map>
+
 enum class ProfileStat
 {
     stars = 0,

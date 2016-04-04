@@ -65,7 +65,7 @@ void GameProfile::setProfileStat(ProfileStat setting, const std::string &val)
 void GameProfile::modifyProfileStat(ProfileStat setting, int amount)
 {
     std::string actualSetting = profileStatToString(setting);
-    int tempVal = stoi(profileStats[actualSetting]) + amount;
+    int tempVal = std::stoi(profileStats[actualSetting]) + amount;
     profileStats[actualSetting] = std::to_string(tempVal);
 }
 

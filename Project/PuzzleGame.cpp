@@ -228,7 +228,7 @@ void PuzzleGame::endGame()
     // Create new elements.
     Sprite *completedPuzzle = Sprite::create(GameSettings::getImageName());
     completedPuzzle->setAnchorPoint(Vec2(0, 1));
-    completedPuzzle->setPosition(Vec2(startPosX, visibleSize.height - startPosY));
+    completedPuzzle->setPosition(Vec2(startPosX, startPosY));
     completedPuzzle->setScaleX(800 / previewImage->getContentSize().width);
     completedPuzzle->setScaleY(600 / previewImage->getContentSize().height);
 

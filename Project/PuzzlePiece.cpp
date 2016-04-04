@@ -1,4 +1,5 @@
 #include "PuzzlePiece.h"
+
 USING_NS_CC;
 
 PuzzlePiece::PuzzlePiece()

@@ -1,7 +1,6 @@
 #include "GameSettings.h"
 #include "GameProfile.h"
 #include "FileUtils.h"
-
 #include "MainMenu.h"
 #include "PuzzleSelection.h"
 #include "ProfileStatistics.h"

@@ -2,7 +2,6 @@
 
 #include "PuzzlePiece.h"
 
-#include "cocos2d.h"
 #include <Vector>
 
 class PuzzleGame;

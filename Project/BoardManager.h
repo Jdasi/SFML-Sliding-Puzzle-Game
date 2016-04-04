@@ -5,7 +5,8 @@
 
 class PuzzlePiece;
 
-namespace cocos2d {
+namespace cocos2d
+{
     class Touch;
     class Rect;
 }
