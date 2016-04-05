@@ -2,4 +2,5 @@
 
 #include <string>
 
-std::string calculateTime(const std::string &str);
+std::string timeToString(const int time);
+std::string timeToString(const std::string &str);

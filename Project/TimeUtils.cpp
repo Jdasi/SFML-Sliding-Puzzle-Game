@@ -1,12 +1,10 @@
 #include <string>
 
-std::string calculateTime(const std::string &str)
+std::string timeToString(const int time)
 {
-    int totalTime = stoi(str);
-
-    int hours = (totalTime / 60) / 60;
-    int minutes = (totalTime / 60) - (hours * 60);
-    int seconds = totalTime % 60;
+    int hours = (time / 60) / 60;
+    int minutes = (time / 60) - (hours * 60);
+    int seconds = time % 60;
 
     std::string timePlayed =
         std::to_string(hours / 10) + std::to_string(hours % 10) + ":" +
@@ -14,4 +12,10 @@ std::string calculateTime(const std::string &str)
         std::to_string(seconds / 10) + std::to_string(seconds % 10);
 
     return timePlayed;
+}
+
+std::string timeToString(const std::string &str)
+{
+    int time = stoi(str);
+    return timeToString(time);
 }

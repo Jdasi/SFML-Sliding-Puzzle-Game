@@ -15,6 +15,7 @@ PuzzleGame::PuzzleGame()
     , gameOver(false)
     , numMoves(0)
     , showHints(false)
+    , usedHints(false)
     , movesLabel(nullptr)
     , timeLabel(nullptr)
     , previewLabel(nullptr)
@@ -240,7 +241,7 @@ void PuzzleGame::updateMovesLabel(int increment)
 void PuzzleGame::updateTimeLabel()
 {
     timer.makeTimePoint();
-    timeLabel->setString("Time: " + calculateTime(std::to_string(timer.getTime())));
+    timeLabel->setString("Time: " + timeToString(timer.getTime()));
 }
 
 bool PuzzleGame::flipHintSwitch(cocos2d::Touch *touch, cocos2d::Event *event)
@@ -251,8 +252,6 @@ bool PuzzleGame::flipHintSwitch(cocos2d::Touch *touch, cocos2d::Event *event)
     }
 
     Rect recTemp = event->getCurrentTarget()->getBoundingBox();
-    Sprite *spr = static_cast<Sprite*>(event->getCurrentTarget());
-
     if (!recTemp.containsPoint(touch->getLocation()))
     {
         return false;
@@ -267,6 +266,11 @@ void PuzzleGame::updateHintStatus()
 {
     if (!showHints)
     {
+        if (!usedHints)
+        {
+            usedHints = true;
+        }
+
         hintSwitch->initWithFile("utility/switch_on.png");
         boardManager.enableAllLabels(true);
         showHints = true;
@@ -324,7 +328,16 @@ void PuzzleGame::changeExistingElements()
     previewLabel->setOpacity(0);
     previewImage->setOpacity(0);
     hintSwitch->setOpacity(0);
-    switchLabel->setOpacity(0);
+
+    if (usedHints)
+    {
+        switchLabel->setString("Used Hints");
+    }
+    else
+    {
+        switchLabel->setOpacity(0);
+    }
+
     menuPuzzle->initWithNormalSprite(
         Sprite::create("utility/new_up.png"),
         Sprite::create("utility/new_dn.png"),

@@ -59,7 +59,8 @@ bool PuzzleSelection::init()
     this->addChild(sceneTitle, 1);
 
     initBackdrop();
-    initMenu();
+    initControlMenu();
+    initHelpMenu();
     initMenuPane();
     initSliders();
     initPreviewImage();
@@ -79,7 +80,7 @@ void PuzzleSelection::initBackdrop()
     this->addChild(backdrop, 0);
 }
 
-void PuzzleSelection::initMenu()
+void PuzzleSelection::initControlMenu()
 {
     MenuItemSprite *menuPlay = MenuItemSprite::create(
         Sprite::create("utility/play_up.png"),
@@ -95,11 +96,16 @@ void PuzzleSelection::initMenu()
         CC_CALLBACK_1(PuzzleSelection::gotoMainMenu, this));
     menuMain->setScale(0.66f);
 
-    cocos2d::Menu *sceneMenu = Menu::create(menuPlay, menuMain, nullptr);
-    sceneMenu->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
+    cocos2d::Menu *controlMenu = Menu::create(menuPlay, menuMain, nullptr);
+    controlMenu->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
     menuPlay->setPosition(Vec2(400, -240));
     menuMain->setPosition(Vec2(400, -300));
 
+    this->addChild(controlMenu, 2);
+}
+
+void PuzzleSelection::initHelpMenu()
+{
     MenuItemSprite *menuHelp = MenuItemSprite::create(
         Sprite::create("utility/help_up.png"),
         Sprite::create("utility/help_dn.png"),
@@ -111,7 +117,6 @@ void PuzzleSelection::initMenu()
     helpMenu->setPosition(Vec2
         ((visibleSize.width / 2) + 100, (visibleSize.height / 2) + 200));
 
-    this->addChild(sceneMenu, 2);
     this->addChild(helpMenu, 2);
 }
 

@@ -16,9 +16,6 @@
     <ClCompile Include="MainMenu.cpp">
       <Filter>project\scenes</Filter>
     </ClCompile>
-    <ClCompile Include="GameSettings.cpp">
-      <Filter>project\utility</Filter>
-    </ClCompile>
     <ClCompile Include="FileUtils.cpp">
       <Filter>project\utility</Filter>
     </ClCompile>
@@ -27,9 +24,6 @@
     </ClCompile>
     <ClCompile Include="PuzzleGame.cpp">
       <Filter>project\scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="GameProfile.cpp">
-      <Filter>project\utility</Filter>
     </ClCompile>
     <ClCompile Include="GameUnlock.cpp">
       <Filter>project\objects</Filter>
@@ -43,11 +37,17 @@
     <ClCompile Include="SimpleTimer.cpp">
       <Filter>project\utility</Filter>
     </ClCompile>
-    <ClCompile Include="BoardManager.cpp">
-      <Filter>project\utility</Filter>
-    </ClCompile>
     <ClCompile Include="TimeUtils.cpp">
       <Filter>project\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="GameProfile.cpp">
+      <Filter>project\static objects</Filter>
+    </ClCompile>
+    <ClCompile Include="GameSettings.cpp">
+      <Filter>project\static objects</Filter>
+    </ClCompile>
+    <ClCompile Include="BoardManager.cpp">
+      <Filter>project\objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -66,9 +66,6 @@
     <ClInclude Include="MainMenu.h">
       <Filter>project\scenes</Filter>
     </ClInclude>
-    <ClInclude Include="GameSettings.h">
-      <Filter>project\utility</Filter>
-    </ClInclude>
     <ClInclude Include="FileUtils.h">
       <Filter>project\utility</Filter>
     </ClInclude>
@@ -77,9 +74,6 @@
     </ClInclude>
     <ClInclude Include="PuzzleGame.h">
       <Filter>project\scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="GameProfile.h">
-      <Filter>project\utility</Filter>
     </ClInclude>
     <ClInclude Include="GameUnlock.h">
       <Filter>project\objects</Filter>
@@ -96,14 +90,20 @@
     <ClInclude Include="Coordinate.h">
       <Filter>project\utility</Filter>
     </ClInclude>
-    <ClInclude Include="BoardManager.h">
-      <Filter>project\utility</Filter>
-    </ClInclude>
     <ClInclude Include="MoveSequence.h">
       <Filter>project\utility</Filter>
     </ClInclude>
     <ClInclude Include="TimeUtils.h">
       <Filter>project\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="GameProfile.h">
+      <Filter>project\static objects</Filter>
+    </ClInclude>
+    <ClInclude Include="GameSettings.h">
+      <Filter>project\static objects</Filter>
+    </ClInclude>
+    <ClInclude Include="BoardManager.h">
+      <Filter>project\objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -124,6 +124,9 @@
     </Filter>
     <Filter Include="project\utility">
       <UniqueIdentifier>{93bb3f5c-a3e6-47bf-beb6-8e711a66d5c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="project\static objects">
+      <UniqueIdentifier>{af8046d3-3f8b-4808-8aec-718a34c431c2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

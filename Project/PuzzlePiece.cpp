@@ -35,7 +35,7 @@ void PuzzlePiece::setCoordinates(int x, int y)
 
 void PuzzlePiece::setCoordinates(Coordinate c)
 {
-    coords = c;
+    setCoordinates(c.x, c.y);
 }
 
 PuzzlePiece *PuzzlePiece::create(const std::string &file, const cocos2d::Rect &rect)

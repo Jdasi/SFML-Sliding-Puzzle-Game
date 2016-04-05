@@ -54,6 +54,7 @@ private:
     SimpleTimer timer;
     int numMoves;
     bool showHints;
+    bool usedHints;
 
     cocos2d::Label *movesLabel;
     cocos2d::Label *timeLabel;

@@ -14,7 +14,8 @@ public:
 
 private:
     void initBackdrop();
-    void initMenu();
+    void initControlMenu();
+    void initHelpMenu();
     void initMenuPane();
     void initSliders();
     void initPreviewImage();

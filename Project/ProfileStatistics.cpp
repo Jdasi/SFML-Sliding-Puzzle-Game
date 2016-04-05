@@ -112,7 +112,7 @@ void ProfileStatistics::initStaticLabels()
 void ProfileStatistics::initDynamicLabels()
 {
     Label *playedLabel = Label::createWithTTF
-        (calculateTime(GameProfile::getProfileStat(ProfileStat::timePlayed)),
+        (timeToString(GameProfile::getProfileStat(ProfileStat::timePlayed)),
         GameSettings::getFontName(), 26);
     playedLabel->setPosition(Vec2(visibleSize.width / 2 + 150, visibleSize.height - 200));
 
