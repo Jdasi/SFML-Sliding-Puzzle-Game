@@ -9,7 +9,7 @@ GameProfile::keymap &GameProfile::getProfileKeymap()
     return profileStats;
 }
 
-std::string GameProfile::profileStatToString(ProfileStat setting)
+std::string GameProfile::profileStatToString(const ProfileStat &setting)
 {
     switch (setting)
     {
@@ -52,24 +52,25 @@ std::string GameProfile::profileStatToString(ProfileStat setting)
     }
 }
 
-std::string GameProfile::getProfileStat(ProfileStat setting)
+std::string GameProfile::getProfileStat(const ProfileStat &setting)
 {
     return profileStats[profileStatToString(setting)];
 }
 
-void GameProfile::setProfileStat(ProfileStat setting, const std::string &val)
+void GameProfile::setProfileStat(const ProfileStat &setting, const std::string &val)
 {
     profileStats[profileStatToString(setting)] = val;
 }
 
-void GameProfile::modifyProfileStat(ProfileStat setting, int amount)
+void GameProfile::modifyProfileStat(const ProfileStat &setting, int amount)
 {
     std::string actualSetting = profileStatToString(setting);
     int tempVal = std::stoi(profileStats[actualSetting]) + amount;
     profileStats[actualSetting] = std::to_string(tempVal);
 }
 
-void GameProfile::modifyProfileStat(ProfileStat setting, const std::string &addition)
+void GameProfile::modifyProfileStat(const ProfileStat &setting,
+                                    const std::string &addition)
 {
     std::string actualSetting = profileStatToString(setting);
     profileStats[actualSetting] += " " + addition;
@@ -121,7 +122,7 @@ bool GameProfile::isInitialised()
     return initialised;
 }
 
-void GameProfile::setInitialised(bool b)
+void GameProfile::setInitialised(const bool b)
 {
     initialised = b;
 }

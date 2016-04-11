@@ -1,7 +1,7 @@
 #include "GameUnlock.h"
 
-GameUnlock::GameUnlock
-    (const std::string &str, int cost, std::vector<GameUnlock> &container, int iid)
+GameUnlock::GameUnlock(const std::string &str, const int cost, 
+                       std::vector<GameUnlock> &container, const int iid)
     : name(str)
     , id(iid)
     , locked(true)
@@ -25,7 +25,7 @@ int GameUnlock::getID() const
     return id;
 }
 
-void GameUnlock::setID(int value)
+void GameUnlock::setID(const int value)
 {
     id = value;
 }
@@ -35,7 +35,7 @@ bool GameUnlock::isLocked() const
     return locked;
 }
 
-void GameUnlock::setLocked(bool lock)
+void GameUnlock::setLocked(const bool lock)
 {
     locked = lock;
 }
@@ -45,7 +45,7 @@ int GameUnlock::getStarCost() const
     return starCost;
 }
 
-void GameUnlock::setStarCost(int cost)
+void GameUnlock::setStarCost(const int cost)
 {
     starCost = cost;
 }

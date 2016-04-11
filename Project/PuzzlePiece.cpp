@@ -18,7 +18,7 @@ int PuzzlePiece::getArrayPos() const
     return arrayPos;
 }
 
-void PuzzlePiece::setArrayPos(int value)
+void PuzzlePiece::setArrayPos(const int value)
 {
     arrayPos = value;
 }
@@ -28,17 +28,17 @@ Coordinate PuzzlePiece::getCoordinates() const
     return coords;
 }
 
-void PuzzlePiece::setCoordinates(int x, int y)
+void PuzzlePiece::setCoordinates(const int x, const int y)
 {
     coords = { x, y };
 }
 
-void PuzzlePiece::setCoordinates(Coordinate c)
+void PuzzlePiece::setCoordinates(const Coordinate &c)
 {
     setCoordinates(c.x, c.y);
 }
 
-PuzzlePiece *PuzzlePiece::create(const std::string &file, const cocos2d::Rect &rect)
+PuzzlePiece *PuzzlePiece::create(const std::string &file, const Rect &rect)
 {
     PuzzlePiece* pSprite = new PuzzlePiece();
 
@@ -58,7 +58,7 @@ bool PuzzlePiece::isBlankSpace() const
     return blankSpace;
 }
 
-void PuzzlePiece::setBlankSpace(bool b)
+void PuzzlePiece::setBlankSpace(const bool b)
 {
     blankSpace = b;
 
@@ -79,15 +79,15 @@ int PuzzlePiece::getID() const
     return id;
 }
 
-void PuzzlePiece::setID(int value)
+void PuzzlePiece::setID(const int value)
 {
     id = value;
 }
 
-void PuzzlePiece::initNumLabel(PuzzleGame *pScene)
+void PuzzlePiece::initNumLabel(PuzzleGame* const pScene)
 {
     Size rectSize = this->getBoundingBox().size;
-    float fontSize = (rectSize.width * 0.10) + (rectSize.height * 0.15);
+    float fontSize = (rectSize.width * 0.125) + (rectSize.height * 0.125);
 
     numLabel = Label::createWithTTF
         (std::to_string(this->getID() + 1), GameSettings::getFontName(), fontSize);
@@ -104,15 +104,15 @@ void PuzzlePiece::setNumLabelPos() const
     Vec2 rectPos = this->getPosition();
 
     numLabel->setPosition(Vec2(rectPos.x + (rectSize.width * 0.2), 
-                               rectPos.y - (rectSize.height * 0.25)));
+                               rectPos.y - (rectSize.height * 0.4)));
 }
 
-cocos2d::Label* PuzzlePiece::getNumLabel() const
+Label* PuzzlePiece::getNumLabel() const
 {
     return numLabel;
 }
 
-void PuzzlePiece::enableLabel(bool enable) const
+void PuzzlePiece::enableLabel(const bool enable) const
 {
     if (enable)
     {

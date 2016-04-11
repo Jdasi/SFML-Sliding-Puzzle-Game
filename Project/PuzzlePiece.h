@@ -15,22 +15,22 @@ public:
     static PuzzlePiece *create(const std::string &file, const cocos2d::Rect &rect);
 
     int getArrayPos() const;
-    void setArrayPos(int value);
+    void setArrayPos(const int value);
 
     Coordinate getCoordinates() const;
-    void setCoordinates(int x, int y);
-    void setCoordinates(Coordinate c);
+    void setCoordinates(const int x, const int y);
+    void setCoordinates(const Coordinate &c);
 
     bool isBlankSpace() const;
-    void setBlankSpace(bool b);
+    void setBlankSpace(const bool b);
 
     int getID() const;
-    void setID(int value);
+    void setID(const int value);
 
-    void initNumLabel(PuzzleGame *pScene);
+    void initNumLabel(PuzzleGame* const pScene);
     void setNumLabelPos() const;
     cocos2d::Label *getNumLabel() const;
-    void enableLabel(bool enable) const;
+    void enableLabel(const bool enable) const;
 
 private:
     int arrayPos;

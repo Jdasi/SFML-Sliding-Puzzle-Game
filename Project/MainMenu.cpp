@@ -111,7 +111,7 @@ void MainMenu::initMenu()
         nullptr,
         CC_CALLBACK_1(MainMenu::exitGame, this));
 
-    cocos2d::Menu *menu = Menu::create
+    Menu *menu = Menu::create
         (menuPlay, menuUnlocks, menuStatistics, menuExit, nullptr);
     menu->setPosition(Vec2(visibleSize.width / 2, (visibleSize.height / 2) - 100));
 
@@ -130,25 +130,25 @@ void MainMenu::initMenu()
     this->addChild(menu, 1);
 }
 
-void MainMenu::gotoPuzzleSelection(cocos2d::Ref *sender) const
+void MainMenu::gotoPuzzleSelection(Ref* const sender) const
 {
     Director::getInstance()->replaceScene(
         TransitionFade::create(0.5, PuzzleSelection::createScene()));
 }
 
-void MainMenu::gotoUnlocks(cocos2d::Ref* sender) const
+void MainMenu::gotoUnlocks(Ref* const sender) const
 {
     Director::getInstance()->replaceScene(
         TransitionFade::create(0.5, ProfileUnlocks::createScene()));
 }
 
-void MainMenu::gotoStatistics(cocos2d::Ref* sender) const
+void MainMenu::gotoStatistics(Ref* const sender) const
 {
     Director::getInstance()->replaceScene(
         TransitionFade::create(0.5, ProfileStatistics::createScene()));
 }
 
-void MainMenu::exitGame(cocos2d::Ref *pSender) const
+void MainMenu::exitGame(Ref* const sender) const
 {
     saveProfile();
     Director::getInstance()->end();

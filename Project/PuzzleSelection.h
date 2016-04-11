@@ -26,16 +26,18 @@ private:
     void updateImageLabels() const;
     void updateRewardsLabel() const;
 
-    bool rightArrowClick(cocos2d::Ref *sender) const;
-    bool leftArrowClick(cocos2d::Ref *sender) const;
+    bool rightArrowClick(Ref* const sender) const;
+    bool leftArrowClick(Ref* const sender) const;
 
-    void puzzleTip(cocos2d::Ref *sender) const;
+    void puzzleTip(Ref* const sender) const;
 
-    void gotoMainMenu(cocos2d::Ref *sender) const;
-    void gotoPuzzleGame(cocos2d::Ref *sender) const;
+    void gotoMainMenu(Ref* const sender) const;
+    void gotoPuzzleGame(Ref* const sender) const;
 
     void setDefaultPuzzle() const;
     int calculatePuzzleValue() const;
+
+    std::vector<std::string> &puzzlesRef;
 
     cocos2d::Label *xSliderLabel;
     cocos2d::Label *ySliderLabel;

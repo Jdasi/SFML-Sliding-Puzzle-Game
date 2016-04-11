@@ -2,7 +2,7 @@
 
 struct Coordinate
 {
-    Coordinate(int argX, int argY)
+    Coordinate(const int argX, const int argY)
         : x(argX)
         , y(argY)
     {

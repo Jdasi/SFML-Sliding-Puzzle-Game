@@ -33,24 +33,26 @@ public:
     BoardManager(Puzzle &ref);
     ~BoardManager() = default;
 
-    bool sanityCheckMove(cocos2d::Rect &rect, cocos2d::Touch &touch, PuzzlePiece *piece);
-    bool generateTileMoves(MoveSequence &seq, PuzzlePiece *piece);
-    void generateMove(MoveSequence &seq, SlideDirection dir);
-    bool pushBackTilesToBeMoved(MoveSequence &seq, Coordinate pos) const;
+    bool sanityCheckMove(cocos2d::Rect &rect, cocos2d::Touch &touch, 
+                         PuzzlePiece* const piece) const;
+    bool generateTileMoves(MoveSequence &seq, PuzzlePiece* const piece);
+    void generateMove(MoveSequence &seq, const SlideDirection dir);
+    bool pushBackTilesToBeMoved(MoveSequence &seq, const Coordinate pos) const;
 
-    void generateRandomMoves(int times);
-    bool tryComputerMove(int fromPiece, Coordinate coords);
+    void generateRandomMoves(const int times);
+    bool tryComputerMove(const int fromPiece, const Coordinate &coords) const;
     void computerMovePiece(PuzzlePiece &fromPieceRef, PuzzlePiece &toPieceRef) const;
-    void computerMovePieceLabel(PuzzlePiece &fromPieceRef, Coordinate coords);
+    void computerMovePieceLabel(const PuzzlePiece &fromPieceRef, const Coordinate &coords)
+                                const;
 
     int findBlankSpace() const;
     void updateBlankspaceInfo();
     void moveBlankSpaceToStart();
 
-    void swapPieces(int fromPiece, int toPiece);
+    void swapPieces(const int fromPiece, const int toPiece) const;
     bool isPuzzleComplete() const;
-    void hideAllPieces(bool hide) const;
-    void enableAllLabels(bool enable) const;
+    void hideAllPieces(const bool hide) const;
+    void enableAllLabels(const bool enable) const;
 
 private:
     int blankSpace;

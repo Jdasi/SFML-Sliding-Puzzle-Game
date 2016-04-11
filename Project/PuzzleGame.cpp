@@ -174,7 +174,7 @@ void PuzzleGame::initHintSwitch()
     this->addChild (switchLabel, 2);
 }
 
-bool PuzzleGame::interactWithPuzzle(cocos2d::Touch *touch, cocos2d::Event *event)
+bool PuzzleGame::interactWithPuzzle(Touch* const touch, Event* const event)
 {
     if (gameOver)
     {
@@ -232,7 +232,7 @@ void PuzzleGame::performMoves(MoveSequence &seq)
     }
 }
 
-void PuzzleGame::updateMovesLabel(int increment)
+void PuzzleGame::updateMovesLabel(const int increment)
 {
     numMoves += increment;
     movesLabel->setString("Moves: " + std::to_string(numMoves));
@@ -244,7 +244,7 @@ void PuzzleGame::updateTimeLabel()
     timeLabel->setString("Time: " + timeToString(timer.getTime()));
 }
 
-bool PuzzleGame::flipHintSwitch(cocos2d::Touch *touch, cocos2d::Event *event)
+bool PuzzleGame::flipHintSwitch(Touch* const touch, Event* const event)
 {
     if (gameOver)
     {
@@ -283,7 +283,7 @@ void PuzzleGame::updateHintStatus()
     }
 }
 
-void PuzzleGame::update(float delta)
+void PuzzleGame::update(const float delta)
 {
     if (!gameOver)
     {
@@ -309,6 +309,7 @@ void PuzzleGame::flashScreen()
     spr->setOpacity(100);
     FadeOut *fade = FadeOut::create(1);
     spr->runAction(fade);
+
     this->addChild(spr, 100);
 }
 
@@ -377,14 +378,14 @@ void PuzzleGame::createEndGameElements()
     this->addChild(numStars, 2);
 }
 
-void PuzzleGame::gotoMainMenu(cocos2d::Ref *sender)
+void PuzzleGame::gotoMainMenu(Ref* const sender)
 {
     timer.endTimerAndRecord();
     Director::getInstance()->replaceScene(
         TransitionFade::create(0.5, MainMenu::createScene()));
 }
 
-void PuzzleGame::gotoPuzzleSelection(cocos2d::Ref *sender)
+void PuzzleGame::gotoPuzzleSelection(Ref* const sender)
 {
     timer.endTimerAndRecord();
     Director::getInstance()->replaceScene(

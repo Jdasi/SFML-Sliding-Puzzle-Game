@@ -6,7 +6,8 @@
 USING_NS_CC;
 
 ProfileUnlocks::ProfileUnlocks()
-    : backdrop(nullptr)
+    : unlocksRef (GameProfile::getUnlocks())
+    , backdrop(nullptr)
     , selectionRect(nullptr)
     , actionButton (nullptr)
     , contextHintLabel (nullptr)
@@ -91,7 +92,7 @@ void ProfileUnlocks::initMenu()
         nullptr,
         CC_CALLBACK_1(ProfileUnlocks::gotoMainMenu, this));
 
-    cocos2d::Menu *menu = Menu::create(actionButton, menuMain, nullptr);
+    Menu *menu = Menu::create(actionButton, menuMain, nullptr);
     menu->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
 
     menuMain->setScale(0.66f);
@@ -176,7 +177,7 @@ void ProfileUnlocks::initLabels()
     this->addChild(contextHintLabel, 2);
 }
 
-bool ProfileUnlocks::imageClick(cocos2d::Touch *touch, cocos2d::Event *event)
+bool ProfileUnlocks::imageClick(Touch* const touch, Event* const event)
 {
     Sprite *spr = static_cast<Sprite*>(event->getCurrentTarget());
 
@@ -238,7 +239,7 @@ void ProfileUnlocks::updateActionButton()
     action = ContextAction::select;
 }
 
-void ProfileUnlocks::performContextAction(cocos2d::Ref *sender)
+void ProfileUnlocks::performContextAction(Ref* const sender)
 {
     switch (action)
     {
@@ -335,7 +336,7 @@ void ProfileUnlocks::updateNumStarsLabel() const
 }
 
 
-void ProfileUnlocks::gotoMainMenu(cocos2d::Ref *sender) const
+void ProfileUnlocks::gotoMainMenu(Ref* const sender) const
 {
     Director::getInstance()->replaceScene(
         TransitionFade::create(0.5, MainMenu::createScene()));

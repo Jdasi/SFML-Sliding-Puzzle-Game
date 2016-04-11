@@ -30,12 +30,12 @@ Coordinate GameSettings::getSegments()
     return segments;
 }
 
-void GameSettings::setSegmentsX(int x)
+void GameSettings::setSegmentsX(const int x)
 {
     segments.x = x;
 }
 
-void GameSettings::setSegmentsY(int y)
+void GameSettings::setSegmentsY(const int y)
 {
     segments.y = y;
 }
@@ -64,7 +64,7 @@ void GameSettings::enumeratePuzzles()
     }
 }
 
-std::vector<std::string> GameSettings::getPuzzles()
+std::vector<std::string> &GameSettings::getPuzzles()
 {
     return puzzles;
 }
@@ -79,7 +79,7 @@ int GameSettings::getCurrentPuzzleValue()
     return currentPuzzleValue;
 }
 
-void GameSettings::setCurrentPuzzleValue(int value)
+void GameSettings::setCurrentPuzzleValue(const int value)
 {
     currentPuzzleValue = value;
 }
@@ -99,7 +99,7 @@ bool GameSettings::isInitialised()
     return initialised;
 }
 
-void GameSettings::setInitialised(bool b)
+void GameSettings::setInitialised(const bool b)
 {
     initialised = b;
 }

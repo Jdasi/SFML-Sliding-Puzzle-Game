@@ -12,28 +12,28 @@ public:
     Puzzle();
     ~Puzzle() = default;
 
-    void initPuzzle(PuzzleGame *pScene, Coordinate startPos);
+    void initPuzzle(PuzzleGame* const pScene, const Coordinate &startPos);
 
-    PuzzlePiece &getPiece(int piece);
-    PuzzlePiece &getPiece(Coordinate coords);
-    PuzzlePiece &getPiece(int x, int y);
+    PuzzlePiece &getPiece(const int piece);
+    PuzzlePiece &getPiece(const Coordinate &coords);
+    PuzzlePiece &getPiece(const int x, const int y);
     std::vector<PuzzlePiece*> &getPieces();
 
-    bool isPieceBlankSpace(int piece) const;
+    bool isPieceBlankSpace(const int piece) const;
 
-    int calculateOffset(int x, int y) const;
-    int calculateOffset(Coordinate coords) const;
+    int calculateOffset(const int x, const int y) const;
+    int calculateOffset(const Coordinate &coords) const;
 
     int getPadding() const;
 
-    void swapPieces(int fromPiece, int toPiece);
+    void swapPieces(const int fromPiece, const int toPiece);
     void swapPieces(const PuzzlePiece &fromRef, const PuzzlePiece &toRef);
     bool isPuzzleComplete() const;
 
-    bool inBounds(int x, int y) const;
+    bool inBounds(const int x, const int y) const;
 
 private:
-    void sanityCheckImage(cocos2d::Sprite *spr);
+    void sanityCheckImage(const cocos2d::Sprite* const spr);
 
     int totalPieces;
     int pad;

@@ -17,7 +17,7 @@ private:
     void initStaticLabels();
     void initDynamicLabels();
 
-    void gotoMainMenu(cocos2d::Ref *sender) const;
+    void gotoMainMenu(Ref* const sender) const;
 
     cocos2d::Size visibleSize{ cocos2d::Director::getInstance()->getVisibleSize() };
 };

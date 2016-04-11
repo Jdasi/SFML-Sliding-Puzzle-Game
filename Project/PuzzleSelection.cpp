@@ -7,7 +7,8 @@
 USING_NS_CC;
 
 PuzzleSelection::PuzzleSelection()
-    : xSliderLabel(nullptr)
+    : puzzlesRef(GameSettings::getPuzzles())
+    , xSliderLabel(nullptr)
     , ySliderLabel(nullptr)
     , xSegmentsSlider(nullptr)
     , ySegmentsSlider(nullptr)
@@ -39,10 +40,10 @@ bool PuzzleSelection::init()
 
     // Circumvent most problems with image discrepencies since last enumeration.
     unsigned int tempID = GameSettings::getImageID();
-    if (tempID < GameSettings::getPuzzles().size())
+    if (tempID < puzzlesRef.size())
     {
         if (GameSettings::getImageName() !=
-            ("puzzles/" + GameSettings::getPuzzles()[GameSettings::getImageID()]))
+            ("puzzles/" + puzzlesRef[GameSettings::getImageID()]))
         {
             setDefaultPuzzle();
         }
@@ -96,7 +97,7 @@ void PuzzleSelection::initControlMenu()
         CC_CALLBACK_1(PuzzleSelection::gotoMainMenu, this));
     menuMain->setScale(0.66f);
 
-    cocos2d::Menu *controlMenu = Menu::create(menuPlay, menuMain, nullptr);
+    Menu *controlMenu = Menu::create(menuPlay, menuMain, nullptr);
     controlMenu->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
     menuPlay->setPosition(Vec2(400, -240));
     menuMain->setPosition(Vec2(400, -300));
@@ -113,7 +114,7 @@ void PuzzleSelection::initHelpMenu()
         CC_CALLBACK_1(PuzzleSelection::puzzleTip, this));
     menuHelp->setScale(0.5f);
 
-    cocos2d::Menu *helpMenu = Menu::create(menuHelp, nullptr);
+    Menu *helpMenu = Menu::create(menuHelp, nullptr);
     helpMenu->setPosition(Vec2
         ((visibleSize.width / 2) + 100, (visibleSize.height / 2) + 200));
 
@@ -241,7 +242,7 @@ void PuzzleSelection::initArrows()
         nullptr,
         CC_CALLBACK_1(PuzzleSelection::rightArrowClick, this));
 
-    cocos2d::Menu *menu = Menu::create(leftArrow, rightArrow, nullptr);
+    Menu *menu = Menu::create(leftArrow, rightArrow, nullptr);
     menu->setPosition(Vec2((visibleSize.width / 2) - 150, (visibleSize.height / 2)));
 
     leftArrow->setPosition(Vec2(-325, 0));
@@ -286,7 +287,7 @@ void PuzzleSelection::updateImageLabels() const
     imageName->setString(GameSettings::getImageName());
     imageNumber->setString
         ("( " + std::to_string(GameSettings::getImageID() + 1) + 
-         " / " + std::to_string(GameSettings::getPuzzles().size()) + " )");
+         " / " + std::to_string(puzzlesRef.size()) + " )");
 }
 
 void PuzzleSelection::updateRewardsLabel() const
@@ -294,17 +295,17 @@ void PuzzleSelection::updateRewardsLabel() const
     puzzleValue->setString("x " + std::to_string(calculatePuzzleValue()));
 }
 
-bool PuzzleSelection::leftArrowClick(cocos2d::Ref *sender) const
+bool PuzzleSelection::leftArrowClick(Ref* const sender) const
 {
     int currentImageID = GameSettings::getImageID();
 
     if (--currentImageID < 0)
     {
-        currentImageID = GameSettings::getPuzzles().size() - 1;
+        currentImageID = puzzlesRef.size() - 1;
     }
 
     GameSettings::setImageName
-        ("puzzles/" + GameSettings::getPuzzles()[currentImageID], currentImageID);
+        ("puzzles/" + puzzlesRef[currentImageID], currentImageID);
 
     updateDisplayedImage();
     updateImageLabels();
@@ -312,17 +313,17 @@ bool PuzzleSelection::leftArrowClick(cocos2d::Ref *sender) const
     return true;
 }
 
-bool PuzzleSelection::rightArrowClick(cocos2d::Ref *sender) const
+bool PuzzleSelection::rightArrowClick(Ref* const sender) const
 {
     unsigned int currentImageID = GameSettings::getImageID();
 
-    if (++currentImageID >(GameSettings::getPuzzles().size() - 1))
+    if (++currentImageID > (puzzlesRef.size() - 1))
     {
         currentImageID = 0;
     }
 
     GameSettings::setImageName
-        ("puzzles/" + GameSettings::getPuzzles()[currentImageID], currentImageID);
+        ("puzzles/" + puzzlesRef[currentImageID], currentImageID);
 
     updateDisplayedImage();
     updateImageLabels();
@@ -330,7 +331,7 @@ bool PuzzleSelection::rightArrowClick(cocos2d::Ref *sender) const
     return true;
 }
 
-void PuzzleSelection::puzzleTip(cocos2d::Ref* sender) const
+void PuzzleSelection::puzzleTip(Ref* const sender) const
 {
     const char tip[124]
     {
@@ -341,13 +342,13 @@ void PuzzleSelection::puzzleTip(cocos2d::Ref* sender) const
     MessageBox(tip, "Square Slide: Puzzles Tip");
 }
 
-void PuzzleSelection::gotoMainMenu(cocos2d::Ref *sender) const
+void PuzzleSelection::gotoMainMenu(Ref* const sender) const
 {
     Director::getInstance()->replaceScene(
         TransitionFade::create(0.5, MainMenu::createScene()));
 }
 
-void PuzzleSelection::gotoPuzzleGame(cocos2d::Ref *sender) const
+void PuzzleSelection::gotoPuzzleGame(Ref* const sender) const
 {
     GameSettings::setCurrentPuzzleValue(calculatePuzzleValue());
 
@@ -357,7 +358,7 @@ void PuzzleSelection::gotoPuzzleGame(cocos2d::Ref *sender) const
 
 void PuzzleSelection::setDefaultPuzzle() const
 {
-    GameSettings::setImageName("puzzles/" + GameSettings::getPuzzles()[0], 0);
+    GameSettings::setImageName("puzzles/" + puzzlesRef[0], 0);
 }
 
 int PuzzleSelection::calculatePuzzleValue() const

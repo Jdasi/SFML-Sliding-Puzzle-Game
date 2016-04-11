@@ -56,7 +56,7 @@ void ProfileStatistics::initMenu()
         nullptr,
         CC_CALLBACK_1(ProfileStatistics::gotoMainMenu, this));
 
-    cocos2d::Menu *menu = Menu::create(menuMain, nullptr);
+    Menu *menu = Menu::create(menuMain, nullptr);
     menu->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2));
 
     menuMain->setScale(0.66f);
@@ -147,7 +147,7 @@ void ProfileStatistics::initDynamicLabels()
     this->addChild(completedLabel, 2);
 }
 
-void ProfileStatistics::gotoMainMenu(cocos2d::Ref *sender) const
+void ProfileStatistics::gotoMainMenu(Ref* const sender) const
 {
     Director::getInstance()->replaceScene(
         TransitionFade::create(0.5, MainMenu::createScene()));

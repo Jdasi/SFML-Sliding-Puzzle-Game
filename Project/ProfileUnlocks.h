@@ -29,18 +29,18 @@ private:
     void initPreviewImages();
     void initLabels();
 
-    bool imageClick(cocos2d::Touch *touch, cocos2d::Event *event);
+    bool imageClick(cocos2d::Touch* const touch, cocos2d::Event* const event);
 
-    void performContextAction(cocos2d::Ref *sender);
+    void performContextAction(Ref* const sender);
     void updateActionButton();
     void updateBackdrop() const;
     void updateSelectionRect();
     void updateContextHintLabel();
     void updateNumStarsLabel() const;
 
-    void gotoMainMenu(cocos2d::Ref *sender) const;
+    void gotoMainMenu(Ref* const sender) const;
 
-    std::vector<GameUnlock> &unlocksRef = GameProfile::getUnlocks();
+    std::vector<GameUnlock> &unlocksRef;
     std::vector<cocos2d::Sprite*> previewImages;
 
     cocos2d::Sprite *backdrop;

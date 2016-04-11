@@ -14,8 +14,8 @@ BoardManager::BoardManager(Puzzle &ref)
 {
 }
 
-bool BoardManager::sanityCheckMove(cocos2d::Rect &rect, cocos2d::Touch &touch, 
-                                   PuzzlePiece *piece)
+bool BoardManager::sanityCheckMove(Rect &rect, Touch &touch, PuzzlePiece* const piece)
+                                   const
 {
     if (piece == nullptr)
     {
@@ -40,7 +40,7 @@ bool BoardManager::sanityCheckMove(cocos2d::Rect &rect, cocos2d::Touch &touch,
     return true;
 }
 
-bool BoardManager::generateTileMoves(MoveSequence &seq, PuzzlePiece *piece)
+bool BoardManager::generateTileMoves(MoveSequence &seq, PuzzlePiece* const piece)
 {
     currentPieceArrayPos = piece->getArrayPos();
     Coordinate currPieceCoords = piece->getCoordinates();
@@ -81,7 +81,7 @@ bool BoardManager::generateTileMoves(MoveSequence &seq, PuzzlePiece *piece)
     return false;
 }
 
-void BoardManager::generateMove(MoveSequence &seq, SlideDirection dir)
+void BoardManager::generateMove(MoveSequence &seq, const SlideDirection dir)
 {
     switch (dir)
     {
@@ -145,7 +145,7 @@ void BoardManager::generateMove(MoveSequence &seq, SlideDirection dir)
 
 }
 
-bool BoardManager::pushBackTilesToBeMoved(MoveSequence &seq, Coordinate pos) const
+bool BoardManager::pushBackTilesToBeMoved(MoveSequence &seq, const Coordinate pos) const
 {
     PuzzlePiece &pieceRef = puzzle.getPiece(pos);
     if (pieceRef.isBlankSpace())
@@ -155,10 +155,11 @@ bool BoardManager::pushBackTilesToBeMoved(MoveSequence &seq, Coordinate pos) con
 
     seq.pieceContainer.push_back(&pieceRef);
     seq.labelContainer.push_back(pieceRef.getNumLabel());
+
     return true;
 }
 
-void BoardManager::generateRandomMoves(int times)
+void BoardManager::generateRandomMoves(const int times)
 {
     for (int i = 0; i < times; ++i)
     {
@@ -217,7 +218,7 @@ void BoardManager::generateRandomMoves(int times)
     }
 }
 
-bool BoardManager::tryComputerMove(int fromPiece, Coordinate coords)
+bool BoardManager::tryComputerMove(const int fromPiece, const Coordinate &coords) const
 {
     if (!puzzle.inBounds(coords.x, coords.y))
     {
@@ -238,14 +239,15 @@ bool BoardManager::tryComputerMove(int fromPiece, Coordinate coords)
 void BoardManager::computerMovePiece(PuzzlePiece &fromPieceRef, PuzzlePiece &toPieceRef)
     const
 {
-    Vec2 pieceFromPos = fromPieceRef.Node::getPosition();
-    Vec2 pieceToPos = toPieceRef.Node::getPosition();
+    Vec2 pieceFromPos = fromPieceRef.getPosition();
+    Vec2 pieceToPos = toPieceRef.getPosition();
 
-    fromPieceRef.Sprite::setPosition(pieceToPos);
-    toPieceRef.Sprite::setPosition(pieceFromPos);
+    fromPieceRef.setPosition(pieceToPos);
+    toPieceRef.setPosition(pieceFromPos);
 }
 
-void BoardManager::computerMovePieceLabel(PuzzlePiece &fromPieceRef, Coordinate coords)
+void BoardManager::computerMovePieceLabel(const PuzzlePiece &fromPieceRef, 
+                                          const Coordinate &coords) const
 {
     Label *fromPieceLabelPtr = fromPieceRef.getNumLabel();
     Label *toPieceLabelPtr = puzzle.getPiece(coords.x, coords.y).getNumLabel();
@@ -300,7 +302,7 @@ void BoardManager::moveBlankSpaceToStart()
     }
 }
 
-void BoardManager::swapPieces(int fromPiece, int toPiece)
+void BoardManager::swapPieces(const int fromPiece, const int toPiece) const
 {
     puzzle.swapPieces(fromPiece, toPiece);
 }
@@ -310,7 +312,7 @@ bool BoardManager::isPuzzleComplete() const
     return puzzle.isPuzzleComplete();
 }
 
-void BoardManager::hideAllPieces(bool hide) const
+void BoardManager::hideAllPieces(const bool hide) const
 {
     std::vector<PuzzlePiece*> &piecesRef = puzzle.getPieces();
 
@@ -327,7 +329,7 @@ void BoardManager::hideAllPieces(bool hide) const
     }
 }
 
-void BoardManager::enableAllLabels(bool enable) const
+void BoardManager::enableAllLabels(const bool enable) const
 {
     std::vector<PuzzlePiece*> &piecesRef = puzzle.getPieces();
 

@@ -6,21 +6,21 @@
 class GameUnlock
 {
 public:
-    GameUnlock(const std::string &str, int cost, std::vector<GameUnlock> &container, 
-               int iid);
+    GameUnlock(const std::string &str, const int cost, std::vector<GameUnlock> &container, 
+               const int iid);
     ~GameUnlock() = default;
 
     std::string getName() const;
     void setName(const std::string &str);
 
     int getID() const;
-    void setID(int value);
+    void setID(const int value);
 
     bool isLocked() const;
-    void setLocked(bool lock);
+    void setLocked(const bool lock);
 
     int getStarCost() const;
-    void setStarCost(int cost);
+    void setStarCost(const int cost);
 
 private:
     std::string name;

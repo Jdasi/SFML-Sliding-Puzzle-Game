@@ -13,7 +13,7 @@ public:
     static cocos2d::Scene *createScene();
     virtual bool init();
 
-    bool interactWithPuzzle(cocos2d::Touch *touch, cocos2d::Event* event);
+    bool interactWithPuzzle(cocos2d::Touch* const touch, cocos2d::Event* const event);
 
     CREATE_FUNC(PuzzleGame);
 
@@ -27,13 +27,13 @@ private:
     void initHintSwitch();
 
     void performMoves(MoveSequence &seq);
-    void updateMovesLabel(int increment = 0);
+    void updateMovesLabel(const int increment = 0);
     void updateTimeLabel();
 
-    bool flipHintSwitch(cocos2d::Touch *touch, cocos2d::Event *event);
+    bool flipHintSwitch(cocos2d::Touch* const touch, cocos2d::Event* const event);
     void updateHintStatus();
 
-    void update(float delta) override;
+    void update(const float delta) override;
 
     void rewardPlayer() const;
     void flashScreen();
@@ -41,8 +41,8 @@ private:
     void changeExistingElements();
     void createEndGameElements();
 
-    void gotoMainMenu(cocos2d::Ref *sender);
-    void gotoPuzzleSelection(cocos2d::Ref *sender);
+    void gotoMainMenu(Ref* const sender);
+    void gotoPuzzleSelection(Ref* const sender);
 
     Puzzle puzzle;
     BoardManager boardManager;

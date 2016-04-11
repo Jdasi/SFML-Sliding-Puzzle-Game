@@ -22,12 +22,13 @@ public:
     using keymap = std::map<std::string, std::string>;
 
     static keymap &getProfileKeymap();
-    static std::string profileStatToString(ProfileStat setting);
+    static std::string profileStatToString(const ProfileStat &setting);
 
-    static std::string getProfileStat(ProfileStat setting);
-    static void setProfileStat(ProfileStat setting, const std::string &val);
-    static void modifyProfileStat(ProfileStat setting, int amount);
-    static void modifyProfileStat(ProfileStat setting, const std::string &addition);
+    static std::string getProfileStat(const ProfileStat &setting);
+    static void setProfileStat(const ProfileStat &setting, const std::string &val);
+    static void modifyProfileStat(const ProfileStat &setting, int amount);
+    static void modifyProfileStat(const ProfileStat &setting, 
+                                  const std::string &addition);
 
     static std::string getCurrentBackground();
 
@@ -37,7 +38,7 @@ public:
     static int stringToBackgroundID(const std::string &str);
 
     static bool isInitialised();
-    static void setInitialised(bool b);
+    static void setInitialised(const bool b);
     
 private:
     static keymap profileStats;

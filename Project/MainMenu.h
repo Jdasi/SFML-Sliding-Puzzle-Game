@@ -17,10 +17,10 @@ private:
     void initStarDisplay();
     void initMenu();
 
-    void gotoPuzzleSelection(cocos2d::Ref *sender) const;
-    void gotoUnlocks(cocos2d::Ref *sender) const;
-    void gotoStatistics(cocos2d::Ref *sender) const;
-    void exitGame(cocos2d::Ref *pSender) const;
+    void gotoPuzzleSelection(Ref* const sender) const;
+    void gotoUnlocks(Ref* const sender) const;
+    void gotoStatistics(Ref* const sender) const;
+    void exitGame(Ref* const sender) const;
 
     cocos2d::Size visibleSize{ cocos2d::Director::getInstance()->getVisibleSize() };
 };

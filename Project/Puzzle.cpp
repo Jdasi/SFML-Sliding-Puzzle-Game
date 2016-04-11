@@ -14,7 +14,7 @@ Puzzle::Puzzle()
 {
 }
 
-void Puzzle::initPuzzle(PuzzleGame *pScene, Coordinate startPos)
+void Puzzle::initPuzzle(PuzzleGame* const pScene, const Coordinate &startPos)
 {
     int segmentsX = GameSettings::getSegments().x;
     int segmentsY = GameSettings::getSegments().y;
@@ -69,7 +69,7 @@ void Puzzle::initPuzzle(PuzzleGame *pScene, Coordinate startPos)
     puzzlePieces[(segmentsX * segmentsY) - 1]->setBlankSpace(true);
 }
 
-void Puzzle::sanityCheckImage(cocos2d::Sprite *spr)
+void Puzzle::sanityCheckImage(const Sprite* const spr)
 {
     int paddingX = (GameSettings::getSegments().x - 1) * pad;
     int paddingY = (GameSettings::getSegments().y - 1) * pad;
@@ -85,17 +85,17 @@ void Puzzle::sanityCheckImage(cocos2d::Sprite *spr)
     }
 }
 
-PuzzlePiece &Puzzle::getPiece(int piece)
+PuzzlePiece &Puzzle::getPiece(const int piece)
 {
     return *puzzlePieces[piece];
 }
 
-PuzzlePiece &Puzzle::getPiece(Coordinate coords)
+PuzzlePiece &Puzzle::getPiece(const Coordinate &coords)
 {
     return getPiece(calculateOffset(coords));
 }
 
-PuzzlePiece &Puzzle::getPiece(int x, int y)
+PuzzlePiece &Puzzle::getPiece(const int x, const int y)
 {
     return getPiece({ x, y });
 }
@@ -105,17 +105,17 @@ std::vector<PuzzlePiece*> &Puzzle::getPieces()
     return puzzlePieces;
 }
 
-bool Puzzle::isPieceBlankSpace(int piece) const
+bool Puzzle::isPieceBlankSpace(const int piece) const
 {
     return puzzlePieces[piece]->isBlankSpace();
 }
 
-int Puzzle::calculateOffset(int x, int y) const
+int Puzzle::calculateOffset(const int x, const int y) const
 {
     return (y * GameSettings::getSegments().x) + x;
 }
 
-int Puzzle::calculateOffset(Coordinate coords) const
+int Puzzle::calculateOffset(const Coordinate &coords) const
 {
     return calculateOffset(coords.x, coords.y);
 }
@@ -125,7 +125,7 @@ int Puzzle::getPadding() const
     return pad;
 }
 
-void Puzzle::swapPieces(int fromPiece, int toPiece)
+void Puzzle::swapPieces(const int fromPiece, const int toPiece)
 {
     std::swap(puzzlePieces[fromPiece], puzzlePieces[toPiece]);
 
@@ -168,7 +168,7 @@ bool Puzzle::isPuzzleComplete() const
     return false;
 }
 
-bool Puzzle::inBounds(int x, int y) const
+bool Puzzle::inBounds(const int x, const int y) const
 {
     if (x >= GameSettings::getSegments().x || x < 0)
     {
