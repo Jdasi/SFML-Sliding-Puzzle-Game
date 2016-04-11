@@ -81,6 +81,7 @@ std::string GameProfile::getCurrentBackground()
     return profileStats[profileStatToString(ProfileStat::currentBackground)];
 }
 
+// In a finished game the Unlocks would be read from a file. For now they are hard coded.
 void GameProfile::enumerateUnlocks()
 {
     GameUnlock regal("regal", 0, unlocks, 0);

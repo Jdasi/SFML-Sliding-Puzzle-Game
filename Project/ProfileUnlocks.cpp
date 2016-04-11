@@ -170,7 +170,6 @@ void ProfileUnlocks::initLabels()
     contextHintLabel->setPosition
         (Vec2(visibleSize.width / 2, (visibleSize.height / 2) - 75));
     contextHintLabel->setColor(Color3B::YELLOW);
-    //contextHintLabel->enableGlow(Color4B::BLACK);
 
     updateContextHintLabel();
 

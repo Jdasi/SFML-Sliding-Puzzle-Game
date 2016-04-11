@@ -174,6 +174,7 @@ void PuzzleGame::initHintSwitch()
     this->addChild (switchLabel, 2);
 }
 
+// Entry point for puzzle interaction; uses BoardManager to identify a valid move attempt.
 bool PuzzleGame::interactWithPuzzle(Touch* const touch, Event* const event)
 {
     if (gameOver)
@@ -190,9 +191,7 @@ bool PuzzleGame::interactWithPuzzle(Touch* const touch, Event* const event)
     }
 
     MoveSequence sequence;
-    bool result = boardManager.generateTileMoves(sequence, piece);
-
-    if (!result)
+    if (!boardManager.generateTileMoves(sequence, piece))
     {
         return false;
     }
@@ -201,6 +200,7 @@ bool PuzzleGame::interactWithPuzzle(Touch* const touch, Event* const event)
     return true;
 }
 
+// Animates the movement of any PuzzlePieces identified in the valid move attempt.
 void PuzzleGame::performMoves(MoveSequence &seq)
 {
     // We need to reverse the vectors because the pieces are pushed back in reverse order.

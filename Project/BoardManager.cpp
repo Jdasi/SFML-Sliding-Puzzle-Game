@@ -40,6 +40,7 @@ bool BoardManager::sanityCheckMove(Rect &rect, Touch &touch, PuzzlePiece* const 
     return true;
 }
 
+// Identifies a valid move by comparing the coordinates of the piece and blankspace.
 bool BoardManager::generateTileMoves(MoveSequence &seq, PuzzlePiece* const piece)
 {
     currentPieceArrayPos = piece->getArrayPos();
@@ -81,6 +82,7 @@ bool BoardManager::generateTileMoves(MoveSequence &seq, PuzzlePiece* const piece
     return false;
 }
 
+// Identifies the pieces that are to be affected when a piece is clicked.
 void BoardManager::generateMove(MoveSequence &seq, const SlideDirection dir)
 {
     switch (dir)
@@ -145,6 +147,7 @@ void BoardManager::generateMove(MoveSequence &seq, const SlideDirection dir)
 
 }
 
+// Adds all non-blankspace pieces to the vector so they are ready to be moved.
 bool BoardManager::pushBackTilesToBeMoved(MoveSequence &seq, const Coordinate pos) const
 {
     PuzzlePiece &pieceRef = puzzle.getPiece(pos);
@@ -159,6 +162,7 @@ bool BoardManager::pushBackTilesToBeMoved(MoveSequence &seq, const Coordinate po
     return true;
 }
 
+// Main method for shuffling tiles on puzzle initialisation.
 void BoardManager::generateRandomMoves(const int times)
 {
     for (int i = 0; i < times; ++i)
@@ -218,6 +222,7 @@ void BoardManager::generateRandomMoves(const int times)
     }
 }
 
+// Moves pieces by swapping positions directly, as opposed to using animations.
 bool BoardManager::tryComputerMove(const int fromPiece, const Coordinate &coords) const
 {
     if (!puzzle.inBounds(coords.x, coords.y))
@@ -315,7 +320,6 @@ bool BoardManager::isPuzzleComplete() const
 void BoardManager::hideAllPieces(const bool hide) const
 {
     std::vector<PuzzlePiece*> &piecesRef = puzzle.getPieces();
-
     for (PuzzlePiece *piece : piecesRef)
     {
         if (hide)

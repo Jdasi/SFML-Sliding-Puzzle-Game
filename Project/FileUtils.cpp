@@ -5,8 +5,9 @@
 #include <codecvt>
 #include <fstream>
 
-// Because filenames are widestrings (accept international characters)
-// We need to convert them to regular strings.
+/* Because filenames are widestrings (accept international characters)
+ * We need to convert them to regular strings.
+ */
 static std::string wstring_to_string(const std::wstring &str)
 {
     typedef std::codecvt_utf8<wchar_t> convert_type;
@@ -32,6 +33,7 @@ std::wstring getExecutablePath()
     return pathstr.substr(0, pathstr.length()-sizeof(executeableName));
 }
 
+// Uses Windows API to list files from a directory.
 std::vector<std::string> enumerateFiles(const std::wstring& path)
 {
     WIN32_FIND_DATA ffd;

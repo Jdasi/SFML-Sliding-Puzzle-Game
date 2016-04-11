@@ -14,6 +14,7 @@ Puzzle::Puzzle()
 {
 }
 
+// Loads the chosen image file and slices it according to the GameSettings specification.
 void Puzzle::initPuzzle(PuzzleGame* const pScene, const Coordinate &startPos)
 {
     int segmentsX = GameSettings::getSegments().x;
@@ -125,6 +126,7 @@ int Puzzle::getPadding() const
     return pad;
 }
 
+// Main method for swapping array position and coordinates of two PuzzlePieces.
 void Puzzle::swapPieces(const int fromPiece, const int toPiece)
 {
     std::swap(puzzlePieces[fromPiece], puzzlePieces[toPiece]);
