@@ -105,6 +105,9 @@
     <ClInclude Include="BoardManager.h">
       <Filter>project\objects</Filter>
     </ClInclude>
+    <ClInclude Include="SlideDirection.h">
+      <Filter>project\utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="resource">

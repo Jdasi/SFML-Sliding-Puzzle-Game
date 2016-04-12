@@ -143,7 +143,7 @@ void PuzzleSelection::initSliders()
     xSegmentsSlider->setPosition(Vec2
         ((visibleSize.width / 2) + 400, (visibleSize.height / 2) + 150));
     xSegmentsSlider->setPercent(GameSettings::getSegments().x - 3);
-    xSegmentsSlider->setMaxPercent(7);
+    xSegmentsSlider->setMaxPercent(4);
 
     xSliderLabel = Label::createWithTTF("X Segments: " + std::to_string
         (xSegmentsSlider->getPercent() + 3), GameSettings::getFontName(), 26);
@@ -175,7 +175,7 @@ void PuzzleSelection::initSliders()
     ySegmentsSlider->setPosition(Vec2
         ((visibleSize.width / 2) + 400, (visibleSize.height / 2) + 50));
     ySegmentsSlider->setPercent(GameSettings::getSegments().y - 3);
-    ySegmentsSlider->setMaxPercent(7);
+    ySegmentsSlider->setMaxPercent(4);
 
     ySliderLabel = Label::createWithTTF("Y Segments: " + std::to_string
         (ySegmentsSlider->getPercent() + 3), GameSettings::getFontName(), 26);

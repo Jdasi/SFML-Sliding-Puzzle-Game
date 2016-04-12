@@ -181,6 +181,7 @@ xcopy "$(SolutionDir)\cocos2d\bin\$(PlatformToolset)\$(Configuration)\*.dll" "$(
     <ClInclude Include="GameUnlock.h" />
     <ClInclude Include="ProfileStatistics.h" />
     <ClInclude Include="SimpleTimer.h" />
+    <ClInclude Include="SlideDirection.h" />
     <ClInclude Include="TimeUtils.h" />
   </ItemGroup>
   <ItemGroup>

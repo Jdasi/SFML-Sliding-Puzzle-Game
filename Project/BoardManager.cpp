@@ -11,6 +11,7 @@ BoardManager::BoardManager(Puzzle &ref)
     , blankSpaceCoords({ 0, 0 }) 
     , puzzle(ref)
     , currentPieceArrayPos(0)
+    , lastDir(SlideDirection::down)
 {
 }
 
@@ -83,7 +84,7 @@ bool BoardManager::generateTileMoves(MoveSequence &seq, PuzzlePiece* const piece
 }
 
 // Identifies the pieces that are to be affected when a piece is clicked.
-bool BoardManager::generateMove(MoveSequence &seq, const SlideDirection dir)
+bool BoardManager::generateMove(MoveSequence &seq, const SlideDirection &dir)
 {
     switch (dir)
     {
@@ -166,6 +167,11 @@ bool BoardManager::generateRandomMove(MoveSequence &seq)
     while (!tilePushed)
     {
         SlideDirection direction = static_cast<SlideDirection>(rand() % 4);
+        if (direction == lastDir)
+        {
+            continue;
+        }
+
         Coordinate attempt { 0, 0 };
 
         seq.xMoveDist = 0;
@@ -223,6 +229,8 @@ bool BoardManager::generateRandomMove(MoveSequence &seq)
         {
             tilePushed = true;
         }
+
+        lastDir = direction;
     }
 
     return true;
@@ -261,31 +269,6 @@ void BoardManager::updateBlankspaceInfo()
 {
     blankSpace = findBlankSpace();
     blankSpaceCoords = puzzle.getPiece(blankSpace).getCoordinates();
-}
-
-void BoardManager::moveBlankSpaceToStart()
-{
-    for (int i = 0; i < GameSettings::getSegments().x; ++i)
-    {
-        updateBlankspaceInfo();
-        MoveSequence seq;
-
-        if (!generateMove(seq, SlideDirection::right))
-        {
-            break;
-        }
-    }
-
-    for (int i = 0; i < GameSettings::getSegments().y; ++i)
-    {
-        updateBlankspaceInfo();
-        MoveSequence seq;
-
-        if (!generateMove(seq, SlideDirection::down))
-        {
-            break;
-        }
-    }
 }
 
 void BoardManager::swapPieces(const int fromPiece, const int toPiece) const

@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Coordinate.h"
+#include "SlideDirection.h"
+
 #include <vector>
 
 namespace cocos2d
@@ -21,14 +23,6 @@ struct MoveSequence;
 
 class BoardManager
 {
-    enum class SlideDirection
-    {
-        up = 0,
-        right,
-        down,
-        left
-    };
-
 public:
     BoardManager(Puzzle &ref);
     ~BoardManager() = default;
@@ -36,13 +30,12 @@ public:
     bool sanityCheckMove(cocos2d::Rect &rect, cocos2d::Touch &touch, 
                          PuzzlePiece* const piece) const;
     bool generateTileMoves(MoveSequence &seq, PuzzlePiece* const piece);
-    bool generateMove(MoveSequence &seq, const SlideDirection dir);
+    bool generateMove(MoveSequence &seq, const SlideDirection &dir);
     bool generateRandomMove(MoveSequence &seq);
     bool pushBackTilesToBeMoved(MoveSequence &seq, const Coordinate pos) const;
 
     int findBlankSpace() const;
     void updateBlankspaceInfo();
-    void moveBlankSpaceToStart();
 
     void swapPieces(const int fromPiece, const int toPiece) const;
     bool isPuzzleComplete() const;
@@ -54,4 +47,5 @@ private:
     Coordinate blankSpaceCoords;
     Puzzle &puzzle;
     int currentPieceArrayPos;
+    SlideDirection lastDir;
 };

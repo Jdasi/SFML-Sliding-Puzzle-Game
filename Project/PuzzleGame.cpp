@@ -5,6 +5,7 @@
 #include "PuzzleSelection.h"
 #include "MoveSequence.h"
 #include "TimeUtils.h"
+#include "SlideDirection.h"
 
 USING_NS_CC;
 
@@ -13,6 +14,8 @@ PuzzleGame::PuzzleGame()
     , startPosX(0)
     , startPosY(0)
     , gameOver(false)
+    , shuffling(true)
+    , started(false)
     , shuffleTimes(0)
     , computerMoves(0)
     , userMoves(0)
@@ -44,8 +47,6 @@ bool PuzzleGame::init()
     {
         return false;
     }
-
-    timer.startTimer();
 
     initBackdrop();
     initPuzzle();
@@ -80,9 +81,11 @@ void PuzzleGame::initPuzzle()
     boardManager.updateBlankspaceInfo();
 
     int product = GameSettings::getSegments().x * GameSettings::getSegments().y;
-    shuffleTimes = (product * product) * 0.2;
+    shuffleTimes = (product * product) * 0.05;
 
-    //boardManager.moveBlankSpaceToStart();
+    // Constrain shuffleTimes to a value between 30-100.
+    shuffleTimes = shuffleTimes < 30 ? 30 : shuffleTimes;
+    shuffleTimes = shuffleTimes > 100 ? 100 : shuffleTimes;
 }
 
 void PuzzleGame::initLabels()
@@ -92,10 +95,8 @@ void PuzzleGame::initLabels()
 
     updateMovesLabel();
 
-    timeLabel = Label::createWithTTF("Time: ", GameSettings::getFontName(), 30);
+    timeLabel = Label::createWithTTF("Time: 00:00:00", GameSettings::getFontName(), 30);
     timeLabel->setPosition(Vec2(visibleSize.width - 210, (visibleSize.height / 2) + 20));
-
-    updateTimeLabel();
 
     this->addChild(movesLabel, 2);
     this->addChild(timeLabel, 2);
@@ -177,10 +178,38 @@ void PuzzleGame::initHintSwitch()
     this->addChild (switchLabel, 2);
 }
 
+void PuzzleGame::update(float delta)
+{
+    if (!gameOver && !shuffling)
+    {
+        updateTimeLabel();
+    }
+
+    if (computerMoves < shuffleTimes)
+    {
+        MoveSequence seq;
+        if (boardManager.generateRandomMove(seq))
+        {
+            performMoves(seq, 0.01f);
+            ++computerMoves;
+        }
+    }
+    else
+    {
+        shuffling = false;
+
+        if (!started)
+        {
+            timer.startTimer();
+            started = true;
+        }
+    }
+}
+
 // Entry point for puzzle interaction; uses BoardManager to identify a valid move attempt.
 bool PuzzleGame::interactWithPuzzle(Touch* const touch, Event* const event)
 {
-    if (gameOver)
+    if (gameOver || shuffling)
     {
         return false;
     }
@@ -228,8 +257,11 @@ void PuzzleGame::performMoves(MoveSequence &seq, const float speed)
         boardManager.swapPieces(p->getArrayPos(), boardManager.findBlankSpace());
         boardManager.updateBlankspaceInfo();
 
-        GameProfile::modifyProfileStat(ProfileStat::totalMoves, 1);
-        updateMovesLabel(1);
+        if (!shuffling)
+        {
+            GameProfile::modifyProfileStat(ProfileStat::totalMoves, 1);
+            updateMovesLabel(1);
+        }
     }
 
     for (Label *l : seq.labelContainer)
@@ -293,27 +325,6 @@ void PuzzleGame::updateHintStatus()
         hintSwitch->initWithFile("utility/switch_off.png");
         boardManager.enableAllLabels(false);
         showHints = false;
-    }
-}
-
-void PuzzleGame::update(float delta)
-{
-    if (!gameOver)
-    {
-        updateTimeLabel();
-    }
-
-    if (computerMoves < shuffleTimes)
-    {
-        MoveSequence seq;
-
-        if (boardManager.generateRandomMove(seq)) 
-        {
-            performMoves(seq, 0.025f);
-            ++computerMoves;
-        }
-    } else {
-
     }
 }
 
