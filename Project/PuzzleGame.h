@@ -26,14 +26,14 @@ private:
     void initPreviewImage();
     void initHintSwitch();
 
-    void performMoves(MoveSequence &seq);
+    void performMoves(MoveSequence &seq, const float speed);
     void updateMovesLabel(const int increment = 0);
     void updateTimeLabel();
 
     bool flipHintSwitch(cocos2d::Touch* const touch, cocos2d::Event* const event);
     void updateHintStatus();
 
-    void update(const float delta) override;
+    void update(float delta) override;
 
     void rewardPlayer() const;
     void flashScreen();
@@ -51,8 +51,10 @@ private:
     int startPosY;
 
     bool gameOver;
+    int shuffleTimes;
+    int computerMoves;
+    int userMoves;
     SimpleTimer timer;
-    int numMoves;
     bool showHints;
     bool usedHints;
 

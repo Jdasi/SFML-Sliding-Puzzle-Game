@@ -13,7 +13,9 @@ PuzzleGame::PuzzleGame()
     , startPosX(0)
     , startPosY(0)
     , gameOver(false)
-    , numMoves(0)
+    , shuffleTimes(0)
+    , computerMoves(0)
+    , userMoves(0)
     , showHints(false)
     , usedHints(false)
     , movesLabel(nullptr)
@@ -75,11 +77,12 @@ void PuzzleGame::initPuzzle()
     startPosX = 100;
     startPosY = visibleSize.height - 80;
     puzzle.initPuzzle(this, { startPosX, startPosY });
+    boardManager.updateBlankspaceInfo();
 
     int product = GameSettings::getSegments().x * GameSettings::getSegments().y;
-    boardManager.generateRandomMoves(product * product);
+    shuffleTimes = (product * product) * 0.2;
 
-    boardManager.moveBlankSpaceToStart();
+    //boardManager.moveBlankSpaceToStart();
 }
 
 void PuzzleGame::initLabels()
@@ -196,21 +199,31 @@ bool PuzzleGame::interactWithPuzzle(Touch* const touch, Event* const event)
         return false;
     }
 
-    performMoves(sequence);
+    performMoves(sequence, 0.1f);
+
+    if (boardManager.isPuzzleComplete())
+    {
+        gameOver = true;
+        endGame();
+    }
+
     return true;
 }
 
-// Animates the movement of any PuzzlePieces identified in the valid move attempt.
-void PuzzleGame::performMoves(MoveSequence &seq)
+// Animates the movement of any PuzzlePieces contained in the MoveSequence.
+void PuzzleGame::performMoves(MoveSequence &seq, const float speed)
 {
     // We need to reverse the vectors because the pieces are pushed back in reverse order.
     std::reverse(seq.pieceContainer.begin(), seq.pieceContainer.end());
     std::reverse(seq.labelContainer.begin(), seq.labelContainer.end());
 
+    PuzzlePiece *endPiecePtr = seq.pieceContainer[seq.pieceContainer.size() - 1];
+    PuzzlePiece &blankSpaceRef = puzzle.getPiece(boardManager.findBlankSpace());
+
     for (PuzzlePiece *p : seq.pieceContainer)
     {
-        MoveBy *move = MoveBy::create(0.1f, Vec2(seq.xMoveDist, seq.yMoveDist));
-        p->runAction(move);
+        MoveBy *moveBy = MoveBy::create(speed, Vec2(seq.xMoveDist, seq.yMoveDist));
+        p->runAction(moveBy);
 
         boardManager.swapPieces(p->getArrayPos(), boardManager.findBlankSpace());
         boardManager.updateBlankspaceInfo();
@@ -221,21 +234,21 @@ void PuzzleGame::performMoves(MoveSequence &seq)
 
     for (Label *l : seq.labelContainer)
     {
-        MoveBy *move = MoveBy::create(0.1f, Vec2(seq.xMoveDist, seq.yMoveDist));
+        MoveBy *move = MoveBy::create(speed, Vec2(seq.xMoveDist, seq.yMoveDist));
         l->runAction(move);
     }
 
-    if (boardManager.isPuzzleComplete())
-    {
-        gameOver = true;
-        endGame();
-    }
+    MoveTo *pieceMove = MoveTo::create(speed, endPiecePtr->getPosition());
+    blankSpaceRef.runAction(pieceMove);
+
+    MoveTo *labelMove = MoveTo::create(speed, endPiecePtr->getNumLabel()->getPosition());
+    blankSpaceRef.getNumLabel()->runAction(labelMove);
 }
 
 void PuzzleGame::updateMovesLabel(const int increment)
 {
-    numMoves += increment;
-    movesLabel->setString("Moves: " + std::to_string(numMoves));
+    userMoves += increment;
+    movesLabel->setString("Moves: " + std::to_string(userMoves));
 }
 
 void PuzzleGame::updateTimeLabel()
@@ -283,11 +296,24 @@ void PuzzleGame::updateHintStatus()
     }
 }
 
-void PuzzleGame::update(const float delta)
+void PuzzleGame::update(float delta)
 {
     if (!gameOver)
     {
         updateTimeLabel();
+    }
+
+    if (computerMoves < shuffleTimes)
+    {
+        MoveSequence seq;
+
+        if (boardManager.generateRandomMove(seq)) 
+        {
+            performMoves(seq, 0.025f);
+            ++computerMoves;
+        }
+    } else {
+
     }
 }
 

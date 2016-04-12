@@ -83,7 +83,7 @@ bool BoardManager::generateTileMoves(MoveSequence &seq, PuzzlePiece* const piece
 }
 
 // Identifies the pieces that are to be affected when a piece is clicked.
-void BoardManager::generateMove(MoveSequence &seq, const SlideDirection dir)
+bool BoardManager::generateMove(MoveSequence &seq, const SlideDirection dir)
 {
     switch (dir)
     {
@@ -145,6 +145,87 @@ void BoardManager::generateMove(MoveSequence &seq, const SlideDirection dir)
         }
     }
 
+    if (seq.pieceContainer.size() == 0)
+    {
+        return false;
+    }
+    
+    return true;
+}
+
+// Main method for shuffling tiles on puzzle initialisation.
+bool BoardManager::generateRandomMove(MoveSequence &seq)
+{
+    PuzzlePiece &blankSpaceRef = puzzle.getPiece(blankSpace);
+    if (blankSpaceRef.getNumberOfRunningActions() != 0)
+    {
+        return false;
+    }
+
+    bool tilePushed = false;
+    while (!tilePushed)
+    {
+        SlideDirection direction = static_cast<SlideDirection>(rand() % 4);
+        Coordinate attempt { 0, 0 };
+
+        seq.xMoveDist = 0;
+        seq.yMoveDist = 0;
+
+        switch (direction)
+        {
+            case SlideDirection::up:
+            {
+                attempt = { blankSpaceCoords.x, blankSpaceCoords.y - 1 };
+
+                seq.yMoveDist = -(blankSpaceRef.getBoundingBox().size.height + puzzle.getPadding());
+                direction = SlideDirection::down;
+
+                break;
+            }
+            case SlideDirection::down:
+            {
+                attempt = { blankSpaceCoords.x, blankSpaceCoords.y + 1 };
+
+                seq.yMoveDist = blankSpaceRef.getBoundingBox().size.height + puzzle.getPadding();
+                direction = SlideDirection::up;
+
+                break;
+            }
+            case SlideDirection::left:
+            {
+                attempt = { blankSpaceCoords.x - 1, blankSpaceCoords.y };
+                seq.xMoveDist = blankSpaceRef.getBoundingBox().size.width + puzzle.getPadding();
+
+                direction = SlideDirection::right;
+
+                break;
+            }
+            case SlideDirection::right:
+            {
+                attempt = { blankSpaceCoords.x + 1, blankSpaceCoords.y };
+
+                seq.xMoveDist = -(blankSpaceRef.getBoundingBox().size.width + puzzle.getPadding());
+                direction = SlideDirection::left;
+
+                break;
+            }
+            default: {}
+        }
+
+        if (!puzzle.inBounds(attempt.x, attempt.y))
+        {
+            continue;
+        }
+
+        currentPieceArrayPos = puzzle.calculateOffset(attempt);
+
+        if (generateMove(seq, direction))
+        {
+            tilePushed = true;
+        }
+    }
+
+    return true;
 }
 
 // Adds all non-blankspace pieces to the vector so they are ready to be moved.
@@ -160,108 +241,6 @@ bool BoardManager::pushBackTilesToBeMoved(MoveSequence &seq, const Coordinate po
     seq.labelContainer.push_back(pieceRef.getNumLabel());
 
     return true;
-}
-
-// Main method for shuffling tiles on puzzle initialisation.
-void BoardManager::generateRandomMoves(const int times)
-{
-    for (int i = 0; i < times; ++i)
-    {
-        updateBlankspaceInfo();
-
-        bool tileSwapped = false;
-        while (!tileSwapped)
-        {
-            SlideDirection direction = static_cast<SlideDirection>(rand() % 4);
-
-            switch (direction)
-            {
-                case SlideDirection::right:
-                {
-                    if (tryComputerMove(blankSpace, 
-                                       { blankSpaceCoords.x + 1, blankSpaceCoords.y }))
-                    {
-                        tileSwapped = true;
-                    }
-
-                    break;
-                }
-                case SlideDirection::down:
-                {
-                    if (tryComputerMove(blankSpace,
-                                       { blankSpaceCoords.x , blankSpaceCoords.y + 1 }))
-                    {
-                        tileSwapped = true;
-                    }
-
-                    break;
-                }
-                case SlideDirection::left:
-                {
-                    if (tryComputerMove(blankSpace,
-                                       { blankSpaceCoords.x - 1, blankSpaceCoords.y }))
-                    {
-                        tileSwapped = true;
-                    }
-
-                    break;
-                }
-                case SlideDirection::up:
-                {
-                    if (tryComputerMove(blankSpace,
-                                       { blankSpaceCoords.x , blankSpaceCoords.y - 1 }))
-                    {
-                        tileSwapped = true;
-                    }
-
-                    break;
-                }
-                default: {}
-            }
-        }
-    }
-}
-
-// Moves pieces by swapping positions directly, as opposed to using animations.
-bool BoardManager::tryComputerMove(const int fromPiece, const Coordinate &coords) const
-{
-    if (!puzzle.inBounds(coords.x, coords.y))
-    {
-        return false;
-    }
-
-    PuzzlePiece &fromPieceRef = puzzle.getPiece(fromPiece);
-    PuzzlePiece &toPieceRef = puzzle.getPiece(coords.x, coords.y);
-
-    computerMovePiece(fromPieceRef, toPieceRef);
-    computerMovePieceLabel(fromPieceRef, coords);
-
-    puzzle.swapPieces(fromPieceRef, toPieceRef);
-
-    return true;
-}
-
-void BoardManager::computerMovePiece(PuzzlePiece &fromPieceRef, PuzzlePiece &toPieceRef)
-    const
-{
-    Vec2 pieceFromPos = fromPieceRef.getPosition();
-    Vec2 pieceToPos = toPieceRef.getPosition();
-
-    fromPieceRef.setPosition(pieceToPos);
-    toPieceRef.setPosition(pieceFromPos);
-}
-
-void BoardManager::computerMovePieceLabel(const PuzzlePiece &fromPieceRef, 
-                                          const Coordinate &coords) const
-{
-    Label *fromPieceLabelPtr = fromPieceRef.getNumLabel();
-    Label *toPieceLabelPtr = puzzle.getPiece(coords.x, coords.y).getNumLabel();
-
-    Vec2 labelFromPos = fromPieceLabelPtr->getPosition();
-    Vec2 labelToPos = toPieceLabelPtr->getPosition();
-
-    fromPieceLabelPtr->setPosition(labelToPos);
-    toPieceLabelPtr->setPosition(labelFromPos);
 }
 
 int BoardManager::findBlankSpace() const
@@ -289,8 +268,9 @@ void BoardManager::moveBlankSpaceToStart()
     for (int i = 0; i < GameSettings::getSegments().x; ++i)
     {
         updateBlankspaceInfo();
+        MoveSequence seq;
 
-        if (!tryComputerMove(blankSpace, { blankSpaceCoords.x + 1, blankSpaceCoords.y }))
+        if (!generateMove(seq, SlideDirection::right))
         {
             break;
         }
@@ -299,8 +279,9 @@ void BoardManager::moveBlankSpaceToStart()
     for (int i = 0; i < GameSettings::getSegments().y; ++i)
     {
         updateBlankspaceInfo();
+        MoveSequence seq;
 
-        if (!tryComputerMove(blankSpace, { blankSpaceCoords.x , blankSpaceCoords.y + 1 }))
+        if (!generateMove(seq, SlideDirection::down))
         {
             break;
         }
