@@ -110,6 +110,8 @@ void generateProfile()
         (ProfileStat::totalMoves)] = "0";
     profileSettings[GameProfile::profileStatToString
         (ProfileStat::totalStarsCollected)] = "0";
+    profileSettings[GameProfile::profileStatToString
+        (ProfileStat::animatedShuffling)] = "true";
 
     saveProfile();
 }

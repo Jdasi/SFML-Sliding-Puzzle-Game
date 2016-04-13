@@ -16,6 +16,7 @@ PuzzleSelection::PuzzleSelection()
     , imageName(nullptr)
     , imageNumber(nullptr)
     , puzzleValue(nullptr)
+    , animSwitch(nullptr)
 {
 }
 
@@ -67,6 +68,7 @@ bool PuzzleSelection::init()
     initPreviewImage();
     initArrows();
     initRewardsPane();
+    initAnimSwitch();
 
     return true;
 }
@@ -141,7 +143,7 @@ void PuzzleSelection::initSliders()
         "utility/SliderNode_Disable.png");
     xSegmentsSlider->loadProgressBarTexture("utility/Slider_PressBar.png");
     xSegmentsSlider->setPosition(Vec2
-        ((visibleSize.width / 2) + 400, (visibleSize.height / 2) + 150));
+        ((visibleSize.width / 2) + 400, (visibleSize.height / 2) + 130));
     xSegmentsSlider->setPercent(GameSettings::getSegments().x - 3);
     xSegmentsSlider->setMaxPercent(4);
 
@@ -149,6 +151,7 @@ void PuzzleSelection::initSliders()
         (xSegmentsSlider->getPercent() + 3), GameSettings::getFontName(), 26);
     xSliderLabel->setPosition(Vec2
         (xSegmentsSlider->getPosition().x, xSegmentsSlider->getPosition().y + 30));
+    xSliderLabel->setColor(Color3B::YELLOW);
 
     xSegmentsSlider->addEventListener([&](Ref* sender, ui::Slider::EventType type) {
         switch (type)
@@ -173,7 +176,7 @@ void PuzzleSelection::initSliders()
         "utility/SliderNode_Disable.png");
     ySegmentsSlider->loadProgressBarTexture("utility/Slider_PressBar.png");
     ySegmentsSlider->setPosition(Vec2
-        ((visibleSize.width / 2) + 400, (visibleSize.height / 2) + 50));
+        ((visibleSize.width / 2) + 400, (visibleSize.height / 2) + 35));
     ySegmentsSlider->setPercent(GameSettings::getSegments().y - 3);
     ySegmentsSlider->setMaxPercent(4);
 
@@ -181,6 +184,7 @@ void PuzzleSelection::initSliders()
         (ySegmentsSlider->getPercent() + 3), GameSettings::getFontName(), 26);
     ySliderLabel->setPosition(Vec2
         (ySegmentsSlider->getPosition().x, ySegmentsSlider->getPosition().y + 30));
+    ySliderLabel->setColor(Color3B::YELLOW);
 
     ySegmentsSlider->addEventListener([&](Ref* sender, ui::Slider::EventType type) {
         switch (type)
@@ -260,6 +264,7 @@ void PuzzleSelection::initRewardsPane()
     Label *rewardDesc = Label::createWithTTF
         ("This Puzzle is worth:", GameSettings::getFontName(), 26);
     rewardDesc->setPosition(Vec2((visibleSize.width / 2) + 400, 350));
+    rewardDesc->setColor(Color3B::YELLOW);
 
     Sprite *star = Sprite::create("utility/star.png");
     star->setPosition(Vec2((visibleSize.width / 2) + 400, 280));
@@ -273,6 +278,31 @@ void PuzzleSelection::initRewardsPane()
     this->addChild(rewardDesc, 1);
     this->addChild(star, 1);
     this->addChild(puzzleValue, 1);
+}
+
+void PuzzleSelection::initAnimSwitch()
+{
+    animSwitch = Sprite::create("utility/switch_on.png");
+    animSwitch->setPosition(Vec2
+        ((visibleSize.width / 2) + 400, (visibleSize.height / 2) + 250));
+    animSwitch->setScale(0.66f);
+
+    auto listener = EventListenerTouchOneByOne::create();
+    listener->onTouchBegan =
+        CC_CALLBACK_2(PuzzleSelection::flipAnimSwitch, this);
+    _eventDispatcher->
+        addEventListenerWithSceneGraphPriority(listener, animSwitch);
+
+    Label *animLabel = Label::createWithTTF
+        ("Animated Shuffling", GameSettings::getFontName(), 26);
+    animLabel->setPosition(Vec2
+        (animSwitch->getPositionX(), animSwitch->getPositionY() + 50));
+    animLabel->setColor(Color3B::YELLOW);
+
+    updateAnimSwitch();
+
+    this->addChild(animSwitch, 2);
+    this->addChild(animLabel, 2);
 }
 
 void PuzzleSelection::updateDisplayedImage() const
@@ -342,6 +372,47 @@ void PuzzleSelection::puzzleTip(Ref* const sender) const
     MessageBox(tip, "Square Slide: Puzzles Tip");
 }
 
+void PuzzleSelection::setDefaultPuzzle() const
+{
+    GameSettings::setImageName("puzzles/" + puzzlesRef[0], 0);
+}
+
+int PuzzleSelection::calculatePuzzleValue() const
+{
+    int xSegments = GameSettings::getSegments().x;
+    int ySegments = GameSettings::getSegments().y;
+
+    return ((xSegments * ySegments) * 2) / 2;
+}
+
+bool PuzzleSelection::flipAnimSwitch(Touch* const touch, Event* const event) const
+{
+    Rect recTemp = event->getCurrentTarget()->getBoundingBox();
+    if (!recTemp.containsPoint(touch->getLocation()))
+    {
+        return false;
+    }
+
+    updateAnimStatus();
+    updateAnimSwitch();
+
+    return true;
+}
+
+void PuzzleSelection::updateAnimSwitch() const
+{
+    GameProfile::animatedShufflingEnabled() ?
+        animSwitch->initWithFile("utility/switch_on.png") :
+        animSwitch->initWithFile("utility/switch_off.png");
+}
+
+void PuzzleSelection::updateAnimStatus() const
+{
+    GameProfile::animatedShufflingEnabled() ?
+        GameProfile::setProfileStat(ProfileStat::animatedShuffling, "false") :
+        GameProfile::setProfileStat(ProfileStat::animatedShuffling, "true");
+}
+
 void PuzzleSelection::gotoMainMenu(Ref* const sender) const
 {
     Director::getInstance()->replaceScene(
@@ -354,17 +425,4 @@ void PuzzleSelection::gotoPuzzleGame(Ref* const sender) const
 
     Director::getInstance()->replaceScene(
         TransitionFade::create(0.5, PuzzleGame::createScene()));
-}
-
-void PuzzleSelection::setDefaultPuzzle() const
-{
-    GameSettings::setImageName("puzzles/" + puzzlesRef[0], 0);
-}
-
-int PuzzleSelection::calculatePuzzleValue() const
-{
-    int xSegments = GameSettings::getSegments().x;
-    int ySegments = GameSettings::getSegments().y;
-
-    return ((xSegments * ySegments) * 2) / 2;
 }

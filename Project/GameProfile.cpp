@@ -45,6 +45,10 @@ std::string GameProfile::profileStatToString(const ProfileStat &setting)
         {
             return "currentBackground";
         }
+        case ProfileStat::animatedShuffling:
+        {
+            return "animatedShuffling";
+        }
         default:
         {
             throw std::runtime_error("Error in profileStatToString");
@@ -79,6 +83,23 @@ void GameProfile::modifyProfileStat(const ProfileStat &setting,
 std::string GameProfile::getCurrentBackground()
 {
     return profileStats[profileStatToString(ProfileStat::currentBackground)];
+}
+
+bool GameProfile::animatedShufflingEnabled()
+{
+    std::string shuffleStr = getProfileStat(ProfileStat::animatedShuffling);
+
+    if (shuffleStr == "true")
+    {
+        return true;
+    }
+
+    if (shuffleStr == "false")
+    {
+        return false;
+    }
+
+    throw std::runtime_error("error in animatedShufflingEnabled");
 }
 
 // In a finished game the Unlocks would be read from a file. For now they are hard coded.

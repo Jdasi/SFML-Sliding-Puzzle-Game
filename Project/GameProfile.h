@@ -13,7 +13,8 @@ enum class ProfileStat
     puzzlesAttempted,
     puzzlesCompleted,
     backgroundsUnlocked,
-    currentBackground
+    currentBackground,
+    animatedShuffling
 };
 
 class GameProfile
@@ -31,6 +32,7 @@ public:
                                   const std::string &addition);
 
     static std::string getCurrentBackground();
+    static bool animatedShufflingEnabled();
 
     static void enumerateUnlocks();
     static std::vector<GameUnlock> &getUnlocks();

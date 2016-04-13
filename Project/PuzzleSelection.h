@@ -21,6 +21,7 @@ private:
     void initPreviewImage();
     void initArrows();
     void initRewardsPane();
+    void initAnimSwitch();
 
     void updateDisplayedImage() const;
     void updateImageLabels() const;
@@ -31,11 +32,15 @@ private:
 
     void puzzleTip(Ref* const sender) const;
 
-    void gotoMainMenu(Ref* const sender) const;
-    void gotoPuzzleGame(Ref* const sender) const;
-
     void setDefaultPuzzle() const;
     int calculatePuzzleValue() const;
+
+    bool flipAnimSwitch(cocos2d::Touch* const touch, cocos2d::Event* const event) const;
+    void updateAnimSwitch() const;
+    void updateAnimStatus() const;
+
+    void gotoMainMenu(Ref* const sender) const;
+    void gotoPuzzleGame(Ref* const sender) const;
 
     std::vector<std::string> &puzzlesRef;
 
@@ -49,6 +54,8 @@ private:
     cocos2d::Label *imageName;
     cocos2d::Label *imageNumber;
     cocos2d::Label *puzzleValue;
+
+    cocos2d::Sprite *animSwitch;
 
     cocos2d::Size visibleSize{ cocos2d::Director::getInstance()->getVisibleSize() };
 };
