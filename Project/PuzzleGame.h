@@ -8,6 +8,12 @@
 
 class PuzzleGame : public cocos2d::Layer
 {
+    enum class Animation
+    {
+        slide,
+        none
+    };
+
 public:
     PuzzleGame();
     static cocos2d::Scene *createScene();
@@ -28,7 +34,7 @@ private:
 
     void update(float delta) override;
 
-    void performMoves(MoveSequence &seq, const float speed, const bool animate);
+    void performMoves(MoveSequence &seq, Animation anim, const float speed = 0.0f);
     void updateMovesLabel(const int increment = 0);
     void updateTimeLabel();
 

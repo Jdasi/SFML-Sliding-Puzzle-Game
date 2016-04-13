@@ -5,7 +5,6 @@
 #include "PuzzleSelection.h"
 #include "MoveSequence.h"
 #include "TimeUtils.h"
-#include "SlideDirection.h"
 
 USING_NS_CC;
 
@@ -81,18 +80,25 @@ void PuzzleGame::initPuzzle()
     boardManager.updateBlankspaceInfo();
 
     int product = GameSettings::getSegments().x * GameSettings::getSegments().y;
-    shuffleTimes = (product * product) * 0.05;
+    shuffleTimes = (product * product) * 0.1;
 
-    for (int i = 0; i < 1000; ++i)
+    // Constrain shuffleTimes to a value between 50-150.
+    shuffleTimes = shuffleTimes < 50 ? 50 : shuffleTimes;
+    shuffleTimes = shuffleTimes > 150 ? 150 : shuffleTimes;
+
+    if (!GameProfile::animatedShufflingEnabled())
     {
-        MoveSequence seq;
-        boardManager.generateRandomMove(seq);
-        performMoves(seq, 0.01f, false);
-    }
+        for (int i = 0; i < shuffleTimes; ++i)
+        {
+            MoveSequence seq;
+            if (boardManager.generateRandomMove(seq))
+            {
+                performMoves(seq, Animation::none);
+            }
+        }
 
-    // Constrain shuffleTimes to a value between 30-100.
-    shuffleTimes = shuffleTimes < 30 ? 30 : shuffleTimes;
-    shuffleTimes = shuffleTimes > 100 ? 100 : shuffleTimes;
+        shuffling = false;
+    }
 }
 
 void PuzzleGame::initLabels()
@@ -192,23 +198,26 @@ void PuzzleGame::update(float delta)
         updateTimeLabel();
     }
 
-    if (computerMoves < 50)
+    if (GameProfile::animatedShufflingEnabled())
     {
-        MoveSequence seq;
-        if (boardManager.generateRandomMove(seq))
+        if (computerMoves < shuffleTimes)
         {
-            performMoves(seq, 0.01f, true);
-            ++computerMoves;
+            MoveSequence seq;
+            if (boardManager.generateRandomMove(seq))
+            {
+                performMoves(seq, Animation::slide, 0.01f);
+                ++computerMoves;
+            }
         }
-    }
-    else
-    {
-        shuffling = false;
-
-        if (!started)
+        else
         {
-            timer.startTimer();
-            started = true;
+            shuffling = false;
+
+            if (!started)
+            {
+                timer.startTimer();
+                started = true;
+            }
         }
     }
 }
@@ -235,7 +244,7 @@ bool PuzzleGame::interactWithPuzzle(Touch* const touch, Event* const event)
         return false;
     }
 
-    performMoves(sequence, 0.1f, true);
+    performMoves(sequence, Animation::slide, 0.1f);
 
     if (boardManager.isPuzzleComplete())
     {
@@ -247,7 +256,7 @@ bool PuzzleGame::interactWithPuzzle(Touch* const touch, Event* const event)
 }
 
 // Animates the movement of any PuzzlePieces contained in the MoveSequence.
-void PuzzleGame::performMoves(MoveSequence &seq, const float speed, const bool animate)
+void PuzzleGame::performMoves(MoveSequence &seq, Animation anim, const float speed)
 {
     // We need to reverse the vectors because the pieces are pushed back in reverse order.
     std::reverse(seq.pieceContainer.begin(), seq.pieceContainer.end());
@@ -261,7 +270,7 @@ void PuzzleGame::performMoves(MoveSequence &seq, const float speed, const bool a
 
     for (PuzzlePiece *p : seq.pieceContainer)
     {
-        if (animate)
+        if (anim == Animation::slide)
         {
             MoveBy *moveBy = MoveBy::create(speed, Vec2(seq.xMoveDist, seq.yMoveDist));
             p->runAction(moveBy);
@@ -287,7 +296,7 @@ void PuzzleGame::performMoves(MoveSequence &seq, const float speed, const bool a
 
     for (Label *l : seq.labelContainer)
     {
-        if (animate)
+        if (anim == Animation::slide)
         {
             MoveBy *move = MoveBy::create(speed, Vec2(seq.xMoveDist, seq.yMoveDist));
             l->runAction(move);
@@ -302,7 +311,7 @@ void PuzzleGame::performMoves(MoveSequence &seq, const float speed, const bool a
         }
     }
 
-    if (animate)
+    if (anim == Animation::slide)
     {
         MoveTo *pieceMove = MoveTo::create(speed, endPiecePos);
         blankSpaceRef.runAction(pieceMove);
@@ -457,14 +466,22 @@ void PuzzleGame::createEndGameElements()
 
 void PuzzleGame::gotoMainMenu(Ref* const sender)
 {
-    timer.endTimerAndRecord();
+    if (started)
+    {
+        timer.endTimerAndRecord();
+    }
+
     Director::getInstance()->replaceScene(
         TransitionFade::create(0.5, MainMenu::createScene()));
 }
 
 void PuzzleGame::gotoPuzzleSelection(Ref* const sender)
 {
-    timer.endTimerAndRecord();
+    if (started)
+    {
+        timer.endTimerAndRecord();
+    }
+    
     Director::getInstance()->replaceScene(
         TransitionFade::create(0.5, PuzzleSelection::createScene()));
 }
