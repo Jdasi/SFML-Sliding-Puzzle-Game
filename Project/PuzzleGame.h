@@ -28,7 +28,7 @@ private:
 
     void update(float delta) override;
 
-    void performMoves(MoveSequence &seq, const float speed);
+    void performMoves(MoveSequence &seq, const float speed, const bool animate);
     void updateMovesLabel(const int increment = 0);
     void updateTimeLabel();
 

@@ -83,6 +83,13 @@ void PuzzleGame::initPuzzle()
     int product = GameSettings::getSegments().x * GameSettings::getSegments().y;
     shuffleTimes = (product * product) * 0.05;
 
+    for (int i = 0; i < 1000; ++i)
+    {
+        MoveSequence seq;
+        boardManager.generateRandomMove(seq);
+        performMoves(seq, 0.01f, false);
+    }
+
     // Constrain shuffleTimes to a value between 30-100.
     shuffleTimes = shuffleTimes < 30 ? 30 : shuffleTimes;
     shuffleTimes = shuffleTimes > 100 ? 100 : shuffleTimes;
@@ -185,12 +192,12 @@ void PuzzleGame::update(float delta)
         updateTimeLabel();
     }
 
-    if (computerMoves < shuffleTimes)
+    if (computerMoves < 50)
     {
         MoveSequence seq;
         if (boardManager.generateRandomMove(seq))
         {
-            performMoves(seq, 0.01f);
+            performMoves(seq, 0.01f, true);
             ++computerMoves;
         }
     }
@@ -228,7 +235,7 @@ bool PuzzleGame::interactWithPuzzle(Touch* const touch, Event* const event)
         return false;
     }
 
-    performMoves(sequence, 0.1f);
+    performMoves(sequence, 0.1f, true);
 
     if (boardManager.isPuzzleComplete())
     {
@@ -240,7 +247,7 @@ bool PuzzleGame::interactWithPuzzle(Touch* const touch, Event* const event)
 }
 
 // Animates the movement of any PuzzlePieces contained in the MoveSequence.
-void PuzzleGame::performMoves(MoveSequence &seq, const float speed)
+void PuzzleGame::performMoves(MoveSequence &seq, const float speed, const bool animate)
 {
     // We need to reverse the vectors because the pieces are pushed back in reverse order.
     std::reverse(seq.pieceContainer.begin(), seq.pieceContainer.end());
@@ -248,11 +255,25 @@ void PuzzleGame::performMoves(MoveSequence &seq, const float speed)
 
     PuzzlePiece *endPiecePtr = seq.pieceContainer[seq.pieceContainer.size() - 1];
     PuzzlePiece &blankSpaceRef = puzzle.getPiece(boardManager.findBlankSpace());
+    
+    Vec2 endPiecePos = endPiecePtr->getPosition();
+    Vec2 endLabelPos = endPiecePtr->getNumLabel()->getPosition();
 
     for (PuzzlePiece *p : seq.pieceContainer)
     {
-        MoveBy *moveBy = MoveBy::create(speed, Vec2(seq.xMoveDist, seq.yMoveDist));
-        p->runAction(moveBy);
+        if (animate)
+        {
+            MoveBy *moveBy = MoveBy::create(speed, Vec2(seq.xMoveDist, seq.yMoveDist));
+            p->runAction(moveBy);
+        }
+        else
+        {
+            Vec2 piecePos = p->getPosition();
+            Vec2 blankPos = blankSpaceRef.getPosition();
+
+            p->setPosition(blankPos);
+            blankSpaceRef.setPosition(piecePos);
+        }
 
         boardManager.swapPieces(p->getArrayPos(), boardManager.findBlankSpace());
         boardManager.updateBlankspaceInfo();
@@ -266,15 +287,34 @@ void PuzzleGame::performMoves(MoveSequence &seq, const float speed)
 
     for (Label *l : seq.labelContainer)
     {
-        MoveBy *move = MoveBy::create(speed, Vec2(seq.xMoveDist, seq.yMoveDist));
-        l->runAction(move);
+        if (animate)
+        {
+            MoveBy *move = MoveBy::create(speed, Vec2(seq.xMoveDist, seq.yMoveDist));
+            l->runAction(move);
+        }
+        else
+        {
+            Vec2 labelPos = l->getPosition();
+            Vec2 blankPos = blankSpaceRef.getNumLabel()->getPosition();
+
+            l->setPosition(blankPos);
+            blankSpaceRef.getNumLabel()->setPosition(labelPos);
+        }
     }
 
-    MoveTo *pieceMove = MoveTo::create(speed, endPiecePtr->getPosition());
-    blankSpaceRef.runAction(pieceMove);
+    if (animate)
+    {
+        MoveTo *pieceMove = MoveTo::create(speed, endPiecePos);
+        blankSpaceRef.runAction(pieceMove);
 
-    MoveTo *labelMove = MoveTo::create(speed, endPiecePtr->getNumLabel()->getPosition());
-    blankSpaceRef.getNumLabel()->runAction(labelMove);
+        MoveTo *labelMove = MoveTo::create(speed, endLabelPos);
+        blankSpaceRef.getNumLabel()->runAction(labelMove);
+    }
+    else
+    {
+        blankSpaceRef.setPosition(endPiecePos);
+        blankSpaceRef.getNumLabel()->setPosition(endLabelPos);
+    }
 }
 
 void PuzzleGame::updateMovesLabel(const int increment)
