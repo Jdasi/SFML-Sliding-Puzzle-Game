@@ -17,7 +17,7 @@ static std::string wstring_to_string(const std::wstring &str)
 
 std::wstring getExecutablePath()
 {
-    const char executeableName[] = "PuzzleGame.exe";
+    char executeableName[] = "PuzzleGame.exe";
 
     TCHAR path[MAX_PATH];
 

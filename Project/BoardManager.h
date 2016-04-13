@@ -3,8 +3,6 @@
 #include "Coordinate.h"
 #include "SlideDirection.h"
 
-#include <vector>
-
 namespace cocos2d
 {
     class Label;

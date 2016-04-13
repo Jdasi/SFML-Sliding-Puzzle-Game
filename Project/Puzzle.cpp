@@ -126,7 +126,7 @@ int Puzzle::getPadding() const
     return pad;
 }
 
-// Main method for swapping array position and coordinates of two PuzzlePieces.
+// Swaps the array position and coordinates of two pieces.
 void Puzzle::swapPieces(const int fromPiece, const int toPiece)
 {
     std::swap(puzzlePieces[fromPiece], puzzlePieces[toPiece]);
@@ -138,7 +138,7 @@ void Puzzle::swapPieces(const int fromPiece, const int toPiece)
     Coordinate fromCoords = puzzlePieces[fromPiece]->getCoordinates();
     Coordinate toCoords = puzzlePieces[toPiece]->getCoordinates();
 
-    // Re-assign using temporary values.
+    // Re-assign from temporary values.
     puzzlePieces[fromPiece]->setArrayPos(toArrayPos);
     puzzlePieces[toPiece]->setArrayPos(fromArrayPos);
 

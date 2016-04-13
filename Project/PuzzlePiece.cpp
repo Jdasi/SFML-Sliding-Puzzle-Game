@@ -62,15 +62,15 @@ void PuzzlePiece::setBlankSpace(const bool b)
 {
     blankSpace = b;
 
-    if (isBlankSpace())
-    {
-        setOpacity(0);
-        enableLabel(false);
-    }
-    else
+    if (!isBlankSpace())
     {
         setOpacity(255);
         enableLabel(true);
+    }
+    else
+    {
+        setOpacity(0);
+        enableLabel(false);
     }
 }
 

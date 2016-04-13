@@ -34,7 +34,10 @@ private:
 
     void update(float delta) override;
 
-    void performMoves(MoveSequence &seq, Animation anim, const float speed = 0.0f);
+    void processMoves(MoveSequence &seq, Animation anim, const float speed = 0.0f);
+    void performMoves(Node* const from, Node* const to, const MoveSequence &seq, 
+                      Animation anim, const float speed) const;
+
     void updateMovesLabel(const int increment = 0);
     void updateTimeLabel();
 
@@ -57,7 +60,6 @@ private:
     int startPosY;
 
     bool gameOver;
-    bool shuffling;
     bool started;
     int shuffleTimes;
     int computerMoves;

@@ -13,7 +13,6 @@ PuzzleGame::PuzzleGame()
     , startPosX(0)
     , startPosY(0)
     , gameOver(false)
-    , shuffling(true)
     , started(false)
     , shuffleTimes(0)
     , computerMoves(0)
@@ -82,9 +81,9 @@ void PuzzleGame::initPuzzle()
     int product = GameSettings::getSegments().x * GameSettings::getSegments().y;
     shuffleTimes = (product * product) * 0.1;
 
-    // Constrain shuffleTimes to a value between 50-150.
+    // Constrain shuffleTimes to a value between 50-200.
     shuffleTimes = shuffleTimes < 50 ? 50 : shuffleTimes;
-    shuffleTimes = shuffleTimes > 150 ? 150 : shuffleTimes;
+    shuffleTimes = shuffleTimes > 200 ? 200 : shuffleTimes;
 
     if (!GameProfile::animatedShufflingEnabled())
     {
@@ -93,11 +92,12 @@ void PuzzleGame::initPuzzle()
             MoveSequence seq;
             if (boardManager.generateRandomMove(seq))
             {
-                performMoves(seq, Animation::none);
+                processMoves(seq, Animation::none);
             }
         }
 
-        shuffling = false;
+        timer.startTimer();
+        started = true;
     }
 }
 
@@ -155,7 +155,8 @@ void PuzzleGame::initMenuPane()
 void PuzzleGame::initPreviewImage()
 {
     previewImage = Sprite::create(GameSettings::getImageName());
-    previewImage->setPosition(Vec2(visibleSize.width - 210, (visibleSize.height / 2) + 175));
+    previewImage->setPosition
+        (Vec2(visibleSize.width - 210, (visibleSize.height / 2) + 175));
     previewImage->setScaleX(264 / previewImage->getContentSize().width);
     previewImage->setScaleY(198 / previewImage->getContentSize().height);
 
@@ -193,7 +194,7 @@ void PuzzleGame::initHintSwitch()
 
 void PuzzleGame::update(float delta)
 {
-    if (!gameOver && !shuffling)
+    if (!gameOver && started)
     {
         updateTimeLabel();
     }
@@ -205,14 +206,12 @@ void PuzzleGame::update(float delta)
             MoveSequence seq;
             if (boardManager.generateRandomMove(seq))
             {
-                performMoves(seq, Animation::slide, 0.01f);
+                processMoves(seq, Animation::slide, 0.01f);
                 ++computerMoves;
             }
         }
         else
         {
-            shuffling = false;
-
             if (!started)
             {
                 timer.startTimer();
@@ -225,7 +224,7 @@ void PuzzleGame::update(float delta)
 // Entry point for puzzle interaction; uses BoardManager to identify a valid move attempt.
 bool PuzzleGame::interactWithPuzzle(Touch* const touch, Event* const event)
 {
-    if (gameOver || shuffling)
+    if (gameOver || !started)
     {
         return false;
     }
@@ -244,7 +243,7 @@ bool PuzzleGame::interactWithPuzzle(Touch* const touch, Event* const event)
         return false;
     }
 
-    performMoves(sequence, Animation::slide, 0.1f);
+    processMoves(sequence, Animation::slide, 0.1f);
 
     if (boardManager.isPuzzleComplete())
     {
@@ -255,74 +254,46 @@ bool PuzzleGame::interactWithPuzzle(Touch* const touch, Event* const event)
     return true;
 }
 
-// Animates the movement of any PuzzlePieces contained in the MoveSequence.
-void PuzzleGame::performMoves(MoveSequence &seq, Animation anim, const float speed)
+void PuzzleGame::processMoves(MoveSequence &seq, Animation anim, const float speed)
 {
-    // We need to reverse the vectors because the pieces are pushed back in reverse order.
-    std::reverse(seq.pieceContainer.begin(), seq.pieceContainer.end());
-    std::reverse(seq.labelContainer.begin(), seq.labelContainer.end());
-
-    PuzzlePiece *endPiecePtr = seq.pieceContainer[seq.pieceContainer.size() - 1];
     PuzzlePiece &blankSpaceRef = puzzle.getPiece(boardManager.findBlankSpace());
-    
-    Vec2 endPiecePos = endPiecePtr->getPosition();
-    Vec2 endLabelPos = endPiecePtr->getNumLabel()->getPosition();
 
+    // We need to reverse the vector because the pieces are pushed back in reverse order.
+    std::reverse(seq.pieceContainer.begin(), seq.pieceContainer.end());
     for (PuzzlePiece *p : seq.pieceContainer)
     {
-        if (anim == Animation::slide)
-        {
-            MoveBy *moveBy = MoveBy::create(speed, Vec2(seq.xMoveDist, seq.yMoveDist));
-            p->runAction(moveBy);
-        }
-        else
-        {
-            Vec2 piecePos = p->getPosition();
-            Vec2 blankPos = blankSpaceRef.getPosition();
-
-            p->setPosition(blankPos);
-            blankSpaceRef.setPosition(piecePos);
-        }
+        performMoves(p, &blankSpaceRef, seq, anim, speed);
+        performMoves(p->getNumLabel(), blankSpaceRef.getNumLabel(), seq, anim, speed);
 
         boardManager.swapPieces(p->getArrayPos(), boardManager.findBlankSpace());
         boardManager.updateBlankspaceInfo();
 
-        if (!shuffling)
+        if (started)
         {
             GameProfile::modifyProfileStat(ProfileStat::totalMoves, 1);
             updateMovesLabel(1);
         }
     }
+}
 
-    for (Label *l : seq.labelContainer)
-    {
-        if (anim == Animation::slide)
-        {
-            MoveBy *move = MoveBy::create(speed, Vec2(seq.xMoveDist, seq.yMoveDist));
-            l->runAction(move);
-        }
-        else
-        {
-            Vec2 labelPos = l->getPosition();
-            Vec2 blankPos = blankSpaceRef.getNumLabel()->getPosition();
-
-            l->setPosition(blankPos);
-            blankSpaceRef.getNumLabel()->setPosition(labelPos);
-        }
-    }
-
+void PuzzleGame::performMoves(Node* const from, Node* const to, const MoveSequence &seq, 
+                              Animation anim, const float speed) const
+{
     if (anim == Animation::slide)
     {
-        MoveTo *pieceMove = MoveTo::create(speed, endPiecePos);
-        blankSpaceRef.runAction(pieceMove);
+        MoveBy *moveOne = MoveBy::create(speed, Vec2(seq.xMoveDist, seq.yMoveDist));
+        from->runAction(moveOne);
 
-        MoveTo *labelMove = MoveTo::create(speed, endLabelPos);
-        blankSpaceRef.getNumLabel()->runAction(labelMove);
+        MoveBy *moveTwo = MoveBy::create(speed, Vec2(-seq.xMoveDist, -seq.yMoveDist));
+        to->runAction(moveTwo);
     }
     else
     {
-        blankSpaceRef.setPosition(endPiecePos);
-        blankSpaceRef.getNumLabel()->setPosition(endLabelPos);
+        Vec2 fromPos = from->getPosition();
+        Vec2 toPos = to->getPosition();
+
+        from->setPosition(toPos);
+        to->setPosition(fromPos);
     }
 }
 

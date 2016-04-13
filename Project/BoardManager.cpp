@@ -1,5 +1,4 @@
 #include "BoardManager.h"
-#include "GameSettings.h"
 #include "Puzzle.h"
 #include "PuzzlePiece.h"
 #include "MoveSequence.h"
@@ -41,7 +40,9 @@ bool BoardManager::sanityCheckMove(Rect &rect, Touch &touch, PuzzlePiece* const 
     return true;
 }
 
-// Identifies a valid move by comparing the coordinates of the piece and blankspace.
+/* Compares the coordinates of the passed PuzzlePiece and the BlankSpace.
+ * If any similarities are found in either X or Y, a SlideDirection is generated.
+ */
 bool BoardManager::generateTileMoves(MoveSequence &seq, PuzzlePiece* const piece)
 {
     currentPieceArrayPos = piece->getArrayPos();
@@ -83,7 +84,9 @@ bool BoardManager::generateTileMoves(MoveSequence &seq, PuzzlePiece* const piece
     return false;
 }
 
-// Identifies the pieces that are to be affected when a piece is clicked.
+/* Uses the SlideDirection to determine which direction to search for the BlankSpace.
+ * Any pieces identified in the search are pushed back into a vector to be processed.
+ */ 
 bool BoardManager::generateMove(MoveSequence &seq, const SlideDirection &dir)
 {
     switch (dir)
@@ -154,7 +157,10 @@ bool BoardManager::generateMove(MoveSequence &seq, const SlideDirection &dir)
     return true;
 }
 
-// Main method for shuffling tiles on puzzle initialisation.
+/* The computer-generated method for shuffling the board.
+ * Because we follow the rules of the game to scramble the board, we ensure the puzzle
+ * is always solvable.
+ */
 bool BoardManager::generateRandomMove(MoveSequence &seq)
 {
     PuzzlePiece &blankSpaceRef = puzzle.getPiece(blankSpace);
@@ -173,7 +179,6 @@ bool BoardManager::generateRandomMove(MoveSequence &seq)
         }
 
         Coordinate attempt { 0, 0 };
-
         seq.xMoveDist = 0;
         seq.yMoveDist = 0;
 
@@ -183,7 +188,8 @@ bool BoardManager::generateRandomMove(MoveSequence &seq)
             {
                 attempt = { blankSpaceCoords.x, blankSpaceCoords.y - 1 };
 
-                seq.yMoveDist = -(blankSpaceRef.getBoundingBox().size.height + puzzle.getPadding());
+                seq.yMoveDist = -(blankSpaceRef.getBoundingBox().size.height + 
+                    puzzle.getPadding());
                 direction = SlideDirection::down;
 
                 break;
@@ -192,7 +198,8 @@ bool BoardManager::generateRandomMove(MoveSequence &seq)
             {
                 attempt = { blankSpaceCoords.x, blankSpaceCoords.y + 1 };
 
-                seq.yMoveDist = blankSpaceRef.getBoundingBox().size.height + puzzle.getPadding();
+                seq.yMoveDist = blankSpaceRef.getBoundingBox().size.height + 
+                    puzzle.getPadding();
                 direction = SlideDirection::up;
 
                 break;
@@ -200,7 +207,8 @@ bool BoardManager::generateRandomMove(MoveSequence &seq)
             case SlideDirection::left:
             {
                 attempt = { blankSpaceCoords.x - 1, blankSpaceCoords.y };
-                seq.xMoveDist = blankSpaceRef.getBoundingBox().size.width + puzzle.getPadding();
+                seq.xMoveDist = blankSpaceRef.getBoundingBox().size.width + 
+                    puzzle.getPadding();
 
                 direction = SlideDirection::right;
 
@@ -210,12 +218,16 @@ bool BoardManager::generateRandomMove(MoveSequence &seq)
             {
                 attempt = { blankSpaceCoords.x + 1, blankSpaceCoords.y };
 
-                seq.xMoveDist = -(blankSpaceRef.getBoundingBox().size.width + puzzle.getPadding());
+                seq.xMoveDist = -(blankSpaceRef.getBoundingBox().size.width + 
+                    puzzle.getPadding());
                 direction = SlideDirection::left;
 
                 break;
             }
-            default: {}
+            default:
+            {
+                throw std::runtime_error("Error in generateRandomMove");
+            }
         }
 
         if (!puzzle.inBounds(attempt.x, attempt.y))
@@ -236,7 +248,6 @@ bool BoardManager::generateRandomMove(MoveSequence &seq)
     return true;
 }
 
-// Adds all non-blankspace pieces to the vector so they are ready to be moved.
 bool BoardManager::pushBackTilesToBeMoved(MoveSequence &seq, const Coordinate pos) const
 {
     PuzzlePiece &pieceRef = puzzle.getPiece(pos);
@@ -246,7 +257,6 @@ bool BoardManager::pushBackTilesToBeMoved(MoveSequence &seq, const Coordinate po
     }
 
     seq.pieceContainer.push_back(&pieceRef);
-    seq.labelContainer.push_back(pieceRef.getNumLabel());
 
     return true;
 }

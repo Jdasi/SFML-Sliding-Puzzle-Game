@@ -363,7 +363,7 @@ bool PuzzleSelection::rightArrowClick(Ref* const sender) const
 
 void PuzzleSelection::puzzleTip(Ref* const sender) const
 {
-    const char tip[124]
+    const char tip[]
     {
         "You can expand your puzzle library by adding images to the puzzles folder. \
         (Accepted image types are .jpg and .png)"

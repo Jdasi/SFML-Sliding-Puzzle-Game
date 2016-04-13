@@ -244,10 +244,10 @@ void ProfileUnlocks::performContextAction(Ref* const sender)
     {
         case ContextAction::unlock:
         {
-            GameProfile::modifyProfileStat
-                (ProfileStat::stars, -unlocksRef[currentSelection].getStarCost());
-            GameProfile::modifyProfileStat
-                (ProfileStat::backgroundsUnlocked, unlocksRef[currentSelection].getName());
+            GameProfile::modifyProfileStat(ProfileStat::stars, 
+                -unlocksRef[currentSelection].getStarCost());
+            GameProfile::modifyProfileStat(ProfileStat::backgroundsUnlocked, 
+                unlocksRef[currentSelection].getName());
 
             previewImages[currentSelection]->initWithFile
                 ("backdrops/" + unlocksRef[currentSelection].getName() + "_puzzle.jpg");
