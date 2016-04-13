@@ -79,11 +79,11 @@ void PuzzleGame::initPuzzle()
     boardManager.updateBlankspaceInfo();
 
     int product = GameSettings::getSegments().x * GameSettings::getSegments().y;
-    shuffleTimes = (product * product) * 0.1;
+    shuffleTimes = (product * product) * 0.5;
 
-    // Constrain shuffleTimes to a value between 50-200.
+    // Constrain shuffleTimes to a value between 50-300.
     shuffleTimes = shuffleTimes < 50 ? 50 : shuffleTimes;
-    shuffleTimes = shuffleTimes > 200 ? 200 : shuffleTimes;
+    shuffleTimes = shuffleTimes > 300 ? 300 : shuffleTimes;
 
     if (!GameProfile::animatedShufflingEnabled())
     {
