@@ -36,8 +36,8 @@ public:
     bool sanityCheckMove(cocos2d::Rect &rect, cocos2d::Touch &touch, 
                          PuzzlePiece* const piece) const;
     bool generateTileMoves(MoveSequence &seq, PuzzlePiece* const piece);
-    void generateMove(MoveSequence &seq, const SlideDirection &dir);
-    bool pushBackTilesToBeMoved(MoveSequence &seq, const Coordinate &pos) const;
+    void generateMove(MoveSequence &seq, const SlideDirection dir);
+    bool pushBackTilesToBeMoved(MoveSequence &seq, const Coordinate pos) const;
 
     void generateRandomMoves(const int times);
     bool tryComputerMove(const int fromPiece, const Coordinate &coords) const;

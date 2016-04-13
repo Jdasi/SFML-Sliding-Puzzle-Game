@@ -83,7 +83,7 @@ bool BoardManager::generateTileMoves(MoveSequence &seq, PuzzlePiece* const piece
 }
 
 // Identifies the pieces that are to be affected when a piece is clicked.
-void BoardManager::generateMove(MoveSequence &seq, const SlideDirection &dir)
+void BoardManager::generateMove(MoveSequence &seq, const SlideDirection dir)
 {
     switch (dir)
     {
@@ -148,7 +148,7 @@ void BoardManager::generateMove(MoveSequence &seq, const SlideDirection &dir)
 }
 
 // Adds all non-blankspace pieces to the vector so they are ready to be moved.
-bool BoardManager::pushBackTilesToBeMoved(MoveSequence &seq, const Coordinate &pos) const
+bool BoardManager::pushBackTilesToBeMoved(MoveSequence &seq, const Coordinate pos) const
 {
     PuzzlePiece &pieceRef = puzzle.getPiece(pos);
     if (pieceRef.isBlankSpace())
