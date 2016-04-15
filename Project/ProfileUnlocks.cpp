@@ -122,14 +122,7 @@ void ProfileUnlocks::initPreviewImages()
     {
         Sprite *spr = Sprite::create();
 
-        if (unlocksRef[i].isLocked())
-        {
-            imgSuffix = "_locked.jpg";
-        }
-        else
-        {
-            imgSuffix = "_puzzle.jpg";
-        }
+        imgSuffix = unlocksRef[i].isLocked() ? "_locked.jpg" : "_puzzle.jpg";
 
         spr->initWithFile("backdrops/" + unlocksRef[i].getName() + imgSuffix);
         spr->setPosition(Vec2(250 + (i * 285) + (i * 2), (visibleSize.height / 2) + 100));
@@ -179,7 +172,6 @@ void ProfileUnlocks::initLabels()
 bool ProfileUnlocks::imageClick(Touch* const touch, Event* const event)
 {
     Sprite *spr = static_cast<Sprite*>(event->getCurrentTarget());
-
     Point pt = touch->getLocation();
     Rect recTemp = spr->getBoundingBox();
 
@@ -188,9 +180,9 @@ bool ProfileUnlocks::imageClick(Touch* const touch, Event* const event)
         return false;
     }
 
-    for (auto i : previewImages)
+    for (Sprite *image : previewImages)
     {
-        i->setOpacity(fadedOpacity);
+        image->setOpacity(fadedOpacity);
     }
 
     spr->setOpacity(selectedOpacity);
@@ -226,16 +218,16 @@ void ProfileUnlocks::updateActionButton()
                 CC_CALLBACK_1(ProfileUnlocks::performContextAction, this));
             action = ContextAction::null;
         }
-
-        return;
     }
-
-    actionButton->initWithNormalSprite(
-        Sprite::create("utility/select_up.png"),
-        Sprite::create("utility/select_dn.png"),
-        nullptr,
-        CC_CALLBACK_1(ProfileUnlocks::performContextAction, this));
-    action = ContextAction::select;
+    else
+    {
+        actionButton->initWithNormalSprite(
+            Sprite::create("utility/select_up.png"),
+            Sprite::create("utility/select_dn.png"),
+            nullptr,
+            CC_CALLBACK_1(ProfileUnlocks::performContextAction, this));
+        action = ContextAction::select;
+    }
 }
 
 void ProfileUnlocks::performContextAction(Ref* const sender)
@@ -258,7 +250,7 @@ void ProfileUnlocks::performContextAction(Ref* const sender)
             updateNumStarsLabel();
 
             action = ContextAction::select;
-            performContextAction(this);
+            performContextAction();
 
             break;
         }
@@ -291,16 +283,17 @@ void ProfileUnlocks::updateSelectionRect()
 
 void ProfileUnlocks::updateContextHintLabel()
 {
-    GameUnlock uRef = unlocksRef[currentSelection];
-    std::string uRefCost = std::to_string(uRef.getStarCost());
+    GameUnlock &unlock = unlocksRef[currentSelection];
+    std::string unlockCost = std::to_string(unlock.getStarCost());
 
-    std::string toString;
+    std::string str;
     switch (action)
     {
         case ContextAction::unlock:
         {
-            toString += "This backdrop costs " + uRefCost + " stars to unlock. ";
-            toString += "Press 'Unlock' to access '" + uRef.getName() + "' now!";
+            str += "This backdrop costs " + unlockCost + " stars to unlock. ";
+            str += "Press 'Unlock' to access '" + unlock.getName() + "' now!";
+
             break;
         }
         case ContextAction::select:
@@ -308,25 +301,26 @@ void ProfileUnlocks::updateContextHintLabel()
             if (previewImages[currentSelection]->getTag() == 
                 GameProfile::stringToBackgroundID(GameProfile::getCurrentBackground()))
             {
-                toString += "This backdrop is currently enabled.";
+                str += "This backdrop is currently enabled.";
             }
             else
             {
-                toString += "You own this backdrop. Press 'Select' to set '";
-                toString += uRef.getName() + "' as your backdrop now!";
+                str += "You own this backdrop. Press 'Select' to set '";
+                str += unlock.getName() + "' as your backdrop now!";
             }
 
             break;
         }
         case ContextAction::null:
         {
-            toString += "This backdrop costs " + uRefCost + " stars to unlock. ";
-            toString += "Earn more stars by completing puzzles!";
+            str += "This backdrop costs " + unlockCost + " stars to unlock. ";
+            str += "Earn more stars by completing puzzles!";
+
             break;
         }
     }
 
-    contextHintLabel->setString(toString);
+    contextHintLabel->setString(str);
 }
 
 void ProfileUnlocks::updateNumStarsLabel() const

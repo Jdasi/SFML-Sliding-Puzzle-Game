@@ -58,20 +58,12 @@ bool PuzzlePiece::isBlankSpace() const
     return blankSpace;
 }
 
-void PuzzlePiece::setBlankSpace(const bool b)
+void PuzzlePiece::setBlankSpace(const bool value)
 {
-    blankSpace = b;
+    blankSpace = value;
 
-    if (!isBlankSpace())
-    {
-        setOpacity(255);
-        enableLabel(true);
-    }
-    else
-    {
-        setOpacity(0);
-        enableLabel(false);
-    }
+    setOpacity(!isBlankSpace() ? 255 : 0);
+    enableLabel(!value);
 }
 
 int PuzzlePiece::getID() const
@@ -107,19 +99,21 @@ void PuzzlePiece::setNumLabelPos() const
                                rectPos.y - (rectSize.height * 0.4)));
 }
 
-Label* PuzzlePiece::getNumLabel() const
+Label *PuzzlePiece::getNumLabel() const
 {
     return numLabel;
 }
 
 void PuzzlePiece::enableLabel(const bool enable) const
 {
-    if (enable)
-    {
-        numLabel->setOpacity(255);
-    }
-    else
-    {
-        numLabel->setOpacity(0);
-    }
+    numLabel->setOpacity(enable ? 255 : 0);
+}
+
+void PuzzlePiece::initListener(PuzzleGame* const pScene)
+{
+    auto listener = EventListenerTouchOneByOne::create();
+    listener->onTouchBegan =
+        CC_CALLBACK_2(PuzzleGame::interactWithPuzzle, pScene);
+    _eventDispatcher->
+        addEventListenerWithSceneGraphPriority(listener, this);
 }

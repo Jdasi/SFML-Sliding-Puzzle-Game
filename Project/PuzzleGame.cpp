@@ -85,6 +85,7 @@ void PuzzleGame::initPuzzle()
     shuffleTimes = shuffleTimes < 50 ? 50 : shuffleTimes;
     shuffleTimes = shuffleTimes > 300 ? 300 : shuffleTimes;
 
+    // Shuffling without animation.
     if (!GameProfile::animatedShufflingEnabled())
     {
         for (int i = 0; i < shuffleTimes; ++i)
@@ -199,6 +200,7 @@ void PuzzleGame::update(float delta)
         updateTimeLabel();
     }
 
+    // Shuffling with animation.
     if (GameProfile::animatedShufflingEnabled())
     {
         if (computerMoves < shuffleTimes)
@@ -387,14 +389,7 @@ void PuzzleGame::changeExistingElements()
     previewImage->setOpacity(0);
     hintSwitch->setOpacity(0);
 
-    if (usedHints)
-    {
-        switchLabel->setString("Used Hints");
-    }
-    else
-    {
-        switchLabel->setOpacity(0);
-    }
+    usedHints ? switchLabel->setString("Used Hints") : switchLabel->setOpacity(0);
 
     menuPuzzle->initWithNormalSprite(
         Sprite::create("utility/new_up.png"),
@@ -437,22 +432,25 @@ void PuzzleGame::createEndGameElements()
 
 void PuzzleGame::gotoMainMenu(Ref* const sender)
 {
-    if (started)
-    {
-        timer.endTimerAndRecord();
-    }
+    recordTimerIfStarted();
 
     Director::getInstance()->replaceScene(
         TransitionFade::create(0.5, MainMenu::createScene()));
 }
 
+
 void PuzzleGame::gotoPuzzleSelection(Ref* const sender)
+{
+    recordTimerIfStarted();
+
+    Director::getInstance()->replaceScene(
+        TransitionFade::create(0.5, PuzzleSelection::createScene()));
+}
+
+void PuzzleGame::recordTimerIfStarted()
 {
     if (started)
     {
         timer.endTimerAndRecord();
     }
-    
-    Director::getInstance()->replaceScene(
-        TransitionFade::create(0.5, PuzzleSelection::createScene()));
 }

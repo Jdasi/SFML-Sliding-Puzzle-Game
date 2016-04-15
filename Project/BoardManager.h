@@ -5,18 +5,12 @@
 
 namespace cocos2d
 {
-    class Label;
-};
-
-class PuzzlePiece;
-
-namespace cocos2d
-{
     class Touch;
     class Rect;
 }
 
 class Puzzle;
+class PuzzlePiece;
 struct MoveSequence;
 
 class BoardManager

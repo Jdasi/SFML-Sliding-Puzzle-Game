@@ -52,6 +52,7 @@ private:
 
     void gotoMainMenu(Ref* const sender);
     void gotoPuzzleSelection(Ref* const sender);
+    void recordTimerIfStarted();
 
     Puzzle puzzle;
     BoardManager boardManager;

@@ -2,7 +2,7 @@
 
 enum class SlideDirection
 {
-    up = 0,
+    up,
     right,
     down,
     left

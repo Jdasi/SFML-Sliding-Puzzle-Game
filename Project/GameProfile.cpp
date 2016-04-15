@@ -61,9 +61,33 @@ std::string GameProfile::getProfileStat(const ProfileStat &setting)
     return profileStats[profileStatToString(setting)];
 }
 
-void GameProfile::setProfileStat(const ProfileStat &setting, const std::string &val)
+void GameProfile::setProfileStat(const ProfileStat &setting, const std::string &value)
 {
-    profileStats[profileStatToString(setting)] = val;
+    profileStats[profileStatToString(setting)] = value;
+}
+
+void GameProfile::setProfileStat(const ProfileStat &setting, const bool value)
+{
+    std::string actualValue;
+    switch (value)
+    {
+        case true:
+        {
+            actualValue = "true";
+            break;
+        }
+        case false:
+        {
+            actualValue = "false";
+            break;
+        }
+        default:
+        {
+            throw std::runtime_error("Error in setProfileStat");
+        }
+    }
+    
+    setProfileStat(setting, actualValue);
 }
 
 void GameProfile::modifyProfileStat(const ProfileStat &setting, int amount)

@@ -13,6 +13,9 @@ public:
     ~Puzzle() = default;
 
     void initPuzzle(PuzzleGame* const pScene, const Coordinate &startPos);
+    void configurePiece(PuzzlePiece* const piece, const Coordinate &startPos, 
+                        const float secX, const float secY, const int xCycles, 
+                        const int yCycles, PuzzleGame* const pScene) const;
 
     PuzzlePiece &getPiece(const int piece);
     PuzzlePiece &getPiece(const Coordinate &coords);

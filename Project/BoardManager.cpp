@@ -296,21 +296,13 @@ void BoardManager::hideAllPieces(const bool hide) const
     std::vector<PuzzlePiece*> &piecesRef = puzzle.getPieces();
     for (PuzzlePiece *piece : piecesRef)
     {
-        if (hide)
-        {
-            piece->setBlankSpace(true);
-        }
-        else
-        {
-            piece->setBlankSpace(false);
-        }
+        piece->setBlankSpace(hide);
     }
 }
 
 void BoardManager::enableAllLabels(const bool enable) const
 {
     std::vector<PuzzlePiece*> &piecesRef = puzzle.getPieces();
-
     for (PuzzlePiece *piece : piecesRef)
     {
         if (piece->isBlankSpace())
@@ -318,13 +310,6 @@ void BoardManager::enableAllLabels(const bool enable) const
             continue;
         }
 
-        if (enable)
-        {
-            piece->enableLabel(true);
-        }
-        else
-        {
-            piece->enableLabel(false);
-        }
+        piece->enableLabel(enable);
     }
 }

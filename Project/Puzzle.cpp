@@ -19,8 +19,8 @@ void Puzzle::initPuzzle(PuzzleGame* const pScene, const Coordinate &startPos)
 {
     int segmentsX = GameSettings::getSegments().x;
     int segmentsY = GameSettings::getSegments().y;
-    std::string file{ GameSettings::getImageName() };
 
+    std::string file{ GameSettings::getImageName() };
     Sprite *puzzle = Sprite::create(file);
 
     sizeX = puzzle->getContentSize().width;
@@ -39,35 +39,36 @@ void Puzzle::initPuzzle(PuzzleGame* const pScene, const Coordinate &startPos)
             PuzzlePiece *piece = PuzzlePiece::create(file, Rect
                 (0 + (secX * xCycles), 0 + (secY * yCycles), secX, secY));
 
-            piece->setScaleX(scaleFactorX);
-            piece->setScaleY(scaleFactorY);
-
-            // Set anchor point to top left of piece.
-            piece->setAnchorPoint(Vec2(0, 1));
-
-            piece->setPosition(Vec2(startPos.x + (((secX * xCycles) * scaleFactorX) + 
-                              (xCycles * pad)), startPos.y - (((secY * yCycles) * 
-                              scaleFactorY) + (yCycles * pad))));
-
-            piece->setArrayPos(calculateOffset(xCycles, yCycles));
-            piece->setID(calculateOffset(xCycles, yCycles));
-            piece->setCoordinates(xCycles, yCycles);
-            piece->initNumLabel(pScene);
+            configurePiece(piece, startPos, secX, secY, xCycles, yCycles, pScene);
 
             pScene->addChild(piece, 1);
-            
-            auto listener = EventListenerTouchOneByOne::create();
-            listener->onTouchBegan =
-                CC_CALLBACK_2(PuzzleGame::interactWithPuzzle, pScene);
-            _eventDispatcher->
-                addEventListenerWithSceneGraphPriority(listener, piece);
-
             puzzlePieces.push_back(piece);
         }
     }
 
     // Hide bottom right puzzle piece.
     puzzlePieces[(segmentsX * segmentsY) - 1]->setBlankSpace(true);
+}
+
+void Puzzle::configurePiece(PuzzlePiece* const piece, const Coordinate &startPos, 
+                            const float secX, const float secY, const int xCycles, 
+                            const int yCycles, PuzzleGame* const pScene) const
+{
+    piece->setScaleX(scaleFactorX);
+    piece->setScaleY(scaleFactorY);
+
+    // Set anchor point to top left of piece.
+    piece->setAnchorPoint(Vec2(0, 1));
+
+    piece->setPosition(Vec2(startPos.x + (((secX * xCycles) * scaleFactorX) +
+                      (xCycles * pad)), startPos.y - (((secY * yCycles) *
+                      scaleFactorY) + (yCycles * pad))));
+
+    piece->setArrayPos(calculateOffset(xCycles, yCycles));
+    piece->setID(calculateOffset(xCycles, yCycles));
+    piece->setCoordinates(xCycles, yCycles);
+    piece->initNumLabel(pScene);
+    piece->initListener(pScene);
 }
 
 void Puzzle::sanityCheckImage(const Sprite* const spr)
@@ -172,12 +173,8 @@ bool Puzzle::isPuzzleComplete() const
 
 bool Puzzle::inBounds(const int x, const int y) const
 {
-    if (x >= GameSettings::getSegments().x || x < 0)
-    {
-        return false;
-    }
-
-    if (y >= GameSettings::getSegments().y || y < 0)
+    if ((x >= GameSettings::getSegments().x || x < 0) ||
+        (y >= GameSettings::getSegments().y || y < 0))
     {
         return false;
     }

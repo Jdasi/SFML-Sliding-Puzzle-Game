@@ -38,21 +38,7 @@ bool PuzzleSelection::init()
     }
 
     GameSettings::enumeratePuzzles();
-
-    // Circumvent most problems with image discrepencies since last enumeration.
-    unsigned int tempID = GameSettings::getImageID();
-    if (tempID < puzzlesRef.size())
-    {
-        if (GameSettings::getImageName() !=
-            ("puzzles/" + puzzlesRef[GameSettings::getImageID()]))
-        {
-            setDefaultPuzzle();
-        }
-    }
-    else
-    {
-        setDefaultPuzzle();
-    }
+    sanityCheckPuzzles();
 
     Sprite *sceneTitle = Sprite::create("utility/chooseLabel.png");
     sceneTitle->setPosition
@@ -305,6 +291,41 @@ void PuzzleSelection::initAnimSwitch()
     this->addChild(animLabel, 2);
 }
 
+bool PuzzleSelection::leftArrowClick(Ref* const sender) const
+{
+    int currentImageID = GameSettings::getImageID();
+    if (--currentImageID < 0)
+    {
+        currentImageID = puzzlesRef.size() - 1;
+    }
+
+    updateImageAndLabels(currentImageID);
+
+    return true;
+}
+
+bool PuzzleSelection::rightArrowClick(Ref* const sender) const
+{
+    unsigned int currentImageID = GameSettings::getImageID();
+    if (++currentImageID > (puzzlesRef.size() - 1))
+    {
+        currentImageID = 0;
+    }
+
+    updateImageAndLabels(currentImageID);
+
+    return true;
+}
+
+void PuzzleSelection::updateImageAndLabels(int currentImageID) const
+{
+    GameSettings::setImageName
+        ("puzzles/" + puzzlesRef[currentImageID], currentImageID);
+
+    updateDisplayedImage();
+    updateImageLabels();
+}
+
 void PuzzleSelection::updateDisplayedImage() const
 {
     displayedImage->initWithFile(GameSettings::getImageName());
@@ -314,51 +335,16 @@ void PuzzleSelection::updateDisplayedImage() const
 
 void PuzzleSelection::updateImageLabels() const
 {
+    std::string currentImageID = std::to_string(GameSettings::getImageID() + 1);
+    std::string totalPuzzles = std::to_string(puzzlesRef.size());
+
     imageName->setString(GameSettings::getImageName());
-    imageNumber->setString
-        ("( " + std::to_string(GameSettings::getImageID() + 1) + 
-         " / " + std::to_string(puzzlesRef.size()) + " )");
+    imageNumber->setString("( " + currentImageID + " / " + totalPuzzles + " )");
 }
 
 void PuzzleSelection::updateRewardsLabel() const
 {
     puzzleValue->setString("x " + std::to_string(calculatePuzzleValue()));
-}
-
-bool PuzzleSelection::leftArrowClick(Ref* const sender) const
-{
-    int currentImageID = GameSettings::getImageID();
-
-    if (--currentImageID < 0)
-    {
-        currentImageID = puzzlesRef.size() - 1;
-    }
-
-    GameSettings::setImageName
-        ("puzzles/" + puzzlesRef[currentImageID], currentImageID);
-
-    updateDisplayedImage();
-    updateImageLabels();
-
-    return true;
-}
-
-bool PuzzleSelection::rightArrowClick(Ref* const sender) const
-{
-    unsigned int currentImageID = GameSettings::getImageID();
-
-    if (++currentImageID > (puzzlesRef.size() - 1))
-    {
-        currentImageID = 0;
-    }
-
-    GameSettings::setImageName
-        ("puzzles/" + puzzlesRef[currentImageID], currentImageID);
-
-    updateDisplayedImage();
-    updateImageLabels();
-
-    return true;
 }
 
 void PuzzleSelection::puzzleTip(Ref* const sender) const
@@ -370,6 +356,24 @@ void PuzzleSelection::puzzleTip(Ref* const sender) const
     };
 
     MessageBox(tip, "Square Slide: Puzzles Tip");
+}
+
+// Circumvent most problems with image discrepencies since last enumeration.
+void PuzzleSelection::sanityCheckPuzzles()
+{
+    unsigned int tempID = GameSettings::getImageID();
+    if (tempID < puzzlesRef.size())
+    {
+        if (GameSettings::getImageName() !=
+            ("puzzles/" + puzzlesRef[GameSettings::getImageID()]))
+        {
+            setDefaultPuzzle();
+        }
+    }
+    else
+    {
+        setDefaultPuzzle();
+    }
 }
 
 void PuzzleSelection::setDefaultPuzzle() const
@@ -399,18 +403,16 @@ bool PuzzleSelection::flipAnimSwitch(Touch* const touch, Event* const event) con
     return true;
 }
 
-void PuzzleSelection::updateAnimSwitch() const
-{
-    GameProfile::animatedShufflingEnabled() ?
-        animSwitch->initWithFile("utility/switch_on.png") :
-        animSwitch->initWithFile("utility/switch_off.png");
-}
-
 void PuzzleSelection::updateAnimStatus() const
 {
-    GameProfile::animatedShufflingEnabled() ?
-        GameProfile::setProfileStat(ProfileStat::animatedShuffling, "false") :
-        GameProfile::setProfileStat(ProfileStat::animatedShuffling, "true");
+    GameProfile::setProfileStat(ProfileStat::animatedShuffling,
+                                !GameProfile::animatedShufflingEnabled());
+}
+
+void PuzzleSelection::updateAnimSwitch() const
+{
+    animSwitch->initWithFile(GameProfile::animatedShufflingEnabled() ?
+                             "utility/switch_on.png" : "utility/switch_off.png");
 }
 
 void PuzzleSelection::gotoMainMenu(Ref* const sender) const

@@ -22,7 +22,7 @@ public:
     void setCoordinates(const Coordinate &c);
 
     bool isBlankSpace() const;
-    void setBlankSpace(const bool b);
+    void setBlankSpace(const bool value);
 
     int getID() const;
     void setID(const int value);
@@ -31,6 +31,8 @@ public:
     void setNumLabelPos() const;
     cocos2d::Label *getNumLabel() const;
     void enableLabel(const bool enable) const;
+
+    void initListener(PuzzleGame* const pScene);
 
 private:
     int arrayPos;

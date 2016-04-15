@@ -31,7 +31,7 @@ private:
 
     bool imageClick(cocos2d::Touch* const touch, cocos2d::Event* const event);
 
-    void performContextAction(Ref* const sender);
+    void performContextAction(Ref* const sender = nullptr);
     void updateActionButton();
     void updateBackdrop() const;
     void updateSelectionRect();

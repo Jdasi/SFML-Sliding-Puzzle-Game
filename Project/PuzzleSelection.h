@@ -23,21 +23,22 @@ private:
     void initRewardsPane();
     void initAnimSwitch();
 
+    bool rightArrowClick(Ref* const sender) const;
+    bool leftArrowClick(Ref* const sender) const;
+    void updateImageAndLabels(int currentImageID) const;
+
     void updateDisplayedImage() const;
     void updateImageLabels() const;
     void updateRewardsLabel() const;
 
-    bool rightArrowClick(Ref* const sender) const;
-    bool leftArrowClick(Ref* const sender) const;
-
     void puzzleTip(Ref* const sender) const;
-
+    void sanityCheckPuzzles();
     void setDefaultPuzzle() const;
     int calculatePuzzleValue() const;
 
     bool flipAnimSwitch(cocos2d::Touch* const touch, cocos2d::Event* const event) const;
-    void updateAnimSwitch() const;
     void updateAnimStatus() const;
+    void updateAnimSwitch() const;
 
     void gotoMainMenu(Ref* const sender) const;
     void gotoPuzzleGame(Ref* const sender) const;

@@ -6,7 +6,7 @@
 
 enum class ProfileStat
 {
-    stars = 0,
+    stars,
     timePlayed,
     totalMoves,
     totalStarsCollected,
@@ -26,7 +26,8 @@ public:
     static std::string profileStatToString(const ProfileStat &setting);
 
     static std::string getProfileStat(const ProfileStat &setting);
-    static void setProfileStat(const ProfileStat &setting, const std::string &val);
+    static void setProfileStat(const ProfileStat &setting, const std::string &value);
+    static void setProfileStat(const ProfileStat &setting, const bool value);
     static void modifyProfileStat(const ProfileStat &setting, int amount);
     static void modifyProfileStat(const ProfileStat &setting, 
                                   const std::string &addition);

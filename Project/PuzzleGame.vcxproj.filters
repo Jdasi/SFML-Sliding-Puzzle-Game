@@ -34,9 +34,6 @@
     <ClCompile Include="ProfileUnlocks.cpp">
       <Filter>project\scenes</Filter>
     </ClCompile>
-    <ClCompile Include="SimpleTimer.cpp">
-      <Filter>project\utility</Filter>
-    </ClCompile>
     <ClCompile Include="TimeUtils.cpp">
       <Filter>project\utility</Filter>
     </ClCompile>
@@ -47,6 +44,9 @@
       <Filter>project\static objects</Filter>
     </ClCompile>
     <ClCompile Include="BoardManager.cpp">
+      <Filter>project\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="SimpleTimer.cpp">
       <Filter>project\objects</Filter>
     </ClCompile>
   </ItemGroup>
@@ -84,15 +84,6 @@
     <ClInclude Include="ProfileUnlocks.h">
       <Filter>project\scenes</Filter>
     </ClInclude>
-    <ClInclude Include="SimpleTimer.h">
-      <Filter>project\utility</Filter>
-    </ClInclude>
-    <ClInclude Include="Coordinate.h">
-      <Filter>project\utility</Filter>
-    </ClInclude>
-    <ClInclude Include="MoveSequence.h">
-      <Filter>project\utility</Filter>
-    </ClInclude>
     <ClInclude Include="TimeUtils.h">
       <Filter>project\utility</Filter>
     </ClInclude>
@@ -105,8 +96,17 @@
     <ClInclude Include="BoardManager.h">
       <Filter>project\objects</Filter>
     </ClInclude>
+    <ClInclude Include="Coordinate.h">
+      <Filter>project\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveSequence.h">
+      <Filter>project\objects</Filter>
+    </ClInclude>
     <ClInclude Include="SlideDirection.h">
-      <Filter>project\utility</Filter>
+      <Filter>project\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="SimpleTimer.h">
+      <Filter>project\objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
