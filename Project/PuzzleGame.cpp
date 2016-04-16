@@ -308,7 +308,7 @@ void PuzzleGame::updateMovesLabel(const int increment)
 void PuzzleGame::updateTimeLabel()
 {
     timer.makeTimePoint();
-    timeLabel->setString("Time: " + timeToString(timer.getTime()));
+    timeLabel->setString("Time: " + Utility::timeToString(timer.getTime()));
 }
 
 bool PuzzleGame::flipHintSwitch(Touch* const touch, Event* const event)

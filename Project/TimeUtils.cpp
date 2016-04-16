@@ -1,5 +1,8 @@
 #include <string>
 
+namespace Utility
+{
+
 std::string timeToString(const int time)
 {
     int hours = (time / 60) / 60;
@@ -19,3 +22,5 @@ std::string timeToString(const std::string &str)
     int time = stoi(str);
     return timeToString(time);
 }
+
+}; // Namespace Utility.

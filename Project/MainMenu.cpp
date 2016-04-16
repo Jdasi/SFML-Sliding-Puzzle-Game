@@ -42,7 +42,7 @@ void MainMenu::initProfile() const
 {
     if (!GameProfile::isInitialised())
     {
-        loadProfile();
+        Utility::loadProfile();
         GameProfile::enumerateUnlocks();
         GameProfile::setInitialised(true);
     }
@@ -150,6 +150,6 @@ void MainMenu::gotoStatistics(Ref* const sender) const
 
 void MainMenu::exitGame(Ref* const sender) const
 {
-    saveProfile();
+    Utility::saveProfile();
     Director::getInstance()->end();
 }

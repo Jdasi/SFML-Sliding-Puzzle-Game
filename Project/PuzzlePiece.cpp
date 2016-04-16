@@ -50,7 +50,7 @@ PuzzlePiece *PuzzlePiece::create(const std::string &file, const Rect &rect)
     }
 
     CC_SAFE_DELETE(pSprite);
-    return NULL;
+    return nullptr;
 }
 
 bool PuzzlePiece::isBlankSpace() const

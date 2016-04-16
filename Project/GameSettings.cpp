@@ -47,12 +47,12 @@ void GameSettings::enumeratePuzzles()
         clearPuzzles();
     }
 
-    std::wstring executable_path = getExecutablePath();
+    std::wstring executable_path = Utility::getExecutablePath();
 
-    std::vector<std::string> puzzlesJpg = 
-        enumerateFiles(executable_path + L"\\puzzles\\*.jpg");
+    std::vector<std::string> puzzlesJpg =
+        Utility::enumerateFiles(executable_path + L"\\puzzles\\*.jpg");
     std::vector<std::string> puzzlesPng =
-        enumerateFiles(executable_path + L"\\puzzles\\*.png");
+        Utility::enumerateFiles(executable_path + L"\\puzzles\\*.png");
 
     puzzles.reserve(puzzlesJpg.size() + puzzlesPng.size());
     puzzles.insert(puzzles.end(), puzzlesJpg.begin(), puzzlesJpg.end());

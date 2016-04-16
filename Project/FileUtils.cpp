@@ -5,6 +5,9 @@
 #include <codecvt>
 #include <fstream>
 
+namespace Utility
+{
+
 /* Because filenames are widestrings (accept international characters)
  * We need to convert them to regular strings.
  */
@@ -138,3 +141,5 @@ void loadProfile()
         profileSettings[key] = val;
     }
 }
+
+}; // Namespace Utility.
