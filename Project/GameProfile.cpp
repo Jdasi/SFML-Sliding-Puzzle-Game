@@ -1,4 +1,5 @@
 #include "GameProfile.h"
+#include "GameExceptions.h"
 
 #include <string>
 
@@ -53,7 +54,7 @@ std::string GameProfile::profileStatToString(const ProfileStat &setting)
         }
         default:
         {
-            throw std::runtime_error("Error in profileStatToString");
+            throw Utility::ProfileStatConversionException();
         }
     }
 }
@@ -72,7 +73,7 @@ void GameProfile::setProfileStat(const ProfileStat &setting, const bool value)
 {
     if (setting != ProfileStat::animatedShuffling)
     {
-        throw std::runtime_error("Error in setProfileStat");
+        throw Utility::ProfileStatConversionException();
     }
 
     std::string actualValue;
@@ -90,7 +91,7 @@ void GameProfile::setProfileStat(const ProfileStat &setting, const bool value)
         }
         default:
         {
-            throw std::runtime_error("Error in setProfileStat");
+            throw Utility::ProfileStatConversionException();
         }
     }
     
@@ -101,7 +102,7 @@ void GameProfile::modifyProfileStat(const ProfileStat &setting, int amount)
 {
     if (setting > ProfileStat::puzzlesCompleted)
     {
-        throw std::runtime_error("Error in modifyProfileStat");
+        throw Utility::ProfileStatConversionException();
     }
 
     std::string actualSetting = profileStatToString(setting);
@@ -114,7 +115,7 @@ void GameProfile::modifyProfileStat(const ProfileStat &setting,
 {
     if (setting != ProfileStat::backgroundsUnlocked)
     {
-        throw std::runtime_error("Error in modifyProfileStat");
+        throw Utility::ProfileStatConversionException();
     }
 
     std::string actualSetting = profileStatToString(setting);
@@ -140,7 +141,7 @@ bool GameProfile::animatedShufflingEnabled()
         return false;
     }
 
-    throw std::runtime_error("error in animatedShufflingEnabled");
+    throw Utility::ProfileStatConversionException();
 }
 
 // In a finished game the unlocks would be read from a file. For now they are hard coded.
@@ -176,7 +177,7 @@ int GameProfile::stringToBackgroundID(const std::string &str)
         }
     }
 
-    throw std::runtime_error("Error in stringToBackgroundID");
+    throw Utility::BackgroundConversionException();
 }
 
 bool GameProfile::isInitialised()

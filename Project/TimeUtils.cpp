@@ -23,4 +23,4 @@ std::string timeToString(const std::string &str)
     return timeToString(time);
 }
 
-}; // Namespace Utility.
+} // Namespace Utility.

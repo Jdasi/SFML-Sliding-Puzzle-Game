@@ -1,5 +1,6 @@
 #include "GameSettings.h"
 #include "FileUtils.h"
+#include "GameExceptions.h"
 
 std::string GameSettings::imageName;
 int GameSettings::imageID = 0;
@@ -60,7 +61,7 @@ void GameSettings::enumeratePuzzles()
 
     if (puzzles.size() == 0)
     {
-        throw std::runtime_error("Puzzles folder is empty");
+        throw Utility::PuzzleEnumerationException();
     }
 }
 

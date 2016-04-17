@@ -2,6 +2,7 @@
 #include "Puzzle.h"
 #include "PuzzlePiece.h"
 #include "MoveSequence.h"
+#include "GameExceptions.h"
 
 USING_NS_CC;
 
@@ -145,7 +146,7 @@ bool BoardManager::generateMove(MoveSequence &seq, const SlideDirection &dir)
         }
         default:
         {
-            throw std::runtime_error("Error in generateMove");
+            throw Utility::MoveGenerationException();
         }
     }
 
@@ -226,7 +227,7 @@ bool BoardManager::generateRandomMove(MoveSequence &seq)
             }
             default:
             {
-                throw std::runtime_error("Error in generateRandomMove");
+                throw Utility::MoveGenerationException();
             }
         }
 
@@ -272,7 +273,7 @@ int BoardManager::findBlankSpace() const
         }
     }
 
-    throw std::runtime_error("Error in findBlankSpace");
+    throw Utility::FindBlankSpaceException();
 }
 
 void BoardManager::updateBlankspaceInfo()

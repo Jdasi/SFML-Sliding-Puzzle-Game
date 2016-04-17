@@ -1,4 +1,5 @@
 #include "GameProfile.h"
+#include "GameExceptions.h"
 
 #include <windows.h>
 #include <vector>
@@ -27,7 +28,7 @@ std::wstring getExecutablePath()
     // Check if the file path is too long.
     if (GetModuleFileName(nullptr, path, MAX_PATH - 1) == 0)
     {
-        throw std::runtime_error("Could not resolve runtime path.");
+        throw ExecutablePathException();
     }
 
     std::wstring pathstr = path;
@@ -50,7 +51,7 @@ std::vector<std::string> enumerateFiles(const std::wstring& path)
             return {};
         }
 
-        throw std::runtime_error("Error in FindFirstFile");
+        throw FileEnumerationException();
     }
 
     std::vector<std::string> files;
@@ -67,7 +68,7 @@ std::vector<std::string> enumerateFiles(const std::wstring& path)
     // If there are no more files.
     if(FindClose(hFind) == 0)
     {
-        throw std::runtime_error("Error in FindClose");
+        throw FileEnumerationException();
     }
 
     return files;
@@ -79,7 +80,7 @@ void saveProfile()
 
     if (!file.is_open())
     {
-        throw std::runtime_error("File not found");
+        throw ProfileAccessException();
     }
 
     GameProfile::Keymap &profileSettings = GameProfile::getProfileKeymap();
@@ -142,4 +143,4 @@ void loadProfile()
     }
 }
 
-}; // Namespace Utility.
+} // Namespace Utility.
