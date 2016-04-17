@@ -16,6 +16,8 @@ class ProfileUnlocks : public cocos2d::Layer
 
 public:
     ProfileUnlocks();
+    ~ProfileUnlocks() = default;
+
     static cocos2d::Scene* createScene();
     virtual bool init();
 

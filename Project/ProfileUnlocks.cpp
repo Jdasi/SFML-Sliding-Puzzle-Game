@@ -23,7 +23,7 @@ ProfileUnlocks::ProfileUnlocks()
 Scene *ProfileUnlocks::createScene()
 {
     Scene *scene = Scene::create();
-    auto layer = ProfileUnlocks::create();
+    Layer *layer = ProfileUnlocks::create();
 
     scene->addChild(layer);
 
@@ -197,10 +197,11 @@ bool ProfileUnlocks::imageClick(Touch* const touch, Event* const event)
 
 void ProfileUnlocks::updateActionButton()
 {
+    int starsAvailable = stoi(GameProfile::getProfileStat(ProfileStat::stars));
+
     if (unlocksRef[currentSelection].isLocked())
     {
-        if (stoi(GameProfile::getProfileStat
-            (ProfileStat::stars)) >= unlocksRef[currentSelection].getStarCost())
+        if (starsAvailable >= unlocksRef[currentSelection].getStarCost())
         {
             actionButton->initWithNormalSprite(
                 Sprite::create("utility/unlock_up.png"),

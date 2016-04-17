@@ -23,7 +23,7 @@ PuzzleSelection::PuzzleSelection()
 Scene *PuzzleSelection::createScene()
 {
     Scene *scene = Scene::create();
-    auto layer = PuzzleSelection::create();
+    Layer *layer = PuzzleSelection::create();
 
     scene->addChild(layer);
 

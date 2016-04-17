@@ -7,6 +7,8 @@ class PuzzleSelection : public cocos2d::Layer
 {
 public:
     PuzzleSelection();
+    ~PuzzleSelection() = default;
+
     static cocos2d::Scene* createScene();
     virtual bool init();
 

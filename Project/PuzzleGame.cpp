@@ -32,7 +32,7 @@ PuzzleGame::PuzzleGame()
 Scene *PuzzleGame::createScene()
 {
     Scene *scene = Scene::create();
-    auto layer = PuzzleGame::create();
+    Layer *layer = PuzzleGame::create();
 
     scene->addChild(layer);
 
@@ -240,7 +240,7 @@ bool PuzzleGame::interactWithPuzzle(Touch* const touch, Event* const event)
     }
 
     MoveSequence sequence;
-    if (!boardManager.generateTileMoves(sequence, piece))
+    if (!boardManager.identifyMoves(sequence, piece))
     {
         return false;
     }

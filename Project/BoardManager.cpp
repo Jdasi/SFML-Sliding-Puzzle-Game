@@ -43,7 +43,7 @@ bool BoardManager::sanityCheckMove(Rect &rect, Touch &touch, PuzzlePiece* const 
 /* Compares the coordinates of the passed PuzzlePiece and the BlankSpace.
  * If any similarities are found in either X or Y, a SlideDirection is generated.
  */
-bool BoardManager::generateTileMoves(MoveSequence &seq, PuzzlePiece* const piece)
+bool BoardManager::identifyMoves(MoveSequence &seq, PuzzlePiece* const piece)
 {
     currentPieceArrayPos = piece->getArrayPos();
     Coordinate currPieceCoords = piece->getCoordinates();

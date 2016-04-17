@@ -16,6 +16,8 @@ class PuzzleGame : public cocos2d::Layer
 
 public:
     PuzzleGame();
+    ~PuzzleGame() = default;
+
     static cocos2d::Scene *createScene();
     virtual bool init();
 
@@ -56,16 +58,15 @@ private:
 
     Puzzle puzzle;
     BoardManager boardManager;
+    SimpleTimer timer;
 
     int startPosX;
     int startPosY;
-
     bool gameOver;
     bool started;
     int shuffleTimes;
     int computerMoves;
     int userMoves;
-    SimpleTimer timer;
     bool showHints;
     bool usedHints;
 

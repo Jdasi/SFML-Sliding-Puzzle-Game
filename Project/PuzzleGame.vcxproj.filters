@@ -102,11 +102,11 @@
     <ClInclude Include="MoveSequence.h">
       <Filter>project\objects</Filter>
     </ClInclude>
-    <ClInclude Include="SlideDirection.h">
-      <Filter>project\objects</Filter>
-    </ClInclude>
     <ClInclude Include="SimpleTimer.h">
       <Filter>project\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="SlideDirection.h">
+      <Filter>project\enums</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -130,6 +130,9 @@
     </Filter>
     <Filter Include="project\static objects">
       <UniqueIdentifier>{af8046d3-3f8b-4808-8aec-718a34c431c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="project\enums">
+      <UniqueIdentifier>{82a3a473-1316-44e4-b829-ff38be12bb82}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

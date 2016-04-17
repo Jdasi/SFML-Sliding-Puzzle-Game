@@ -82,10 +82,10 @@ void saveProfile()
         throw std::runtime_error("File not found");
     }
 
-    GameProfile::keymap &profileSettings = GameProfile::getProfileKeymap();
-    for (auto itr : profileSettings)
+    GameProfile::Keymap &profileSettings = GameProfile::getProfileKeymap();
+    for (auto setting : profileSettings)
     {
-        std::string line = itr.first + "=" + itr.second + '\n';
+        std::string line = setting.first + "=" + setting.second + '\n';
         file << line;
     }
 
@@ -94,7 +94,7 @@ void saveProfile()
 
 void generateProfile()
 {
-    GameProfile::keymap &profileSettings = GameProfile::getProfileKeymap();
+    GameProfile::Keymap &profileSettings = GameProfile::getProfileKeymap();
     profileSettings.clear();
 
     profileSettings[GameProfile::profileStatToString
@@ -128,7 +128,7 @@ void loadProfile()
         generateProfile();
     }
 
-    GameProfile::keymap &profileSettings = GameProfile::getProfileKeymap();
+    GameProfile::Keymap &profileSettings = GameProfile::getProfileKeymap();
 
     std::string line;
     while (std::getline(file, line))

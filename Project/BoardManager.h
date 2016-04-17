@@ -21,7 +21,7 @@ public:
 
     bool sanityCheckMove(cocos2d::Rect &rect, cocos2d::Touch &touch, 
                          PuzzlePiece* const piece) const;
-    bool generateTileMoves(MoveSequence &seq, PuzzlePiece* const piece);
+    bool identifyMoves(MoveSequence &seq, PuzzlePiece* const piece);
     bool generateMove(MoveSequence &seq, const SlideDirection &dir);
     bool generateRandomMove(MoveSequence &seq);
     bool pushBackTilesToBeMoved(MoveSequence &seq, const Coordinate pos) const;

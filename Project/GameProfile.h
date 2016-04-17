@@ -20,9 +20,12 @@ enum class ProfileStat
 class GameProfile
 {
 public:
-    using keymap = std::map<std::string, std::string>;
+    GameProfile() = default;
+    ~GameProfile() = default;
 
-    static keymap &getProfileKeymap();
+    using Keymap = std::map<std::string, std::string>;
+
+    static Keymap &getProfileKeymap();
     static std::string profileStatToString(const ProfileStat &setting);
 
     static std::string getProfileStat(const ProfileStat &setting);
@@ -44,7 +47,7 @@ public:
     static void setInitialised(const bool b);
     
 private:
-    static keymap profileStats;
+    static Keymap profileStats;
     static bool initialised;
     static std::vector<GameUnlock> unlocks;
 };

@@ -5,6 +5,9 @@
 class MainMenu : public cocos2d::Layer
 {
 public:
+    MainMenu() = default;
+    ~MainMenu() = default;
+
     static cocos2d::Scene* createScene();
     virtual bool init();
 

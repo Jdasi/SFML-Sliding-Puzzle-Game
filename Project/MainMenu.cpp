@@ -11,7 +11,7 @@ USING_NS_CC;
 Scene *MainMenu::createScene()
 {
     Scene *scene = Scene::create();
-    auto layer = MainMenu::create();
+    Layer *layer = MainMenu::create();
 
     scene->addChild(layer);
 

@@ -1,10 +1,12 @@
 #include "GameProfile.h"
 
-GameProfile::keymap GameProfile::profileStats;
+#include <string>
+
+GameProfile::Keymap GameProfile::profileStats;
 bool GameProfile::initialised = false;
 std::vector<GameUnlock> GameProfile::unlocks;
 
-GameProfile::keymap &GameProfile::getProfileKeymap()
+GameProfile::Keymap &GameProfile::getProfileKeymap()
 {
     return profileStats;
 }
@@ -68,6 +70,11 @@ void GameProfile::setProfileStat(const ProfileStat &setting, const std::string &
 
 void GameProfile::setProfileStat(const ProfileStat &setting, const bool value)
 {
+    if (setting != ProfileStat::animatedShuffling)
+    {
+        throw std::runtime_error("Error in setProfileStat");
+    }
+
     std::string actualValue;
     switch (value)
     {
@@ -92,14 +99,24 @@ void GameProfile::setProfileStat(const ProfileStat &setting, const bool value)
 
 void GameProfile::modifyProfileStat(const ProfileStat &setting, int amount)
 {
+    if (setting > ProfileStat::puzzlesCompleted)
+    {
+        throw std::runtime_error("Error in modifyProfileStat");
+    }
+
     std::string actualSetting = profileStatToString(setting);
-    int tempVal = std::stoi(profileStats[actualSetting]) + amount;
+    int tempVal = stoi(profileStats[actualSetting]) + amount;
     profileStats[actualSetting] = std::to_string(tempVal);
 }
 
 void GameProfile::modifyProfileStat(const ProfileStat &setting,
                                     const std::string &addition)
 {
+    if (setting != ProfileStat::backgroundsUnlocked)
+    {
+        throw std::runtime_error("Error in modifyProfileStat");
+    }
+
     std::string actualSetting = profileStatToString(setting);
     profileStats[actualSetting] += " " + addition;
 }
@@ -126,7 +143,7 @@ bool GameProfile::animatedShufflingEnabled()
     throw std::runtime_error("error in animatedShufflingEnabled");
 }
 
-// In a finished game the Unlocks would be read from a file. For now they are hard coded.
+// In a finished game the unlocks would be read from a file. For now they are hard coded.
 void GameProfile::enumerateUnlocks()
 {
     GameUnlock regal("regal", 0, unlocks, 0);
@@ -135,8 +152,7 @@ void GameProfile::enumerateUnlocks()
     GameUnlock alien("alien", 12, unlocks, 3);
 
     std::string unlockedBackgrounds = getProfileStat(ProfileStat::backgroundsUnlocked);
-
-    for (GameUnlock g : unlocks)
+    for (GameUnlock &g : unlocks)
     {
         if (unlockedBackgrounds.find(g.getName()) != std::string::npos)
         {
@@ -152,7 +168,7 @@ std::vector<GameUnlock> &GameProfile::getUnlocks()
 
 int GameProfile::stringToBackgroundID(const std::string &str)
 {
-    for (GameUnlock g : unlocks)
+    for (GameUnlock &g : unlocks)
     {
         if (str == g.getName())
         {

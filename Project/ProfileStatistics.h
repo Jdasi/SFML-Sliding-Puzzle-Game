@@ -5,6 +5,9 @@
 class ProfileStatistics : public cocos2d::Layer
 {
 public:
+    ProfileStatistics() = default;
+    ~ProfileStatistics() = default;
+
     static cocos2d::Scene* createScene();
     virtual bool init();
 

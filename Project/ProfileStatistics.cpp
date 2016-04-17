@@ -9,7 +9,7 @@ USING_NS_CC;
 Scene *ProfileStatistics::createScene()
 {
     Scene *scene = Scene::create();
-    auto layer = ProfileStatistics::create();
+    Layer *layer = ProfileStatistics::create();
 
     scene->addChild(layer);
 

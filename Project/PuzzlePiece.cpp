@@ -40,7 +40,7 @@ void PuzzlePiece::setCoordinates(const Coordinate &c)
 
 PuzzlePiece *PuzzlePiece::create(const std::string &file, const Rect &rect)
 {
-    PuzzlePiece* pSprite = new PuzzlePiece();
+    PuzzlePiece *pSprite = new PuzzlePiece();
 
     if (pSprite->initWithFile(file, rect))
     {

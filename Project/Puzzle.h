@@ -2,7 +2,7 @@
 
 #include "PuzzlePiece.h"
 
-#include <Vector>
+#include <vector>
 
 class PuzzleGame;
 
