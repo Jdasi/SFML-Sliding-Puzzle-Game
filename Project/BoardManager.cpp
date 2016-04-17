@@ -3,6 +3,7 @@
 #include "PuzzlePiece.h"
 #include "MoveSequence.h"
 #include "GameExceptions.h"
+#include "GameSettings.h"
 
 USING_NS_CC;
 
@@ -231,7 +232,7 @@ bool BoardManager::generateRandomMove(MoveSequence &seq)
             }
         }
 
-        if (!puzzle.inBounds(attempt.x, attempt.y))
+        if (!inBounds(attempt.x, attempt.y))
         {
             continue;
         }
@@ -313,4 +314,15 @@ void BoardManager::enableAllLabels(const bool enable) const
 
         piece->enableLabel(enable);
     }
+}
+
+bool BoardManager::inBounds(const int x, const int y) const
+{
+    if ((x >= GameSettings::getSegments().x || x < 0) ||
+        (y >= GameSettings::getSegments().y || y < 0))
+    {
+        return false;
+    }
+
+    return true;
 }

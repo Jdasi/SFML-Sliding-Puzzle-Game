@@ -10,12 +10,13 @@ public:
 
     void startTimer();
     void makeTimePoint();
-    void endTimer();
     void endTimerAndRecord();
     time_t getTime() const;
-    void recordTime();
 
 private:
+    void endTimer();
+    void recordTime();
+
     std::chrono::steady_clock::time_point start;
     std::chrono::steady_clock::time_point end;
     bool recorded;

@@ -13,16 +13,11 @@ public:
     ~Puzzle() = default;
 
     void initPuzzle(PuzzleGame* const pScene, const Coordinate &startPos);
-    void configurePiece(PuzzlePiece* const piece, const Coordinate &startPos, 
-                        const float secX, const float secY, const int xCycles, 
-                        const int yCycles, PuzzleGame* const pScene) const;
 
     PuzzlePiece &getPiece(const int piece);
     PuzzlePiece &getPiece(const Coordinate &coords);
     PuzzlePiece &getPiece(const int x, const int y);
     std::vector<PuzzlePiece*> &getPieces();
-
-    bool isPieceBlankSpace(const int piece) const;
 
     int calculateOffset(const int x, const int y) const;
     int calculateOffset(const Coordinate &coords) const;
@@ -33,10 +28,11 @@ public:
     void swapPieces(const PuzzlePiece &fromRef, const PuzzlePiece &toRef);
     bool isPuzzleComplete() const;
 
-    bool inBounds(const int x, const int y) const;
-
 private:
-    void sanityCheckImage(const cocos2d::Sprite* const spr);
+    void scaleImage(const cocos2d::Sprite* const spr);
+    void configurePiece(PuzzlePiece* const piece, const Coordinate &startPos, 
+                        const float secX, const float secY, const int xCycles, 
+                        const int yCycles, PuzzleGame* const pScene) const;
 
     int totalPieces;
     int pad;

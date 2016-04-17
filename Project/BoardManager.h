@@ -24,7 +24,6 @@ public:
     bool identifyMoves(MoveSequence &seq, PuzzlePiece* const piece);
     bool generateMove(MoveSequence &seq, const SlideDirection &dir);
     bool generateRandomMove(MoveSequence &seq);
-    bool pushBackTilesToBeMoved(MoveSequence &seq, const Coordinate pos) const;
 
     int findBlankSpace() const;
     void updateBlankspaceInfo();
@@ -35,6 +34,9 @@ public:
     void enableAllLabels(const bool enable) const;
 
 private:
+    bool pushBackTilesToBeMoved(MoveSequence &seq, const Coordinate pos) const;
+    bool inBounds(const int x, const int y) const;
+
     int blankSpace;
     Coordinate blankSpaceCoords;
     Puzzle &puzzle;

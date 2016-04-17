@@ -29,7 +29,7 @@ void Puzzle::initPuzzle(PuzzleGame* const pScene, const Coordinate &startPos)
     float secX = sizeX / segmentsX;
     float secY = sizeY / segmentsY;
 
-    sanityCheckImage(puzzle);
+    scaleImage(puzzle);
 
     // Splice puzzle image into PuzzlePieces.
     for (int yCycles = 0; yCycles < segmentsY; ++yCycles)
@@ -71,7 +71,7 @@ void Puzzle::configurePiece(PuzzlePiece* const piece, const Coordinate &startPos
     piece->initListener(pScene);
 }
 
-void Puzzle::sanityCheckImage(const Sprite* const spr)
+void Puzzle::scaleImage(const Sprite* const spr)
 {
     int paddingX = (GameSettings::getSegments().x - 1) * pad;
     int paddingY = (GameSettings::getSegments().y - 1) * pad;
@@ -105,11 +105,6 @@ PuzzlePiece &Puzzle::getPiece(const int x, const int y)
 std::vector<PuzzlePiece*> &Puzzle::getPieces()
 {
     return puzzlePieces;
-}
-
-bool Puzzle::isPieceBlankSpace(const int piece) const
-{
-    return puzzlePieces[piece]->isBlankSpace();
 }
 
 int Puzzle::calculateOffset(const int x, const int y) const
@@ -171,13 +166,3 @@ bool Puzzle::isPuzzleComplete() const
     return false;
 }
 
-bool Puzzle::inBounds(const int x, const int y) const
-{
-    if ((x >= GameSettings::getSegments().x || x < 0) ||
-        (y >= GameSettings::getSegments().y || y < 0))
-    {
-        return false;
-    }
-
-    return true;
-}

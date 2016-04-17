@@ -28,13 +28,14 @@ public:
     void setID(const int value);
 
     void initNumLabel(PuzzleGame* const pScene);
-    void setNumLabelPos() const;
     cocos2d::Label *getNumLabel() const;
     void enableLabel(const bool enable) const;
 
     void initListener(PuzzleGame* const pScene);
 
 private:
+    void setNumLabelPos() const;
+
     int arrayPos;
     Coordinate coords;
     bool blankSpace;
