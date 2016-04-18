@@ -118,31 +118,36 @@ void ProfileUnlocks::initMenuPane()
 void ProfileUnlocks::initPreviewImages()
 {
     std::string imgSuffix;
-    for (int i = 0; i < 4; ++i)
+    int counter = 0;
+
+    for (GameUnlock &unlock : unlocksRef)
     {
         Sprite *spr = Sprite::create();
 
-        imgSuffix = unlocksRef[i].isLocked() ? "_locked.jpg" : "_puzzle.jpg";
+        imgSuffix = unlock.isLocked() ? "_locked.jpg" : "_puzzle.jpg";
 
-        spr->initWithFile("backdrops/" + unlocksRef[i].getName() + imgSuffix);
-        spr->setPosition(Vec2(250 + (i * 285) + (i * 2), (visibleSize.height / 2) + 100));
+        spr->initWithFile("backdrops/" + unlock.getName() + imgSuffix);
+        spr->setPosition(Vec2(250 + (counter * 285) + (counter * 2),
+            (visibleSize.height / 2) + 100));
         spr->setScaleX(273 / spr->getContentSize().width);
         spr->setScaleY(154 / spr->getContentSize().height);
         spr->setOpacity(fadedOpacity);
-        spr->setTag(i);
+        spr->setTag(counter);
 
         auto listener = EventListenerTouchOneByOne::create();
         listener->onTouchBegan = CC_CALLBACK_2(ProfileUnlocks::imageClick, this);
         _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, spr);
 
         previewImages.push_back(spr);
-
+        
         Label *lbl = Label::createWithTTF
-            (unlocksRef[i].getName(), GameSettings::getFontName(), 28);
+            (unlock.getName(), GameSettings::getFontName(), 28);
         lbl->setPosition(Vec2(spr->getPositionX(), spr->getPositionY() - 100));
 
         this->addChild(spr, 3);
         this->addChild(lbl, 3);
+
+        ++counter;
     }
 
     previewImages[currentSelection]->setOpacity(selectedOpacity);
