@@ -94,13 +94,14 @@ void PuzzleGame::initPuzzle()
 void PuzzleGame::initLabels()
 {
     movesLabel = Label::createWithTTF("Moves: ", GameSettings::getFontName(), 30);
-    movesLabel->setPosition(Vec2(visibleSize.width - 210, (visibleSize.height / 2) - 20));
+    movesLabel->setPosition(Vec2(visibleSize.width - 210, (visibleSize.height / 2) + 5));
 
     updateMovesLabel();
 
     timeLabel = Label::createWithTTF
         ("Time: " + Utility::timeToString(0), GameSettings::getFontName(), 30);
-    timeLabel->setPosition(Vec2(visibleSize.width - 210, (visibleSize.height / 2) + 20));
+    timeLabel->setPosition(Vec2
+        (movesLabel->getPositionX(), movesLabel->getPositionY() + 40));
 
     this->addChild(movesLabel, 2);
     this->addChild(timeLabel, 2);
@@ -114,20 +115,28 @@ void PuzzleGame::initMenu()
         nullptr,
         CC_CALLBACK_1(PuzzleGame::gotoPuzzleSelection, this));
 
+    MenuItemSprite *menuShuffle = MenuItemSprite::create(
+        Sprite::create("utility/reshuffle_up.png"),
+        Sprite::create("utility/reshuffle_dn.png"),
+        nullptr,
+        CC_CALLBACK_1(PuzzleGame::shuffleButtonClick, this));
+
     MenuItemSprite *menuMain = MenuItemSprite::create(
         Sprite::create("utility/main_up.png"),
         Sprite::create("utility/main_dn.png"),
         nullptr,
         CC_CALLBACK_1(PuzzleGame::gotoMainMenu, this));
 
-    Menu *menu = Menu::create(menuPuzzle, menuMain, nullptr);
+    Menu *menu = Menu::create(menuPuzzle, menuShuffle, menuMain, nullptr);
     menu->setPosition(Vec2(visibleSize.width - 210, visibleSize.height / 2));
 
     menuPuzzle->setScale(0.66f);
+    menuShuffle->setScale(0.66f);
     menuMain->setScale(0.66f);
 
-    menuPuzzle->setPositionY(-215);
-    menuMain->setPositionY(-275);
+    menuPuzzle->setPositionY(-190);
+    menuShuffle->setPositionY(menuPuzzle->getPositionY() - 60);
+    menuMain->setPositionY(menuShuffle->getPositionY() - 60);
 
     this->addChild(menu, 2);
 }
@@ -147,7 +156,7 @@ void PuzzleGame::initPreviewImage()
 {
     previewImage = Sprite::create(GameSettings::getImageName());
     previewImage->setPosition
-        (Vec2(visibleSize.width - 210, (visibleSize.height / 2) + 175));
+        (Vec2(visibleSize.width - 210, (visibleSize.height / 2) + 200));
     previewImage->setScaleX(264 / previewImage->getContentSize().width);
     previewImage->setScaleY(198 / previewImage->getContentSize().height);
 
@@ -164,7 +173,7 @@ void PuzzleGame::initHintSwitch()
 {
     hintSwitch = Sprite::create("utility/switch_off.png");
     hintSwitch->setPosition(Vec2
-        (visibleSize.width - 210, (visibleSize.height / 2) - 125));
+        (visibleSize.width - 210, (visibleSize.height / 2) - 100));
     hintSwitch->setScale(0.66f);
 
     auto listener = EventListenerTouchOneByOne::create();
@@ -185,8 +194,6 @@ void PuzzleGame::initHintSwitch()
 
 void PuzzleGame::shuffleWithoutAnimation()
 {
-    started = false;
-
     for (int i = 0; i < shuffleTimes; ++i)
     {
         MoveSequence seq;
@@ -212,8 +219,6 @@ void PuzzleGame::update(float delta)
     {
         if (computerMoves < shuffleTimes)
         {
-            started = false;
-
             MoveSequence seq;
             if (boardManager.generateRandomMove(seq))
             {
@@ -229,6 +234,29 @@ void PuzzleGame::update(float delta)
                 started = true;
             }
         }
+    }
+}
+
+void PuzzleGame::shuffleButtonClick(Ref* const sender)
+{
+    if (gameOver || !started)
+    {
+        return;
+    }
+
+    started = false;
+
+    GameProfile::modifyProfileStat(ProfileStat::puzzlesAttempted, 1);
+    GameProfile::modifyProfileStat(ProfileStat::totalMoves, -userMoves);
+    userMoves = 0;
+    updateMovesLabel();
+
+    timeLabel->setString("Time: " + Utility::timeToString(0));
+    computerMoves = 0;
+
+    if (!GameProfile::animatedShufflingEnabled())
+    {
+        shuffleWithoutAnimation();
     }
 }
 

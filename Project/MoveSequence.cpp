@@ -67,7 +67,6 @@ void MoveSequence::pushBack(PuzzlePiece* piece)
     }
 
     deleteContainer();
-
     pieceContainer = new PuzzlePiece*[sz + 1];
 
     for (int i = 0; i < sz; ++i)

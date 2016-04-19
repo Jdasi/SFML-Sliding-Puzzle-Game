@@ -37,6 +37,8 @@ private:
     void shuffleWithoutAnimation();
     void update(float delta) override;
 
+    void shuffleButtonClick(Ref* const sender);
+
     void processMoves(MoveSequence &seq, Animation anim, const float speed = 0.0f);
     void performMoves(Node* const from, Node* const to, const MoveSequence &seq, 
                       Animation anim, const float speed) const;

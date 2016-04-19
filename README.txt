@@ -3,8 +3,8 @@ GAME PROFILE
 ------------------------------------------------------------------
 The game uses a profile.txt file to save user progress.
 
-If you encounter any problems during play, try deleting 
-profile.txt and relaunching the application.
+If you encounter any problems during play, or if you wish to reset
+your progress, delete profile.txt and relaunch the application.
 
 For debugging purposes, you can change the values in
 profile.txt. (e.g. set stars to 100 so you can unlock everything)
