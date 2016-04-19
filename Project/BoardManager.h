@@ -11,7 +11,7 @@ namespace cocos2d
 
 class Puzzle;
 class PuzzlePiece;
-struct MoveSequence;
+class MoveSequence;
 
 class BoardManager
 {

@@ -34,6 +34,7 @@ private:
     void initPreviewImage();
     void initHintSwitch();
 
+    void shuffleWithoutAnimation();
     void update(float delta) override;
 
     void processMoves(MoveSequence &seq, Animation anim, const float speed = 0.0f);

@@ -49,6 +49,9 @@
     <ClCompile Include="SimpleTimer.cpp">
       <Filter>project\objects</Filter>
     </ClCompile>
+    <ClCompile Include="MoveSequence.cpp">
+      <Filter>project\objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h">

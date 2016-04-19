@@ -85,20 +85,9 @@ void PuzzleGame::initPuzzle()
     shuffleTimes = shuffleTimes < 50 ? 50 : shuffleTimes;
     shuffleTimes = shuffleTimes > 300 ? 300 : shuffleTimes;
 
-    // Shuffling without animation.
     if (!GameProfile::animatedShufflingEnabled())
     {
-        for (int i = 0; i < shuffleTimes; ++i)
-        {
-            MoveSequence seq;
-            if (boardManager.generateRandomMove(seq))
-            {
-                processMoves(seq, Animation::none);
-            }
-        }
-
-        timer.startTimer();
-        started = true;
+        shuffleWithoutAnimation();
     }
 }
 
@@ -109,7 +98,8 @@ void PuzzleGame::initLabels()
 
     updateMovesLabel();
 
-    timeLabel = Label::createWithTTF("Time: 00:00:00", GameSettings::getFontName(), 30);
+    timeLabel = Label::createWithTTF
+        ("Time: " + Utility::timeToString(0), GameSettings::getFontName(), 30);
     timeLabel->setPosition(Vec2(visibleSize.width - 210, (visibleSize.height / 2) + 20));
 
     this->addChild(movesLabel, 2);
@@ -193,6 +183,23 @@ void PuzzleGame::initHintSwitch()
     this->addChild (switchLabel, 2);
 }
 
+void PuzzleGame::shuffleWithoutAnimation()
+{
+    started = false;
+
+    for (int i = 0; i < shuffleTimes; ++i)
+    {
+        MoveSequence seq;
+        if (boardManager.generateRandomMove(seq))
+        {
+            processMoves(seq, Animation::none);
+        }
+    }
+
+    timer.startTimer();
+    started = true;
+}
+
 void PuzzleGame::update(float delta)
 {
     if (!gameOver && started)
@@ -205,6 +212,8 @@ void PuzzleGame::update(float delta)
     {
         if (computerMoves < shuffleTimes)
         {
+            started = false;
+
             MoveSequence seq;
             if (boardManager.generateRandomMove(seq))
             {
@@ -259,15 +268,17 @@ bool PuzzleGame::interactWithPuzzle(Touch* const touch, Event* const event)
 void PuzzleGame::processMoves(MoveSequence &seq, Animation anim, const float speed)
 {
     PuzzlePiece &blankSpaceRef = puzzle.getPiece(boardManager.findBlankSpace());
+    PuzzlePiece **pieceContainerRef = seq.getPieceContainer();
 
-    // We need to reverse the vector because the pieces are pushed back in reverse order.
-    std::reverse(seq.pieceContainer.begin(), seq.pieceContainer.end());
-    for (PuzzlePiece *p : seq.pieceContainer)
+    int size = seq.size();
+    for (int i = size - 1; i >= 0; --i)
     {
-        performMoves(p, &blankSpaceRef, seq, anim, speed);
-        performMoves(p->getNumLabel(), blankSpaceRef.getNumLabel(), seq, anim, speed);
+        performMoves(pieceContainerRef[i], &blankSpaceRef, seq, anim, speed);
+        performMoves(pieceContainerRef[i]->getNumLabel(), 
+            blankSpaceRef.getNumLabel(), seq, anim, speed);
 
-        boardManager.swapPieces(p->getArrayPos(), boardManager.findBlankSpace());
+        boardManager.swapPieces(pieceContainerRef[i]->getArrayPos(),
+            boardManager.findBlankSpace());
         boardManager.updateBlankspaceInfo();
 
         if (started)
@@ -281,12 +292,15 @@ void PuzzleGame::processMoves(MoveSequence &seq, Animation anim, const float spe
 void PuzzleGame::performMoves(Node* const from, Node* const to, const MoveSequence &seq, 
                               Animation anim, const float speed) const
 {
+    float xMoveDist = seq.getMoveDistX();
+    float yMoveDist = seq.getMoveDistY();
+
     if (anim == Animation::slide)
     {
-        MoveBy *moveOne = MoveBy::create(speed, Vec2(seq.xMoveDist, seq.yMoveDist));
+        MoveBy *moveOne = MoveBy::create(speed, Vec2(xMoveDist, yMoveDist));
         from->runAction(moveOne);
 
-        MoveBy *moveTwo = MoveBy::create(speed, Vec2(-seq.xMoveDist, -seq.yMoveDist));
+        MoveBy *moveTwo = MoveBy::create(speed, Vec2(-xMoveDist, -yMoveDist));
         to->runAction(moveTwo);
     }
     else

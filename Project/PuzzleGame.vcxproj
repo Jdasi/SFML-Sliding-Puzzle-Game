@@ -153,6 +153,7 @@ xcopy "$(SolutionDir)\cocos2d\bin\$(PlatformToolset)\$(Configuration)\*.dll" "$(
     <ClCompile Include="GameSettings.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenu.cpp" />
+    <ClCompile Include="MoveSequence.cpp" />
     <ClCompile Include="ProfileUnlocks.cpp" />
     <ClCompile Include="Puzzle.cpp" />
     <ClCompile Include="PuzzlePiece.cpp" />

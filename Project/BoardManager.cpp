@@ -55,12 +55,16 @@ bool BoardManager::identifyMoves(MoveSequence &seq, PuzzlePiece* const piece)
     {
         if (currPieceCoords.y > blankSpaceCoords.y)
         {
-            seq.yMoveDist = piece->getBoundingBox().size.height + puzzle.getPadding();
+            seq.setMoveDistY(piece->getBoundingBox().size.height + 
+                puzzle.getPadding());
+
             generateMove(seq, SlideDirection::up);
         }
         else
         {
-            seq.yMoveDist = -(piece->getBoundingBox().size.height + puzzle.getPadding());
+            seq.setMoveDistY(-(piece->getBoundingBox().size.height + 
+                puzzle.getPadding()));
+
             generateMove(seq, SlideDirection::down);
         }
 
@@ -71,12 +75,16 @@ bool BoardManager::identifyMoves(MoveSequence &seq, PuzzlePiece* const piece)
     {
         if (currPieceCoords.x > blankSpaceCoords.x)
         {
-            seq.xMoveDist = -(piece->getBoundingBox().size.width + puzzle.getPadding());
+            seq.setMoveDistX(-(piece->getBoundingBox().size.width + 
+                puzzle.getPadding()));
+
             generateMove(seq, SlideDirection::left);
         }
         else
         {
-            seq.xMoveDist = piece->getBoundingBox().size.width + puzzle.getPadding();
+            seq.setMoveDistX(piece->getBoundingBox().size.width + 
+                puzzle.getPadding());
+
             generateMove(seq, SlideDirection::right);
         }
 
@@ -151,7 +159,7 @@ bool BoardManager::generateMove(MoveSequence &seq, const SlideDirection &dir) co
         }
     }
 
-    if (seq.pieceContainer.size() == 0)
+    if (seq.size() == 0)
     {
         return false;
     }
@@ -181,8 +189,7 @@ bool BoardManager::generateRandomMove(MoveSequence &seq)
         }
 
         Coordinate attempt { 0, 0 };
-        seq.xMoveDist = 0;
-        seq.yMoveDist = 0;
+        seq.setMoveDist(0, 0);
 
         switch (direction)
         {
@@ -190,8 +197,9 @@ bool BoardManager::generateRandomMove(MoveSequence &seq)
             {
                 attempt = { blankSpaceCoords.x, blankSpaceCoords.y - 1 };
 
-                seq.yMoveDist = -(blankSpaceRef.getBoundingBox().size.height + 
-                    puzzle.getPadding());
+                seq.setMoveDistY(-(blankSpaceRef.getBoundingBox().size.height +
+                    puzzle.getPadding()));
+
                 direction = SlideDirection::down;
 
                 break;
@@ -200,8 +208,9 @@ bool BoardManager::generateRandomMove(MoveSequence &seq)
             {
                 attempt = { blankSpaceCoords.x, blankSpaceCoords.y + 1 };
 
-                seq.yMoveDist = blankSpaceRef.getBoundingBox().size.height + 
-                    puzzle.getPadding();
+                seq.setMoveDistY(blankSpaceRef.getBoundingBox().size.height +
+                    puzzle.getPadding());
+
                 direction = SlideDirection::up;
 
                 break;
@@ -209,8 +218,9 @@ bool BoardManager::generateRandomMove(MoveSequence &seq)
             case SlideDirection::left:
             {
                 attempt = { blankSpaceCoords.x - 1, blankSpaceCoords.y };
-                seq.xMoveDist = blankSpaceRef.getBoundingBox().size.width + 
-                    puzzle.getPadding();
+
+                seq.setMoveDistX(blankSpaceRef.getBoundingBox().size.width +
+                    puzzle.getPadding());
 
                 direction = SlideDirection::right;
 
@@ -220,8 +230,9 @@ bool BoardManager::generateRandomMove(MoveSequence &seq)
             {
                 attempt = { blankSpaceCoords.x + 1, blankSpaceCoords.y };
 
-                seq.xMoveDist = -(blankSpaceRef.getBoundingBox().size.width + 
-                    puzzle.getPadding());
+                seq.setMoveDistX(-(blankSpaceRef.getBoundingBox().size.width +
+                    puzzle.getPadding()));
+
                 direction = SlideDirection::left;
 
                 break;
@@ -258,7 +269,7 @@ bool BoardManager::pushBackTilesToBeMoved(MoveSequence &seq, const Coordinate po
         return false;
     }
 
-    seq.pieceContainer.push_back(&pieceRef);
+    seq.pushBack(&pieceRef);
 
     return true;
 }
