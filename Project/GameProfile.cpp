@@ -5,7 +5,8 @@
 
 GameProfile::Keymap GameProfile::profileStats;
 bool GameProfile::initialised = false;
-std::vector<GameUnlock> GameProfile::unlocks;
+const int GameProfile::numUnlocks = 4;
+GameUnlock GameProfile::unlocks[numUnlocks];
 
 GameProfile::Keymap &GameProfile::getProfileKeymap()
 {
@@ -162,7 +163,12 @@ void GameProfile::enumerateUnlocks()
     }
 }
 
-std::vector<GameUnlock> &GameProfile::getUnlocks()
+int GameProfile::getNumUnlocks()
+{
+    return numUnlocks;
+}
+
+GameUnlock *GameProfile::getUnlocks()
 {
     return unlocks;
 }

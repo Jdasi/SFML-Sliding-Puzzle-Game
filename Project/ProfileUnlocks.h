@@ -16,7 +16,7 @@ class ProfileUnlocks : public cocos2d::Layer
 
 public:
     ProfileUnlocks();
-    ~ProfileUnlocks() = default;
+    ~ProfileUnlocks();
 
     static cocos2d::Scene* createScene();
     virtual bool init();
@@ -36,14 +36,14 @@ private:
     void performContextAction(Ref* const sender = nullptr);
     void updateActionButton();
     void updateBackdrop() const;
-    void updateSelectionRect();
-    void updateContextHintLabel();
+    void updateSelectionRect() const;
+    void updateContextHintLabel() const;
     void updateNumStarsLabel() const;
 
     void gotoMainMenu(Ref* const sender) const;
 
-    std::vector<GameUnlock> &unlocksRef;
-    std::vector<cocos2d::Sprite*> previewImages;
+    GameUnlock *unlocksRef;
+    cocos2d::Sprite **previewImages;
 
     cocos2d::Sprite *backdrop;
     cocos2d::Sprite *selectionRect;

@@ -1,13 +1,20 @@
 #include "GameUnlock.h"
 
+GameUnlock::GameUnlock()
+    : id(0)
+    , locked(false)
+    , starCost(0)
+{
+}
+
 GameUnlock::GameUnlock(const std::string &str, const int cost, 
-                       std::vector<GameUnlock> &container, const int iid)
+                       GameUnlock container[], const int iid)
     : name(str)
     , id(iid)
     , locked(true)
     , starCost(cost)
 {
-    container.push_back(*this);
+    container[iid] = *this;
 }
 
 std::string GameUnlock::getName() const

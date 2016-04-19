@@ -39,7 +39,8 @@ public:
     static bool animatedShufflingEnabled();
 
     static void enumerateUnlocks();
-    static std::vector<GameUnlock> &getUnlocks();
+    static int getNumUnlocks();
+    static GameUnlock *getUnlocks();
 
     static int stringToBackgroundID(const std::string &str);
 
@@ -49,5 +50,6 @@ public:
 private:
     static Keymap profileStats;
     static bool initialised;
-    static std::vector<GameUnlock> unlocks;
+    static const int numUnlocks;
+    static GameUnlock unlocks[];
 };

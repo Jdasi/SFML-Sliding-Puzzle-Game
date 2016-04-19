@@ -89,7 +89,7 @@ bool BoardManager::identifyMoves(MoveSequence &seq, PuzzlePiece* const piece)
 /* Uses the SlideDirection to determine which direction to search for the BlankSpace.
  * Any pieces identified in the search are pushed back into a vector to be processed.
  */ 
-bool BoardManager::generateMove(MoveSequence &seq, const SlideDirection &dir)
+bool BoardManager::generateMove(MoveSequence &seq, const SlideDirection &dir) const
 {
     switch (dir)
     {
@@ -265,12 +265,14 @@ bool BoardManager::pushBackTilesToBeMoved(MoveSequence &seq, const Coordinate po
 
 int BoardManager::findBlankSpace() const
 {
-    std::vector<PuzzlePiece*> &piecesRef = puzzle.getPieces();
-    for (PuzzlePiece *piece : piecesRef)
+    PuzzlePiece **piecesRef = puzzle.getPieces();
+    int totalPieces = puzzle.getTotalPieces();
+
+    for (int i = 0; i < totalPieces; ++i)
     {
-        if (piece->isBlankSpace())
+        if (piecesRef[i]->isBlankSpace())
         {
-            return piece->getArrayPos();
+            return piecesRef[i]->getArrayPos();
         }
     }
 
@@ -295,24 +297,28 @@ bool BoardManager::isPuzzleComplete() const
 
 void BoardManager::hideAllPieces(const bool hide) const
 {
-    std::vector<PuzzlePiece*> &piecesRef = puzzle.getPieces();
-    for (PuzzlePiece *piece : piecesRef)
+    PuzzlePiece **piecesRef = puzzle.getPieces();
+    int totalPieces = puzzle.getTotalPieces();
+
+    for (int i = 0; i < totalPieces; ++i)
     {
-        piece->setBlankSpace(hide);
+        piecesRef[i]->setBlankSpace(hide);
     }
 }
 
 void BoardManager::enableAllLabels(const bool enable) const
 {
-    std::vector<PuzzlePiece*> &piecesRef = puzzle.getPieces();
-    for (PuzzlePiece *piece : piecesRef)
+    PuzzlePiece **piecesRef = puzzle.getPieces();
+    int totalPieces = puzzle.getTotalPieces();
+    
+    for (int i = 0; i < totalPieces; ++i)
     {
-        if (piece->isBlankSpace())
+        if (piecesRef[i]->isBlankSpace())
         {
             continue;
         }
 
-        piece->enableLabel(enable);
+        piecesRef[i]->enableLabel(enable);
     }
 }
 

@@ -1,11 +1,12 @@
 #pragma once
 
-#include <vector>
+#include <string>
 
 class GameUnlock
 {
 public:
-    GameUnlock(const std::string &str, const int cost, std::vector<GameUnlock> &container, 
+    GameUnlock();
+    GameUnlock(const std::string &str, const int cost, GameUnlock container[], 
                const int iid);
     ~GameUnlock() = default;
 

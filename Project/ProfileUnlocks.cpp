@@ -6,7 +6,8 @@
 USING_NS_CC;
 
 ProfileUnlocks::ProfileUnlocks()
-    : unlocksRef (GameProfile::getUnlocks())
+    : unlocksRef(GameProfile::getUnlocks())
+    , previewImages(new Sprite*[GameProfile::getNumUnlocks()])
     , backdrop(nullptr)
     , selectionRect(nullptr)
     , actionButton (nullptr)
@@ -18,6 +19,11 @@ ProfileUnlocks::ProfileUnlocks()
         (GameProfile::getCurrentBackground()))
     , action(ContextAction::select)
 {
+}
+
+ProfileUnlocks::~ProfileUnlocks()
+{
+    delete[] previewImages;
 }
 
 Scene *ProfileUnlocks::createScene()
@@ -118,36 +124,33 @@ void ProfileUnlocks::initMenuPane()
 void ProfileUnlocks::initPreviewImages()
 {
     std::string imgSuffix;
-    int counter = 0;
 
-    for (GameUnlock &unlock : unlocksRef)
+    for (int i = 0; i < 4; ++i)
     {
         Sprite *spr = Sprite::create();
 
-        imgSuffix = unlock.isLocked() ? "_locked.jpg" : "_puzzle.jpg";
+        imgSuffix = unlocksRef[i].isLocked() ? "_locked.jpg" : "_puzzle.jpg";
 
-        spr->initWithFile("backdrops/" + unlock.getName() + imgSuffix);
-        spr->setPosition(Vec2(250 + (counter * 285) + (counter * 2),
+        spr->initWithFile("backdrops/" + unlocksRef[i].getName() + imgSuffix);
+        spr->setPosition(Vec2(250 + (i * 285) + (i * 2),
             (visibleSize.height / 2) + 100));
         spr->setScaleX(273 / spr->getContentSize().width);
         spr->setScaleY(154 / spr->getContentSize().height);
         spr->setOpacity(fadedOpacity);
-        spr->setTag(counter);
+        spr->setTag(i);
 
         auto listener = EventListenerTouchOneByOne::create();
         listener->onTouchBegan = CC_CALLBACK_2(ProfileUnlocks::imageClick, this);
         _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, spr);
 
-        previewImages.push_back(spr);
+        previewImages[i] = spr;
         
         Label *lbl = Label::createWithTTF
-            (unlock.getName(), GameSettings::getFontName(), 28);
+            (unlocksRef[i].getName(), GameSettings::getFontName(), 28);
         lbl->setPosition(Vec2(spr->getPositionX(), spr->getPositionY() - 100));
 
         this->addChild(spr, 3);
         this->addChild(lbl, 3);
-
-        ++counter;
     }
 
     previewImages[currentSelection]->setOpacity(selectedOpacity);
@@ -185,9 +188,10 @@ bool ProfileUnlocks::imageClick(Touch* const touch, Event* const event)
         return false;
     }
 
-    for (Sprite *image : previewImages)
+    int numUnlocks = GameProfile::getNumUnlocks();
+    for (int i = 0; i < numUnlocks; ++i)
     {
-        image->setOpacity(fadedOpacity);
+        previewImages[i]->setOpacity(fadedOpacity);
     }
 
     spr->setOpacity(selectedOpacity);
@@ -281,13 +285,13 @@ void ProfileUnlocks::updateBackdrop() const
         ("backdrops/" + GameProfile::getCurrentBackground() + "_menu.jpg");
 }
 
-void ProfileUnlocks::updateSelectionRect()
+void ProfileUnlocks::updateSelectionRect() const
 {
     Vec2 currImagePos = previewImages[currentSelection]->getPosition();
     selectionRect->setPosition(Vec2(currImagePos.x, currImagePos.y));
 }
 
-void ProfileUnlocks::updateContextHintLabel()
+void ProfileUnlocks::updateContextHintLabel() const
 {
     GameUnlock &unlock = unlocksRef[currentSelection];
     std::string unlockCost = std::to_string(unlock.getStarCost());

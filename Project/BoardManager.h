@@ -22,7 +22,7 @@ public:
     bool sanityCheckMove(cocos2d::Rect &rect, cocos2d::Touch &touch, 
                          PuzzlePiece* const piece) const;
     bool identifyMoves(MoveSequence &seq, PuzzlePiece* const piece);
-    bool generateMove(MoveSequence &seq, const SlideDirection &dir);
+    bool generateMove(MoveSequence &seq, const SlideDirection &dir) const;
     bool generateRandomMove(MoveSequence &seq);
 
     int findBlankSpace() const;

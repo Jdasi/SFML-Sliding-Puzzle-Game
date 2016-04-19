@@ -5,33 +5,45 @@
 USING_NS_CC;
 
 Puzzle::Puzzle()
-    : totalPieces(GameSettings::getSegments().x * GameSettings::getSegments().y)
+    : segmentsX(GameSettings::getSegments().x)
+    , segmentsY(GameSettings::getSegments().y)
+    , file(GameSettings::getImageName())
+    , totalPieces(segmentsX * segmentsY)
     , pad(2)
-    , sizeX(0)
-    , sizeY(0)
+    , imageSizeX(0.0f)
+    , imageSizeY(0.0f)
     , scaleFactorX(1.0f)
     , scaleFactorY(1.0f)
+    , puzzlePieces(new PuzzlePiece*[totalPieces])
 {
+}
+
+Puzzle::~Puzzle()
+{
+    delete[] puzzlePieces;
 }
 
 // Loads the chosen image file and slices it according to the GameSettings specification.
 void Puzzle::initPuzzle(PuzzleGame* const pScene, const Coordinate &startPos)
 {
-    int segmentsX = GameSettings::getSegments().x;
-    int segmentsY = GameSettings::getSegments().y;
-
-    std::string file{ GameSettings::getImageName() };
     Sprite *puzzle = Sprite::create(file);
 
-    sizeX = puzzle->getContentSize().width;
-    sizeY = puzzle->getContentSize().height;
+    imageSizeX = puzzle->getContentSize().width;
+    imageSizeY = puzzle->getContentSize().height;
 
-    float secX = sizeX / segmentsX;
-    float secY = sizeY / segmentsY;
+    float secX = imageSizeX / segmentsX;
+    float secY = imageSizeY / segmentsY;
 
     scaleImage(puzzle);
+    sliceImage(pScene, startPos, secX, secY);
 
-    // Splice puzzle image into PuzzlePieces.
+    // Hide bottom right puzzle piece.
+    puzzlePieces[(segmentsX * segmentsY) - 1]->setBlankSpace(true);
+}
+
+void Puzzle::sliceImage(PuzzleGame* const pScene, const Coordinate& startPos,
+                        const float secX, const float secY)
+{
     for (int yCycles = 0; yCycles < segmentsY; ++yCycles)
     {
         for (int xCycles = 0; xCycles < segmentsX; ++xCycles)
@@ -42,12 +54,9 @@ void Puzzle::initPuzzle(PuzzleGame* const pScene, const Coordinate &startPos)
             configurePiece(piece, startPos, secX, secY, xCycles, yCycles, pScene);
 
             pScene->addChild(piece, 1);
-            puzzlePieces.push_back(piece);
+            puzzlePieces[calculateOffset(xCycles, yCycles)] = piece;
         }
     }
-
-    // Hide bottom right puzzle piece.
-    puzzlePieces[(segmentsX * segmentsY) - 1]->setBlankSpace(true);
 }
 
 void Puzzle::configurePiece(PuzzlePiece* const piece, const Coordinate &startPos, 
@@ -76,33 +85,33 @@ void Puzzle::scaleImage(const Sprite* const spr)
     int paddingX = (GameSettings::getSegments().x - 1) * pad;
     int paddingY = (GameSettings::getSegments().y - 1) * pad;
 
-    if (sizeX + paddingX != 800)
+    if (imageSizeX + paddingX != 800)
     {
         scaleFactorX = (800 - paddingX) / spr->getContentSize().width;
     }
 
-    if (sizeY + paddingY != 600)
+    if (imageSizeX + paddingY != 600)
     {
         scaleFactorY = (600 - paddingY) / spr->getContentSize().height;
     }
 }
 
-PuzzlePiece &Puzzle::getPiece(const int piece)
+PuzzlePiece &Puzzle::getPiece(const int piece) const
 {
     return *puzzlePieces[piece];
 }
 
-PuzzlePiece &Puzzle::getPiece(const Coordinate &coords)
+PuzzlePiece &Puzzle::getPiece(const Coordinate &coords) const
 {
     return getPiece(calculateOffset(coords));
 }
 
-PuzzlePiece &Puzzle::getPiece(const int x, const int y)
+PuzzlePiece &Puzzle::getPiece(const int x, const int y) const
 {
     return getPiece({ x, y });
 }
 
-std::vector<PuzzlePiece*> &Puzzle::getPieces()
+PuzzlePiece **Puzzle::getPieces() const
 {
     return puzzlePieces;
 }
@@ -122,8 +131,13 @@ int Puzzle::getPadding() const
     return pad;
 }
 
+int Puzzle::getTotalPieces() const
+{
+    return totalPieces;
+}
+
 // Swaps the array position and coordinates of two pieces.
-void Puzzle::swapPieces(const int fromPiece, const int toPiece)
+void Puzzle::swapPieces(const int fromPiece, const int toPiece) const
 {
     std::swap(puzzlePieces[fromPiece], puzzlePieces[toPiece]);
 
@@ -142,7 +156,7 @@ void Puzzle::swapPieces(const int fromPiece, const int toPiece)
     puzzlePieces[toPiece]->setCoordinates(fromCoords);
 }
 
-void Puzzle::swapPieces(const PuzzlePiece &fromRef, const PuzzlePiece &toRef)
+void Puzzle::swapPieces(const PuzzlePiece &fromRef, const PuzzlePiece &toRef) const
 {
     swapPieces(fromRef.getArrayPos(), toRef.getArrayPos());
 }
@@ -150,9 +164,9 @@ void Puzzle::swapPieces(const PuzzlePiece &fromRef, const PuzzlePiece &toRef)
 bool Puzzle::isPuzzleComplete() const
 {
     int correctPieces = 0;
-    for (PuzzlePiece *piece : puzzlePieces)
+    for (int i = 0; i < totalPieces; ++i)
     {
-        if (piece->getArrayPos() == piece->getID())
+        if (puzzlePieces[i]->getArrayPos() == puzzlePieces[i]->getID())
         {
             ++correctPieces;
         }
